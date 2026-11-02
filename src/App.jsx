@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import CheckoutModal from './components/CheckoutModal';
+import Checkout from './pages/Checkout';
 import Home from './pages/Home';
 import AdreFunnel from './pages/AdreFunnel';
 import CinemoodFunnel from './pages/CinemoodFunnel';
@@ -22,6 +22,7 @@ const resolveCurrentRoute = () => {
 
   if (target === 'adre-combo' || target === 'ebook' || target === 'adre') return 'adre-combo';
   if (target === 'cinemood-presets' || target === 'cinemood' || target === 'presets' || target === 'english-bundle' || target === 'english') return 'cinemood-presets';
+  if (target === 'checkout' || target === 'pay' || target === 'order') return 'checkout';
   if (target === 'contact' || target === 'contact-us') return 'contact';
   if (target === 'terms' || target === 'terms-and-conditions') return 'terms';
   if (target === 'refund-policy' || target === 'refund' || target === 'refunds') return 'refund';
@@ -34,9 +35,26 @@ const resolveCurrentRoute = () => {
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState(resolveCurrentRoute());
-  const [checkoutProduct, setCheckoutProduct] = useState(null);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [initialOrderBumpSelected, setInitialOrderBumpSelected] = useState(false);
+  const [checkoutProduct, setCheckoutProduct] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const prodId = params.get('product') || params.get('id');
+      if (prodId && PRODUCTS[prodId]) return PRODUCTS[prodId];
+      const saved = sessionStorage.getItem('pj_checkout_product_id');
+      if (saved && PRODUCTS[saved]) return PRODUCTS[saved];
+    } catch (e) {}
+    return PRODUCTS['cinemood-presets'] || PRODUCTS['adre-combo'];
+  });
+  const [initialOrderBumpSelected, setInitialOrderBumpSelected] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const bumpParam = params.get('bump');
+      if (bumpParam === '1' || bumpParam === 'true') return true;
+      if (bumpParam === '0' || bumpParam === 'false') return false;
+      return sessionStorage.getItem('pj_checkout_bump') === '1';
+    } catch (e) {}
+    return false;
+  });
   const [purchaseData, setPurchaseData] = useState(null);
 
   useEffect(() => {
@@ -52,7 +70,7 @@ export default function App() {
     };
   }, []);
 
-  const navigateTo = (route) => {
+  const navigateTo = (route, options = {}) => {
     let urlPath = '/';
     let normalized = route;
 
@@ -62,6 +80,11 @@ export default function App() {
     } else if (route === 'cinemood-presets' || route === 'cinemood' || route === 'presets' || route === 'english-bundle' || route === 'english') {
       urlPath = '/cinemood-presets';
       normalized = 'cinemood-presets';
+    } else if (route === 'checkout' || route === 'pay') {
+      const targetProd = options.product || checkoutProduct || PRODUCTS['cinemood-presets'];
+      const bump = options.withBump !== undefined ? options.withBump : initialOrderBumpSelected;
+      urlPath = `/checkout?product=${targetProd.id}${bump ? '&bump=1' : ''}`;
+      normalized = 'checkout';
     } else if (route === 'contact') {
       urlPath = '/contact';
       normalized = 'contact';
@@ -99,31 +122,24 @@ export default function App() {
   const handleBuyProduct = (product, withBump = false) => {
     setCheckoutProduct(product);
     setInitialOrderBumpSelected(withBump);
-    setIsCheckoutOpen(true);
-  };
-
-  const handleCloseCheckout = () => {
-    document.body.classList.remove('modal-open');
-    document.body.style.removeProperty('overflow');
-    document.documentElement.style.removeProperty('overflow');
-    setIsCheckoutOpen(false);
+    try {
+      sessionStorage.setItem('pj_checkout_product_id', product.id);
+      sessionStorage.setItem('pj_checkout_bump', withBump ? '1' : '0');
+    } catch (e) {}
+    navigateTo('checkout', { product, withBump });
   };
 
   const handlePaymentSuccess = (data) => {
-    document.body.classList.remove('modal-open');
-    document.body.style.removeProperty('overflow');
-    document.documentElement.style.removeProperty('overflow');
     setPurchaseData(data);
-    setIsCheckoutOpen(false);
     navigateTo('success');
   };
 
-  // Funnel pages, success screen, and admin must have ZERO global nav distractions
-  const isFunnelPage = currentRoute === 'adre-combo' || currentRoute === 'cinemood-presets' || currentRoute === 'english-bundle' || currentRoute === 'success' || currentRoute === 'admin';
+  // Funnel pages, checkout page, success screen, and admin must have ZERO global nav distractions
+  const isFunnelPage = currentRoute === 'adre-combo' || currentRoute === 'cinemood-presets' || currentRoute === 'english-bundle' || currentRoute === 'checkout' || currentRoute === 'success' || currentRoute === 'admin';
 
   return (
     <div className={`app-root ${isFunnelPage ? 'is-funnel-mode' : ''}`}>
-      {/* Top Navbar - Hidden on Funnel Pages (/adre-combo, /cinemood-presets) & Admin */}
+      {/* Top Navbar - Hidden on Funnel Pages (/adre-combo, /cinemood-presets, /checkout) & Admin */}
       {!isFunnelPage && <Navbar onNavigate={navigateTo} />}
 
       {/* Main Content Router */}
@@ -136,6 +152,14 @@ export default function App() {
         )}
         {(currentRoute === 'cinemood-presets' || currentRoute === 'english-bundle') && (
           <CinemoodFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
+        )}
+        {currentRoute === 'checkout' && (
+          <Checkout
+            product={checkoutProduct}
+            initialOrderBumpSelected={initialOrderBumpSelected}
+            onNavigate={navigateTo}
+            onSuccess={handlePaymentSuccess}
+          />
         )}
         {currentRoute === 'contact' && <ContactUs />}
         {currentRoute === 'terms' && <Terms />}
@@ -154,15 +178,6 @@ export default function App() {
 
       {/* Global Footer - Hidden on Funnel Pages & Admin */}
       {!isFunnelPage && <Footer onNavigate={navigateTo} />}
-
-      {/* Universal Direct Cashfree Checkout Modal */}
-      <CheckoutModal
-        isOpen={isCheckoutOpen}
-        onClose={handleCloseCheckout}
-        product={checkoutProduct}
-        initialOrderBumpSelected={initialOrderBumpSelected}
-        onSuccess={handlePaymentSuccess}
-      />
     </div>
   );
 }
