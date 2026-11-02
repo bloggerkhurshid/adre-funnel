@@ -248,7 +248,7 @@ export default function AdreFunnel({ onBuyProduct, onNavigate }) {
               </ul>
 
               <a
-                href={product.downloadUrl}
+                href={product.samplePdfUrl || 'https://drive.google.com/file/d/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag/view?usp=sharing'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary-cta"

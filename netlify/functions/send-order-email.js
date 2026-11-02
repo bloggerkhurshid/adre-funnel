@@ -72,8 +72,8 @@ export const handler = async (event, context) => {
 
     const buyerName = customerName || 'Valued Learner';
     const mainTitle = productName || 'Assam Govt Exam 4-in-1 MCQ Ebook Combo';
-    const mainDownload = downloadUrl || 'https://drive.google.com/file/d/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag/view?usp=sharing';
-    const bumpDownload = orderBumpDownloadUrl || 'https://drive.google.com/file/d/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag/view?usp=sharing';
+    const mainDownload = downloadUrl || 'https://drive.google.com/drive/folders/1x5XWr2uextv3b3eSoKIpYjoWvu-nqv0n?usp=sharing';
+    const bumpDownload = orderBumpDownloadUrl || 'https://drive.google.com/drive/folders/10XEU9gZUYbGgP9aZjLNE6PG-tNW96IzO?usp=sharing';
 
     const filesHtmlList = files.length > 0 
       ? files.map(f => `<li style="margin-bottom: 6px;">✓ ${f}</li>`).join('')

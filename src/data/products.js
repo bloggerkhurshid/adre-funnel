@@ -21,7 +21,7 @@ export const CTET_ORDER_BUMP = {
     'Social Science (For Paper II)',
     '100% Exam-Oriented Practice MCQs'
   ],
-  downloadUrl: 'https://drive.google.com/file/d/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag/view?usp=sharing',
+  downloadUrl: 'https://drive.google.com/drive/folders/10XEU9gZUYbGgP9aZjLNE6PG-tNW96IzO?usp=sharing',
   files: [
     'CTET Paper I & II Complete MCQ Practice Ebook with Answers [PDF]'
   ],
@@ -79,7 +79,8 @@ export const PRODUCTS = {
       '📱 Mobile-Friendly Offline PDF with 100% Verified Answers',
       '⚡ Instant Digital Download after payment'
     ],
-    downloadUrl: 'https://drive.google.com/file/d/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag/view?usp=sharing',
+    samplePdfUrl: 'https://drive.google.com/file/d/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag/view?usp=sharing',
+    downloadUrl: 'https://drive.google.com/drive/folders/1x5XWr2uextv3b3eSoKIpYjoWvu-nqv0n?usp=sharing',
     files: [
       'ADRE All Subject-Wise MCQ Ebook (Grade 3 & 4) [PDF]',
       'Bonus 1: SSC GD Complete Special E-Book [PDF]',
