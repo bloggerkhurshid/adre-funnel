@@ -254,25 +254,48 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
             </div>
           </div>
 
-          {/* Simple 1-Line Optional Bump Checkbox */}
+          {/* Order Bump Checkbox Card with Detailed Description */}
           {hasOrderBump && (
-            <label className={`checkout-bump-mini-box ${includeOrderBump ? 'active' : ''}`}>
-              <input
-                type="checkbox"
-                checked={includeOrderBump}
-                onChange={(e) => handleBumpToggle(e.target.checked)}
-                className="checkout-bump-checkbox"
-              />
-              <div className="checkout-bump-text">
-                <div className="checkout-bump-title-row">
-                  <span>⚡ <strong>Add {product.orderBump.shortName || product.orderBump.name}</strong></span>
-                  <span className="checkout-bump-price-badge">+₹{product.orderBump.price}</span>
-                </div>
-                <p className="checkout-bump-mini-desc">
-                  {isCinemood ? '20+ Wedding & Prewedding Lightroom XML Templates' : 'CTET Paper I & II MCQ Ebook with Detailed Answers'}
-                </p>
+            <div 
+              className={`checkout-bump-mini-box ${includeOrderBump ? 'active' : ''}`}
+              onClick={() => handleBumpToggle(!includeOrderBump)}
+            >
+              <div className="checkout-bump-top-row">
+                <label className="checkout-bump-checkbox-label" onClick={(e) => e.stopPropagation()}>
+                  <input
+                    type="checkbox"
+                    checked={includeOrderBump}
+                    onChange={(e) => handleBumpToggle(e.target.checked)}
+                    className="checkout-bump-checkbox"
+                  />
+                  <span className="checkout-bump-label-title">
+                    ⚡ <strong>ONE-TIME OFFER: Add {product.orderBump.name}</strong>
+                  </span>
+                </label>
+                <span className="checkout-bump-price-badge">
+                  +₹{product.orderBump.price} <del>₹{product.orderBump.originalPrice}</del>
+                </span>
               </div>
-            </label>
+
+              <div className="checkout-bump-desc-wrap">
+                <p className="checkout-bump-pitch-text">
+                  {product.orderBump.pitch}
+                </p>
+
+                <div className="checkout-bump-bullets-mini">
+                  <strong>What’s Included:</strong>
+                  <ul>
+                    {product.orderBump.features.map((feat, fIdx) => (
+                      <li key={fIdx}>✓ {feat}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="checkout-bump-footer-note">
+                  💍 <em>Perfect For: Wedding photography, pre-wedding shoots, engagement portraits, couple photography, and cinematic storytelling.</em>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Error Message */}
