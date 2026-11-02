@@ -111,6 +111,24 @@ export default function CheckoutModal({
 
       // If live Cashfree payment_session_id returned and SDK is ready
       if (orderData.payment_session_id && window.Cashfree && !orderData.preview_mode) {
+        // Pre-save order details to sessionStorage & Firebase so both modal & mobile redirect work smoothly
+        const livePayload = {
+          product,
+          orderBumpSelected: includeOrderBump && hasOrderBump,
+          orderBump: product.orderBump,
+          totalAmount,
+          paymentId: orderData.order_id,
+          name,
+          email,
+          phone,
+          gateway: 'cashfree',
+          timestamp: Date.now()
+        };
+        try {
+          sessionStorage.setItem('pj_verified_order', JSON.stringify(livePayload));
+          saveOrderToFirestore(livePayload);
+        } catch (e) {}
+
         const cashfree = window.Cashfree({ mode: 'production' });
         cashfree.checkout({
           paymentSessionId: orderData.payment_session_id,
@@ -120,7 +138,7 @@ export default function CheckoutModal({
             setIsProcessing(false);
             console.log('Cashfree modal closed/error:', result.error);
           } else if (result.paymentDetails) {
-            handleSuccessfulPayment(orderData.order_id || result.paymentDetails.paymentMessage);
+            handleSuccessfulPayment(orderData.order_id);
           }
         });
         return;
