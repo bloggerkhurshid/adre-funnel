@@ -348,7 +348,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
                 onClick={() => onBuyProduct(product)}
                 role="button"
                 tabIndex={0}
-                title={`Get ${preset.title} Preset - ₹99 CineMood Pack`}
+                title={`Get ${preset.title} Preset - ₹${product.price} CineMood Pack`}
               >
                 <div className="lr-preset-img-wrapper">
                   <img 
@@ -499,6 +499,43 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
 
         </div>
       </section>
+
+      {/* Sleek Minimal Dark Footer for Funnel Compliance */}
+      <footer className="funnel-minimal-footer">
+        <div className="container text-center">
+          <div className="funnel-footer-brand">
+            <img src="/logo.png" alt="ProjuktiSoft Logo" className="funnel-footer-logo" />
+            <span>ProjuktiSoft</span>
+          </div>
+          <p className="funnel-footer-notice">
+            Official CineMood™ Lightroom mobile presets distributed by ProjuktiSoft. Billed securely in <strong>Indian Rupees (INR - ₹)</strong>. 100% Instant Digital Download.
+          </p>
+          <div className="funnel-footer-links">
+            <a href="/my-downloads" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('my-downloads'); }} className="highlight">
+              📥 Access My Downloads
+            </a>
+            <span>•</span>
+            <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('contact'); }}>
+              Contact Us
+            </a>
+            <span>•</span>
+            <a href="/terms" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('terms'); }}>
+              Terms & Conditions
+            </a>
+            <span>•</span>
+            <a href="/refund-policy" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('refund'); }}>
+              Refund Policy
+            </a>
+            <span>•</span>
+            <a href="/privacy-policy" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('privacy'); }}>
+              Privacy Policy
+            </a>
+          </div>
+          <p className="funnel-footer-copy">
+            © 2026 ProjuktiSoft. All rights reserved. Adobe Lightroom is a registered trademark of Adobe Inc.
+          </p>
+        </div>
+      </footer>
 
       {/* Sticky Bottom Bar for Mobile & Desktop */}
       {showSticky && (

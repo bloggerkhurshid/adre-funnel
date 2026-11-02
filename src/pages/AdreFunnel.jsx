@@ -571,14 +571,51 @@ export default function AdreFunnel({ onBuyProduct, onNavigate }) {
         </div>
       </section>
 
+      {/* Sleek Minimal Dark Footer for Funnel Compliance */}
+      <footer className="funnel-minimal-footer">
+        <div className="container text-center">
+          <div className="funnel-footer-brand">
+            <img src="/logo.png" alt="ProjuktiSoft Logo" className="funnel-footer-logo" />
+            <span>ProjuktiSoft</span>
+          </div>
+          <p className="funnel-footer-notice">
+            Official ADRE 3.0 & Assam Police Exam Study Bundle. Billed securely in <strong>Indian Rupees (INR - ₹)</strong>. 100% Instant Digital PDF Download.
+          </p>
+          <div className="funnel-footer-links">
+            <a href="/my-downloads" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('my-downloads'); }} className="highlight">
+              📥 Access My Downloads
+            </a>
+            <span>•</span>
+            <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('contact'); }}>
+              Contact Us
+            </a>
+            <span>•</span>
+            <a href="/terms" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('terms'); }}>
+              Terms & Conditions
+            </a>
+            <span>•</span>
+            <a href="/refund-policy" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('refund'); }}>
+              Refund Policy
+            </a>
+            <span>•</span>
+            <a href="/privacy-policy" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('privacy'); }}>
+              Privacy Policy
+            </a>
+          </div>
+          <p className="funnel-footer-copy">
+            © 2026 ProjuktiSoft. All rights reserved. Designed for candidates preparing for competitive exams in Assam.
+          </p>
+        </div>
+      </footer>
+
       {/* Sticky Bottom Buy Bar */}
       <div className={`sticky-buy-bar ${showSticky ? 'visible' : ''}`}>
         <div className="sticky-bar-content">
           <div className="sticky-price-info">
             <div className="sticky-bundle-title">Assam Exam 4-in-1 Combo (4 Ebooks)</div>
             <div className="sticky-price-row">
-              <span className="sticky-price">₹99</span>
-              <span className="sticky-old-price">₹999</span>
+              <span className="sticky-price">₹{product.price}</span>
+              <span className="sticky-old-price">₹{product.originalPrice}</span>
               <span className="sticky-timer-pill">⏳ {formattedTime}</span>
             </div>
           </div>

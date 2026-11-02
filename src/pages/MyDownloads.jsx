@@ -90,7 +90,7 @@ export default function MyDownloads({ onNavigate }) {
 
           {/* Search Box */}
           <form onSubmit={handleSearch} style={{ maxWidth: '560px', margin: '0 auto 30px' }}>
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <div className="downloads-search-wrap">
               <input
                 type="text"
                 required
