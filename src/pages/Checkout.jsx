@@ -4,19 +4,15 @@ import { saveOrderToFirestore } from '../firebase';
 import { PRODUCTS, CTET_ORDER_BUMP, WEDDING_ORDER_BUMP } from '../data/products';
 
 export default function Checkout({ product: propProduct, initialOrderBumpSelected = false, onNavigate, onSuccess }) {
-  // 1. Resolve product: from prop or query param (default: cinemood-presets)
+  // Resolve product
   const getInitialProduct = () => {
     if (propProduct) return propProduct;
     try {
       const params = new URLSearchParams(window.location.search);
       const prodId = params.get('product') || params.get('id');
-      if (prodId && PRODUCTS[prodId]) {
-        return PRODUCTS[prodId];
-      }
+      if (prodId && PRODUCTS[prodId]) return PRODUCTS[prodId];
       const savedId = sessionStorage.getItem('pj_checkout_product_id');
-      if (savedId && PRODUCTS[savedId]) {
-        return PRODUCTS[savedId];
-      }
+      if (savedId && PRODUCTS[savedId]) return PRODUCTS[savedId];
     } catch (e) {}
     return PRODUCTS['cinemood-presets'] || PRODUCTS['adre-combo'];
   };
@@ -42,9 +38,6 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Urgency Timer (14 mins countdown)
-  const [timeLeft, setTimeLeft] = useState(14 * 60 + 28);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     MetaPixel.pageView('Checkout Page');
@@ -54,19 +47,6 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
       }
     } catch (e) {}
   }, [product]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatTimer = (secs) => {
-    const m = Math.floor(secs / 60);
-    const s = secs % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };
 
   const isCinemood = product?.id === 'cinemood-presets' || product?.id === 'english-bundle';
   const hasOrderBump = !!product?.orderBump;
@@ -243,280 +223,144 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
 
   return (
     <div className={`checkout-page ${isCinemood ? 'theme-cinemood' : 'theme-adre'}`}>
-      {/* Urgency Countdown Bar */}
-      <div className="checkout-urgency-bar">
-        <div className="checkout-urgency-inner">
-          <span className="checkout-live-dot">●</span>
-          <span>Your 90% Discount is Reserved for: <strong>{formatTimer(timeLeft)}</strong></span>
-          <span className="checkout-urgency-sep">•</span>
-          <span>⚡ Instant Digital Delivery on Screen & Email</span>
+      <div className="checkout-minimal-wrap">
+        
+        {/* Top Back Nav & Secure Badge */}
+        <div className="checkout-top-nav">
+          <button type="button" className="checkout-back-link" onClick={handleBack}>
+            ← {isCinemood ? 'Back to Presets' : 'Back to Store'}
+          </button>
+          <span className="checkout-secure-pill">🔒 256-Bit SSL Encrypted</span>
         </div>
-      </div>
 
-      {/* Main Two-Column Checkout Layout */}
-      <div className="checkout-container">
-        <div className="checkout-grid">
+        {/* Minimal Checkout Card */}
+        <div className="checkout-minimal-card">
           
-          {/* Left Column: Customer Form & Payment */}
-          <div className="checkout-col-form">
-            <div className="checkout-card">
-              <div className="checkout-card-header">
-                <div className="checkout-step-badge">1</div>
-                <div>
-                  <h2 className="checkout-card-title">Customer Information</h2>
-                  <p className="checkout-card-subtitle">Where should we deliver your digital files and official receipt?</p>
-                </div>
+          {/* Product Header Row */}
+          <div className="checkout-item-header">
+            <img 
+              src={product?.coverImage || '/presets/cinemood-banner.jpg'} 
+              alt={product?.name}
+              className="checkout-item-img"
+            />
+            <div className="checkout-item-info">
+              <span className="checkout-item-badge">{isCinemood ? '50+ DNG PACK' : 'EXAM COMBO'}</span>
+              <h2 className="checkout-item-title">{product?.shortName || product?.name}</h2>
+              <div className="checkout-item-price-tag">
+                <span className="checkout-price-main">₹{product?.price}</span>
+                <del className="checkout-price-del">₹{product?.originalPrice}</del>
+                <span className="checkout-price-save">{product?.discountPercent}</span>
               </div>
-
-              {errorMessage && (
-                <div className="checkout-error-banner">
-                  ⚠️ {errorMessage}
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="checkout-form">
-                <div className="checkout-form-group">
-                  <label htmlFor="chk-name">
-                    Full Name <span className="req">*</span>
-                  </label>
-                  <input
-                    id="chk-name"
-                    type="text"
-                    required
-                    placeholder="Enter your full name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="checkout-input"
-                  />
-                </div>
-
-                <div className="checkout-form-group">
-                  <label htmlFor="chk-email">
-                    Email Address <span className="req">*</span>
-                  </label>
-                  <input
-                    id="chk-email"
-                    type="email"
-                    required
-                    placeholder="name@gmail.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="checkout-input"
-                  />
-                  <span className="checkout-field-hint">
-                    📩 Google Drive download link & order receipt will be sent to this email instantly.
-                  </span>
-                </div>
-
-                <div className="checkout-form-group">
-                  <label htmlFor="chk-phone">
-                    Phone / WhatsApp Number <span className="req">*</span>
-                  </label>
-                  <div className="checkout-phone-input-wrap">
-                    <span className="checkout-phone-prefix">+91</span>
-                    <input
-                      id="chk-phone"
-                      type="tel"
-                      required
-                      placeholder="9876543210"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="checkout-input checkout-input-phone"
-                      maxLength={10}
-                    />
-                  </div>
-                  <span className="checkout-field-hint">
-                    📱 For instant order delivery verification and customer support.
-                  </span>
-                </div>
-
-                {/* Step 2: Payment Method Section */}
-                <div className="checkout-payment-section">
-                  <div className="checkout-card-header" style={{ marginBottom: '14px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                    <div className="checkout-step-badge">2</div>
-                    <div>
-                      <h3 className="checkout-card-title" style={{ fontSize: '1.15rem' }}>Select Payment Method</h3>
-                      <p className="checkout-card-subtitle">100% RBI Authorized & Secure Cashfree Gateway</p>
-                    </div>
-                  </div>
-
-                  <div className="checkout-payment-methods-box">
-                    <div className="checkout-payment-option selected">
-                      <div className="checkout-radio-indicator">✓</div>
-                      <div className="checkout-pay-details">
-                        <strong>UPI Instant Pay (Google Pay / PhonePe / Paytm / BHIM)</strong>
-                        <span>Fastest zero-fee checkout via QR Code or direct UPI Intent</span>
-                      </div>
-                      <span className="checkout-popular-tag">MOST POPULAR</span>
-                    </div>
-
-                    <div className="checkout-payment-option">
-                      <div className="checkout-radio-indicator empty"></div>
-                      <div className="checkout-pay-details">
-                        <strong>Debit Card / Credit Card / NetBanking / Wallets</strong>
-                        <span>Visa, Mastercard, RuPay, ICICI, HDFC, SBI, Cred</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Submit Pay Button */}
-                <button
-                  type="submit"
-                  disabled={isProcessing}
-                  className="checkout-submit-btn"
-                >
-                  {isProcessing ? (
-                    <span className="checkout-btn-loading">
-                      <svg className="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                        <circle cx="12" cy="12" r="10" strokeDasharray="32" strokeLinecap="round" />
-                      </svg>
-                      Connecting to Secure Gateway...
-                    </span>
-                  ) : (
-                    <span>
-                      🔒 PAY ₹{totalAmount} & GET INSTANT ACCESS →
-                    </span>
-                  )}
-                </button>
-
-                <div className="checkout-guarantee-row">
-                  <div className="checkout-g-item">
-                    <span>🛡️</span>
-                    <span>7-Day 100% Satisfaction Guarantee</span>
-                  </div>
-                  <div className="checkout-g-item">
-                    <span>⚡</span>
-                    <span>Instant Digital Access</span>
-                  </div>
-                  <div className="checkout-g-item">
-                    <span>🔒</span>
-                    <span>RBI Authorized Gateway</span>
-                  </div>
-                </div>
-              </form>
             </div>
           </div>
 
-          {/* Right Column: Order Summary & Bump Offer */}
-          <div className="checkout-col-summary">
-            <div className="checkout-summary-card">
-              <h3 className="checkout-summary-title">Order Summary</h3>
+          {/* Simple 1-Line Optional Bump Checkbox */}
+          {hasOrderBump && (
+            <label className={`checkout-bump-mini-box ${includeOrderBump ? 'active' : ''}`}>
+              <input
+                type="checkbox"
+                checked={includeOrderBump}
+                onChange={(e) => handleBumpToggle(e.target.checked)}
+                className="checkout-bump-checkbox"
+              />
+              <div className="checkout-bump-text">
+                <div className="checkout-bump-title-row">
+                  <span>⚡ <strong>Add {product.orderBump.shortName || product.orderBump.name}</strong></span>
+                  <span className="checkout-bump-price-badge">+₹{product.orderBump.price}</span>
+                </div>
+                <p className="checkout-bump-mini-desc">
+                  {isCinemood ? '20+ Wedding & Prewedding Lightroom XML Templates' : 'CTET Paper I & II MCQ Ebook with Detailed Answers'}
+                </p>
+              </div>
+            </label>
+          )}
 
-              {/* Product Preview Card */}
-              <div className="checkout-prod-preview">
-                <img 
-                  src={product?.coverImage || '/presets/cinemood-banner.jpg'} 
-                  alt={product?.name}
-                  className="checkout-prod-thumb"
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="checkout-minimal-error">
+              ⚠️ {errorMessage}
+            </div>
+          )}
+
+          {/* 3 Essential Inputs Form */}
+          <form onSubmit={handleSubmit} className="checkout-minimal-form">
+            <div className="checkout-field">
+              <label htmlFor="chk-name">Full Name <span className="req">*</span></label>
+              <input
+                id="chk-name"
+                type="text"
+                required
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="checkout-clean-input"
+              />
+            </div>
+
+            <div className="checkout-field">
+              <label htmlFor="chk-email">
+                Email Address <span className="req">*</span>
+                <span className="field-note">(Files will be delivered here)</span>
+              </label>
+              <input
+                id="chk-email"
+                type="email"
+                required
+                placeholder="name@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="checkout-clean-input"
+              />
+            </div>
+
+            <div className="checkout-field">
+              <label htmlFor="chk-phone">WhatsApp / Mobile Number <span className="req">*</span></label>
+              <div className="checkout-clean-phone">
+                <span className="phone-prefix">+91</span>
+                <input
+                  id="chk-phone"
+                  type="tel"
+                  required
+                  placeholder="9876543210"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="checkout-clean-input phone-input"
+                  maxLength={10}
                 />
-                <div className="checkout-prod-meta">
-                  <span className="checkout-prod-tag">{isCinemood ? '50+ DNG PACK' : 'EXAM BUNDLE'}</span>
-                  <h4 className="checkout-prod-name">{product?.name}</h4>
-                  <div className="checkout-prod-price-row">
-                    <span className="checkout-prod-curr">₹{product?.price}</span>
-                    <del className="checkout-prod-old">₹{product?.originalPrice}</del>
-                    <span className="checkout-prod-discount">{product?.discountPercent}</span>
-                  </div>
-                </div>
               </div>
-
-              {/* Order Bump Card (If Available) */}
-              {hasOrderBump && (
-                <div 
-                  className={`checkout-bump-card ${includeOrderBump ? 'active' : ''}`}
-                  onClick={() => handleBumpToggle(!includeOrderBump)}
-                >
-                  <div className="checkout-bump-header">
-                    <label className="checkout-bump-checkbox" onClick={(e) => e.stopPropagation()}>
-                      <input
-                        type="checkbox"
-                        checked={includeOrderBump}
-                        onChange={(e) => handleBumpToggle(e.target.checked)}
-                      />
-                      <span className="checkout-bump-label-title">
-                        ⚡ Add {product.orderBump.name} for just <span className="highlight">₹{product.orderBump.price}</span> <del>₹{product.orderBump.originalPrice}</del>
-                      </span>
-                    </label>
-                    <span className="checkout-bump-pill">90% OFF</span>
-                  </div>
-
-                  <p className="checkout-bump-pitch">{product.orderBump.pitch}</p>
-
-                  <div className="checkout-bump-features-list">
-                    {product.orderBump.features.slice(0, 3).map((feat, fIdx) => (
-                      <div key={fIdx} className="checkout-bump-feat-item">
-                        ✓ {feat}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Detailed Bill Breakdown */}
-              <div className="checkout-bill-box">
-                <div className="checkout-bill-row">
-                  <span>{product?.shortName || product?.name}</span>
-                  <span>₹{product?.price}</span>
-                </div>
-
-                {includeOrderBump && hasOrderBump && (
-                  <div className="checkout-bill-row bump-row">
-                    <span>+ {product.orderBump.shortName || product.orderBump.name}</span>
-                    <span>₹{product.orderBump.price}</span>
-                  </div>
-                )}
-
-                <div className="checkout-bill-row">
-                  <span>Digital Delivery & Handling</span>
-                  <span className="checkout-free-text">FREE (Instant)</span>
-                </div>
-
-                <div className="checkout-bill-row discount-row">
-                  <span>Launch Special Savings</span>
-                  <span className="checkout-saved-text">-₹{product?.originalPrice - product?.price}</span>
-                </div>
-
-                <div className="checkout-bill-divider" />
-
-                <div className="checkout-bill-total-row">
-                  <div>
-                    <strong>Total Amount Payable</strong>
-                    <small>All taxes & digital fees included</small>
-                  </div>
-                  <div className="checkout-total-number">
-                    ₹{totalAmount}
-                  </div>
-                </div>
-              </div>
-
-              {/* What You Receive */}
-              <div className="checkout-included-deliverables">
-                <strong>📦 Instant Deliverables After Payment:</strong>
-                <ul>
-                  {product?.files?.map((file, idx) => (
-                    <li key={idx}>✓ {file}</li>
-                  ))}
-                  {includeOrderBump && hasOrderBump && product.orderBump.files?.map((file, idx) => (
-                    <li key={`bump-${idx}`} style={{ color: '#38bdf8' }}>✓ [BONUS] {file}</li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Trust Badge Bar */}
-              <div className="checkout-trust-footer">
-                <div className="checkout-tf-item">
-                  <span className="checkout-tf-icon">🔒</span>
-                  <span>Direct Encrypted Checkout via Cashfree Payments</span>
-                </div>
-              </div>
-
             </div>
-          </div>
+
+            {/* Total Row */}
+            <div className="checkout-minimal-total">
+              <span className="total-label">Total Payable:</span>
+              <span className="total-amount">₹{totalAmount}</span>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isProcessing}
+              className="checkout-clean-pay-btn"
+            >
+              {isProcessing ? (
+                <span>Connecting to Secure Gateway...</span>
+              ) : (
+                <span>Pay ₹{totalAmount} via UPI / Card →</span>
+              )}
+            </button>
+
+            {/* Micro Trust */}
+            <div className="checkout-micro-trust">
+              <span>🔒 100% Secure via Cashfree</span>
+              <span>•</span>
+              <span>⚡ Instant Download</span>
+              <span>•</span>
+              <span>🛡️ 7-Day Guarantee</span>
+            </div>
+          </form>
 
         </div>
       </div>
     </div>
   );
 }
-
