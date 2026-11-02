@@ -12,7 +12,7 @@ import RefundPolicy from './pages/RefundPolicy';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import MyDownloads from './pages/MyDownloads';
 import AdminDashboard from './pages/AdminDashboard';
-import { PRODUCTS } from './data/products';
+import { PRODUCTS, getProductById } from './data/products';
 
 // Helper to determine route from clean pathname (e.g. /adre-combo, /ebook) or fallback hash
 const resolveCurrentRoute = () => {
@@ -20,8 +20,9 @@ const resolveCurrentRoute = () => {
   const hash = window.location.hash.replace('#', '').replace(/^\/+/, '').toLowerCase();
   const target = path || hash;
 
-  if (target === 'adre-combo' || target === 'ebook' || target === 'adre') return 'adre-combo';
-  if (target === 'cinemood-presets' || target === 'cinemood' || target === 'presets' || target === 'english-bundle' || target === 'english') return 'cinemood-presets';
+  if (target === 'adre-combo' || target === 'ebook' || target === 'adre' || target === 'assam') return 'adre-combo';
+  if (target === 'cinemood-presets' || target === 'cinemood' || target === 'presets' || target === 'preset' || target === 'lightroom' || target === 'lr' || target === 'dng') return 'cinemood-presets';
+  if (target === 'english-bundle' || target === 'english') return 'cinemood-presets';
   if (target === 'checkout' || target === 'pay' || target === 'order') return 'checkout';
   if (target === 'contact' || target === 'contact-us') return 'contact';
   if (target === 'terms' || target === 'terms-and-conditions') return 'terms';
@@ -33,18 +34,22 @@ const resolveCurrentRoute = () => {
   return 'home';
 };
 
+const resolveInitialCheckoutProduct = () => {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const prodId = params.get('product') || params.get('id');
+    const resolved = getProductById(prodId);
+    if (resolved) return resolved;
+    const saved = sessionStorage.getItem('pj_checkout_product_id');
+    const savedProd = getProductById(saved);
+    if (savedProd) return savedProd;
+  } catch (e) {}
+  return PRODUCTS['cinemood-presets'] || PRODUCTS['adre-combo'];
+};
+
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState(resolveCurrentRoute());
-  const [checkoutProduct, setCheckoutProduct] = useState(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const prodId = params.get('product') || params.get('id');
-      if (prodId && PRODUCTS[prodId]) return PRODUCTS[prodId];
-      const saved = sessionStorage.getItem('pj_checkout_product_id');
-      if (saved && PRODUCTS[saved]) return PRODUCTS[saved];
-    } catch (e) {}
-    return PRODUCTS['cinemood-presets'] || PRODUCTS['adre-combo'];
-  });
+  const [checkoutProduct, setCheckoutProduct] = useState(resolveInitialCheckoutProduct);
   const [initialOrderBumpSelected, setInitialOrderBumpSelected] = useState(() => {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -59,7 +64,12 @@ export default function App() {
 
   useEffect(() => {
     const handleLocationChange = () => {
-      setCurrentRoute(resolveCurrentRoute());
+      const newRoute = resolveCurrentRoute();
+      setCurrentRoute(newRoute);
+      if (newRoute === 'checkout') {
+        const prod = resolveInitialCheckoutProduct();
+        if (prod) setCheckoutProduct(prod);
+      }
     };
 
     window.addEventListener('popstate', handleLocationChange);
@@ -83,6 +93,8 @@ export default function App() {
     } else if (route === 'checkout' || route === 'pay') {
       const targetProd = options.product || checkoutProduct || PRODUCTS['cinemood-presets'];
       const bump = options.withBump !== undefined ? options.withBump : initialOrderBumpSelected;
+      setCheckoutProduct(targetProd);
+      if (options.withBump !== undefined) setInitialOrderBumpSelected(bump);
       urlPath = `/checkout?product=${targetProd.id}${bump ? '&bump=1' : ''}`;
       normalized = 'checkout';
     } else if (route === 'contact') {

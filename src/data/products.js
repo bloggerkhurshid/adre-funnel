@@ -24,7 +24,8 @@ export const CTET_ORDER_BUMP = {
   downloadUrl: 'https://drive.google.com/file/d/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag/view?usp=sharing',
   files: [
     'CTET Paper I & II Complete MCQ Practice Ebook with Answers [PDF]'
-  ]
+  ],
+  perfectFor: '📚 Perfect For: CTET Paper I & II candidates, Assam TET aspirants, and government teaching exam preparation.'
 };
 
 export const WEDDING_ORDER_BUMP = {
@@ -48,7 +49,8 @@ export const WEDDING_ORDER_BUMP = {
   downloadUrl: 'https://drive.google.com/drive/folders/10r0oO0i0Uqa_b8ujxc9uxTcobQBMXmmC?usp=drive_link',
   files: [
     'Wedding & Prewedding Collection (20+ XML Templates)'
-  ]
+  ],
+  perfectFor: '💍 Perfect For: Wedding photography, pre-wedding shoots, engagement portraits, couple photography, and cinematic storytelling.'
 };
 
 export const PRODUCTS = {
@@ -148,5 +150,27 @@ export const PRODUCTS = {
     ],
     orderBump: WEDDING_ORDER_BUMP
   }
+};
+
+// Direct aliases to guarantee that URL params (?product=adre or ?product=presets) never fail or mismatch
+PRODUCTS['adre'] = PRODUCTS['adre-combo'];
+PRODUCTS['combo'] = PRODUCTS['adre-combo'];
+PRODUCTS['ebook'] = PRODUCTS['adre-combo'];
+PRODUCTS['assam'] = PRODUCTS['adre-combo'];
+PRODUCTS['cinemood'] = PRODUCTS['cinemood-presets'];
+PRODUCTS['presets'] = PRODUCTS['cinemood-presets'];
+PRODUCTS['preset'] = PRODUCTS['cinemood-presets'];
+PRODUCTS['lightroom'] = PRODUCTS['cinemood-presets'];
+PRODUCTS['lr'] = PRODUCTS['cinemood-presets'];
+PRODUCTS['dng'] = PRODUCTS['cinemood-presets'];
+PRODUCTS['english'] = PRODUCTS['english-bundle'];
+
+/**
+ * Universal helper to safely retrieve any product by ID or alias
+ */
+export const getProductById = (rawId) => {
+  if (!rawId) return null;
+  const key = String(rawId).trim().toLowerCase();
+  return PRODUCTS[key] || null;
 };
 

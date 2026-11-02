@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { MetaPixel } from '../components/MetaPixel';
 import { saveOrderToFirestore } from '../firebase';
-import { PRODUCTS, CTET_ORDER_BUMP, WEDDING_ORDER_BUMP } from '../data/products';
+import { PRODUCTS, CTET_ORDER_BUMP, WEDDING_ORDER_BUMP, getProductById } from '../data/products';
 
 export default function Checkout({ product: propProduct, initialOrderBumpSelected = false, onNavigate, onSuccess }) {
-  // Resolve product
-  const getInitialProduct = () => {
+  // Safe helper to resolve current product from prop, URL search parameters, or session
+  const resolveTargetProduct = () => {
     if (propProduct) return propProduct;
     try {
       const params = new URLSearchParams(window.location.search);
       const prodId = params.get('product') || params.get('id');
-      if (prodId && PRODUCTS[prodId]) return PRODUCTS[prodId];
+      const resolved = getProductById(prodId);
+      if (resolved) return resolved;
+
       const savedId = sessionStorage.getItem('pj_checkout_product_id');
-      if (savedId && PRODUCTS[savedId]) return PRODUCTS[savedId];
+      const savedProd = getProductById(savedId);
+      if (savedProd) return savedProd;
     } catch (e) {}
     return PRODUCTS['cinemood-presets'] || PRODUCTS['adre-combo'];
   };
@@ -30,13 +33,29 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
     return false;
   };
 
-  const [product, setProduct] = useState(getInitialProduct);
+  const [product, setProduct] = useState(resolveTargetProduct);
   const [includeOrderBump, setIncludeOrderBump] = useState(getInitialBump);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Keep product reactively in sync when props or URL changes
+  useEffect(() => {
+    if (propProduct) {
+      setProduct(propProduct);
+    } else {
+      const resolved = resolveTargetProduct();
+      if (resolved) setProduct(resolved);
+    }
+  }, [propProduct]);
+
+  useEffect(() => {
+    if (initialOrderBumpSelected !== undefined) {
+      setIncludeOrderBump(Boolean(initialOrderBumpSelected));
+    }
+  }, [initialOrderBumpSelected]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -292,7 +311,9 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
                 </div>
 
                 <div className="checkout-bump-footer-note">
-                  💍 <em>Perfect For: Wedding photography, pre-wedding shoots, engagement portraits, couple photography, and cinematic storytelling.</em>
+                  <em>{product.orderBump.perfectFor || (isCinemood 
+                    ? '💍 Perfect For: Wedding photography, pre-wedding shoots, engagement portraits, couple photography, and cinematic storytelling.'
+                    : '📚 Perfect For: CTET Paper I & II candidates, Assam TET aspirants, and government teaching exam preparation.')}</em>
                 </div>
               </div>
             </div>
