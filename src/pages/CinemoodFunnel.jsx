@@ -136,9 +136,9 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
   ];
 
   const featuresList = [
-    { icon: '🎨', title: '50+ Curated Cinematic Presets', desc: 'Moody Brown, Teal & Orange, Film Mirage, Golden Hour, Dark Fade, Vintage Cinematic & 44+ more looks.' },
-    { icon: '📱', title: '100% Free Lightroom Mobile Compatible', desc: 'Works effortlessly on the FREE Adobe Lightroom Mobile app (iOS & Android). No monthly Adobe subscription required!' },
-    { icon: '💻', title: 'Desktop Lightroom (.XMP) Included', desc: 'Full support for Lightroom Classic, Lightroom CC, and Adobe Camera RAW on Windows PC & Mac.' },
+    { icon: '🎨', title: '50+ Curated Cinematic DNG Presets', desc: 'Moody Brown, Teal & Orange, Film Mirage, Golden Hour, Dark Fade, Vintage Cinematic & 44+ more looks.' },
+    { icon: '📱', title: '100% Free Lightroom Mobile (.DNG)', desc: 'Works effortlessly on the FREE Adobe Lightroom Mobile app (iOS & Android). No monthly Adobe subscription required!' },
+    { icon: '💎', title: 'Universal High-Fidelity DNG Format', desc: 'Pre-calibrated RAW DNG profiles compatible across Mobile, Tablets, and Desktop Lightroom.' },
     { icon: '⚡', title: '1-Click Instant Magic', desc: 'Simply copy settings and paste onto any mobile photo to get an aesthetic, Instagram-ready cinematic look in seconds.' },
     { icon: '📸', title: 'Works on All Camera & Phone Photos', desc: 'Specially calibrated for iPhone, Samsung, OnePlus, Xiaomi, and DSLR/Mirrorless RAW & JPEG photos.' },
     { icon: '📖', title: 'Step-by-Step Installation Video & PDF', desc: 'Complete beginner-friendly instructions included so you can import and apply presets in less than 2 minutes.' }
@@ -185,7 +185,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
           
           <div className="lr-badge-header">
             <span className="lr-app-icon">Lr</span>
-            <span>CINEMOOD COLLECTION • 50+ CINEMATIC PRESETS</span>
+            <span>CINEMOOD COLLECTION • 50+ CINEMATIC DNG PRESETS</span>
           </div>
 
           <h1 className="lr-hero-title">
@@ -220,7 +220,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
               className="lr-banner-img"
             />
             <div className="lr-banner-overlay-tag">
-              <span>🔥 50+ READY-TO-USE PRESETS (.DNG + .XMP)</span>
+              <span>🔥 50+ READY-TO-USE CINEMATIC DNG PRESETS</span>
             </div>
           </div>
 
@@ -270,8 +270,8 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             >
               <span>
                 {selectedBump 
-                  ? `GET 50+ PRESETS + WEDDING PACK (₹${product.price + product.orderBump.price})`
-                  : `GET 50+ CINEMATIC PRESETS NOW — ₹${product.price}`}
+                  ? `GET 50+ DNG PRESETS + WEDDING XML PACK (₹${product.price + product.orderBump.price})`
+                  : `GET 50+ CINEMATIC DNG PRESETS NOW — ₹${product.price}`}
               </span>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -341,8 +341,8 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             >
               <span>
                 {selectedBump 
-                  ? `DOWNLOAD ALL 50+ PRESETS + WEDDING PACK (₹${product.price + product.orderBump.price})`
-                  : `DOWNLOAD ALL 50+ PRESETS (₹${product.price})`}
+                  ? `DOWNLOAD 50+ DNG PRESETS + WEDDING XML PACK (₹${product.price + product.orderBump.price})`
+                  : `DOWNLOAD ALL 50+ DNG PRESETS (₹${product.price})`}
               </span>
             </button>
           </div>
@@ -452,7 +452,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
               >
                 <span>
                   {selectedBump 
-                    ? `GET 50+ PRESETS + WEDDING PACK (₹${product.price + product.orderBump.price})`
+                    ? `GET 50+ DNG PRESETS + WEDDING XML PACK (₹${product.price + product.orderBump.price})`
                     : `GET INSTANT ACCESS NOW (₹${product.price})`}
                 </span>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -476,7 +476,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             <div className="lr-sticky-info">
               <span className="lr-sticky-app-badge">Lr</span>
               <div>
-                <strong>{selectedBump ? 'CineMood + Wedding Pack' : 'CineMood 50+ Presets'}</strong>
+                <strong>{selectedBump ? 'CineMood DNG + Wedding XML Pack' : 'CineMood 50+ DNG Presets'}</strong>
                 <span className="lr-sticky-price">
                   ₹{selectedBump ? (product.price + product.orderBump.price) : product.price} 
                   <del>₹{selectedBump ? (product.originalPrice + product.orderBump.originalPrice) : product.originalPrice}</del>

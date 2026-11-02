@@ -29,25 +29,25 @@ export const CTET_ORDER_BUMP = {
 
 export const WEDDING_ORDER_BUMP = {
   id: 'wedding-bump-49',
-  name: 'XMP - Wedding & Prewedding Collection (20+ Presets)',
-  shortName: 'Wedding & Prewedding Pack',
-  tagline: '20+ Timeless Cinematic Wedding & Pre-wedding Lightroom Presets',
+  name: 'XML - Wedding & Prewedding Collection (20+ Templates)',
+  shortName: 'Wedding XML Templates Pack',
+  tagline: '20+ Timeless Cinematic Wedding & Pre-wedding XML Templates',
   price: 49,
   originalPrice: 499,
   discountPercent: '90% OFF',
   coverImage: '/presets/cinemood-banner.jpg',
-  pitch: 'Transform your wedding photographs into timeless, cinematic masterpieces with the Wedding Lightroom Presets Bundle. Featuring 20+ premium presets, this collection helps you achieve elegant skin tones, warm golden highlights, soft romantic colours, and professional cinematic looks with just one click.',
+  pitch: 'Transform your wedding photographs into timeless, cinematic masterpieces with the Wedding Lightroom Presets Bundle. Featuring 20+ premium presets in XML format, this collection helps you achieve elegant skin tones, warm golden highlights, soft romantic colours, and professional cinematic looks with just one click.',
   features: [
-    '20+ Premium Wedding Lightroom Presets (.XMP & .DNG)',
+    '20+ Premium Wedding Lightroom XML Templates',
     'Cinematic and Romantic Colour Tones',
     'Warm, Golden-Hour-Inspired Looks',
     'Elegant and Natural Skin-Tone Enhancement',
-    'Professional Wedding and Pre-wedding Editing Styles',
-    'Quick, Easy-to-Apply Presets to Speed Up Your Workflow'
+    'Professional Wedding and Pre-wedding XML Editing Styles',
+    'Quick, Easy-to-Apply XML Templates to Speed Up Your Workflow'
   ],
   downloadUrl: 'https://drive.google.com/drive/folders/10r0oO0i0Uqa_b8ujxc9uxTcobQBMXmmC?usp=drive_link',
   files: [
-    'Wedding & Prewedding Collection (20+ Presets) [.XMP & .DNG]'
+    'Wedding & Prewedding Collection (20+ XML Templates)'
   ]
 };
 
@@ -88,9 +88,9 @@ export const PRODUCTS = {
   },
   'cinemood-presets': {
     id: 'cinemood-presets',
-    name: 'CineMood Lightroom Presets (50+ Cinematic Pack)',
-    shortName: 'CineMood 50+ Presets Pack',
-    tagline: '50+ Curated Cinematic Presets for Mobile & Desktop',
+    name: 'CineMood Lightroom Presets (50+ Cinematic DNG Pack)',
+    shortName: 'CineMood 50+ DNG Presets',
+    tagline: '50+ Curated Cinematic DNG Presets for Mobile & Desktop',
     category: 'Photography & Photo Editing',
     currency: 'INR',
     currencySymbol: '₹',
@@ -101,29 +101,27 @@ export const PRODUCTS = {
     totalReviews: '3,840+',
     featuredBadge: '🔥 TRENDING LIGHTROOM PACK',
     coverImage: '/presets/cinemood-banner.jpg',
-    description: 'Transform your ordinary phone and camera photos into stunning cinematic film frames with 1-click. Curated specifically for cinematic color grading on Adobe Lightroom Mobile (Free App) & Desktop.',
+    description: 'Transform your ordinary phone and camera photos into stunning cinematic film frames with 1-click. Curated specifically for cinematic color grading in high-fidelity DNG format on Adobe Lightroom Mobile (Free App) & Desktop.',
     features: [
-      '🎨 50+ Premium Cinematic Presets (Moody Brown, Teal & Orange, Mirage & more)',
-      '📱 100% Free Lightroom Mobile Compatible (iOS & Android - No Subscription Needed)',
-      '💻 Desktop Lightroom Classic & CC (.XMP) Included for PC & Mac',
-      '⚡ 1-Click Instant Import & Color Grading',
+      '🎨 50+ Premium Cinematic DNG Presets (Moody Brown, Teal & Orange, Mirage & more)',
+      '📱 100% Free Lightroom Mobile Compatible (.DNG format for iOS & Android)',
+      '⚡ 1-Click Instant Import & Color Grading (No Adobe Subscription Needed)',
       '💎 Clean Skin Tones, Rich Depth & Professional Balanced Contrast',
-      '📖 Step-by-Step Mobile & Desktop Video/PDF Installation Guide Included',
+      '📖 Step-by-Step Installation Video/PDF Tutorial Included',
       '🚀 Instant Digital Access & Lifetime Validity with Free Future Updates'
     ],
     downloadUrl: 'https://drive.google.com/drive/folders/10r0oO0i0Uqa_b8ujxc9uxTcobQBMXmmC?usp=drive_link',
     files: [
-      'CineMood 50+ Mobile DNG Presets Pack (Instant Mobile Import)',
-      'CineMood Desktop XMP Presets Collection (PC & Mac)',
+      'CineMood 50+ Cinematic DNG Presets Pack (Instant Mobile & Desktop Import)',
       'Step-by-Step Installation & Usage Guide [PDF]'
     ],
     orderBump: WEDDING_ORDER_BUMP
   },
   'english-bundle': {
     id: 'cinemood-presets',
-    name: 'CineMood Lightroom Presets (50+ Cinematic Pack)',
-    shortName: 'CineMood 50+ Presets Pack',
-    tagline: '50+ Curated Cinematic Presets for Mobile & Desktop',
+    name: 'CineMood Lightroom Presets (50+ Cinematic DNG Pack)',
+    shortName: 'CineMood 50+ DNG Presets',
+    tagline: '50+ Curated Cinematic DNG Presets for Mobile & Desktop',
     category: 'Photography & Photo Editing',
     currency: 'INR',
     currencySymbol: '₹',
@@ -134,20 +132,18 @@ export const PRODUCTS = {
     totalReviews: '3,840+',
     featuredBadge: '🔥 TRENDING LIGHTROOM PACK',
     coverImage: '/presets/cinemood-banner.jpg',
-    description: 'Transform your ordinary phone and camera photos into stunning cinematic film frames with 1-click. Curated specifically for cinematic color grading on Adobe Lightroom Mobile (Free App) & Desktop.',
+    description: 'Transform your ordinary phone and camera photos into stunning cinematic film frames with 1-click. Curated specifically for cinematic color grading in high-fidelity DNG format on Adobe Lightroom Mobile (Free App) & Desktop.',
     features: [
-      '🎨 50+ Premium Cinematic Presets (Moody Brown, Teal & Orange, Mirage & more)',
-      '📱 100% Free Lightroom Mobile Compatible (iOS & Android - No Subscription Needed)',
-      '💻 Desktop Lightroom Classic & CC (.XMP) Included for PC & Mac',
-      '⚡ 1-Click Instant Import & Color Grading',
+      '🎨 50+ Premium Cinematic DNG Presets (Moody Brown, Teal & Orange, Mirage & more)',
+      '📱 100% Free Lightroom Mobile Compatible (.DNG format for iOS & Android)',
+      '⚡ 1-Click Instant Import & Color Grading (No Adobe Subscription Needed)',
       '💎 Clean Skin Tones, Rich Depth & Professional Balanced Contrast',
-      '📖 Step-by-Step Mobile & Desktop Video/PDF Installation Guide Included',
+      '📖 Step-by-Step Installation Video/PDF Tutorial Included',
       '🚀 Instant Digital Access & Lifetime Validity with Free Future Updates'
     ],
     downloadUrl: 'https://drive.google.com/drive/folders/10r0oO0i0Uqa_b8ujxc9uxTcobQBMXmmC?usp=drive_link',
     files: [
-      'CineMood 50+ Mobile DNG Presets Pack (Instant Mobile Import)',
-      'CineMood Desktop XMP Presets Collection (PC & Mac)',
+      'CineMood 50+ Cinematic DNG Presets Pack (Instant Mobile & Desktop Import)',
       'Step-by-Step Installation & Usage Guide [PDF]'
     ],
     orderBump: WEDDING_ORDER_BUMP
