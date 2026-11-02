@@ -172,9 +172,9 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
       <div className="lr-top-bar">
         <div className="lr-banner-content">
           <span className="lr-pill-live">⚡ FLASH LAUNCH SALE</span>
-          <span>Flat 90% OFF Ends In: <strong className="lr-timer">{formattedTime}</strong></span>
+          <span>Flat {product.discountPercent} Ends In: <strong className="lr-timer">{formattedTime}</strong></span>
           <span className="lr-sep">•</span>
-          <span>Special Offer: <strong>₹99 INR Only!</strong> (Original <del>₹999</del>)</span>
+          <span>Special Offer: <strong>₹{product.price} INR Only!</strong> (Original <del>₹{product.originalPrice}</del>)</span>
         </div>
       </div>
 
@@ -427,7 +427,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
               <div className="lr-step-item">
                 <div className="lr-step-num">1</div>
                 <h4>Download Files</h4>
-                <p>Complete the ₹99 payment and get instant Google Drive access to all 50+ presets.</p>
+                <p>Complete the ₹{product.price} payment and get instant Google Drive access to all 50+ presets.</p>
               </div>
               <div className="lr-step-arrow">→</div>
               <div className="lr-step-item">
