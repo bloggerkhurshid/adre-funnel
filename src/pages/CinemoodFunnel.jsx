@@ -161,8 +161,8 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
       a: 'No prior editing skills required! The pack includes an easy-to-follow PDF and video tutorial showing you exactly how to import the files and apply them to your photos in just 1 click.'
     },
     {
-      q: 'Is there a money-back guarantee?',
-      a: 'Yes! We offer a 7-day satisfaction guarantee. If the presets do not work for your photos, simply reach out to our dedicated support team at support@projuktisoft.shop.'
+      q: 'What if I need help with installation?',
+      a: 'The pack comes with an easy-to-follow step-by-step video and PDF tutorial. Plus, our dedicated support team is available at support@projuktisoft.shop to assist you anytime.'
     }
   ];
 
@@ -396,7 +396,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             />
           </div>
           <div className="lr-guarantee-subtext">
-            <span>🛡️ 100% Risk-Free Guarantee • 7 Days Hassle-Free Support • Verified Adobe Lightroom Files</span>
+            <span>🛡️ 100% Authentic Lightroom Files • Dedicated Support • Instant Delivery</span>
           </div>
         </div>
       </section>

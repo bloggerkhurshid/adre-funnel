@@ -378,7 +378,7 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
               <span>•</span>
               <span>⚡ Instant Download</span>
               <span>•</span>
-              <span>🛡️ 7-Day Guarantee</span>
+              <span>📩 Email Delivery</span>
             </div>
           </form>
 
