@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { findOrdersByEmailOrPhone } from '../firebase';
-import { PRODUCTS, CTET_ORDER_BUMP, WEDDING_ORDER_BUMP } from '../data/products';
+import { PRODUCTS, CTET_ORDER_BUMP, WEDDING_ORDER_BUMP, getProductById } from '../data/products';
 
 export default function MyDownloads({ onNavigate }) {
   const [queryInput, setQueryInput] = useState('');
@@ -30,6 +30,38 @@ export default function MyDownloads({ onNavigate }) {
       setIsSearching(false);
     }
   };
+
+  // Deduplicate orders by product so repeat purchases appear only once
+  const uniqueOrders = (() => {
+    const map = new Map();
+
+    for (const order of foundOrders) {
+      const resolvedProd = getProductById(order.productId);
+      const prodKey = resolvedProd ? resolvedProd.id : (order.productId || 'adre-combo');
+
+      if (!map.has(prodKey)) {
+        map.set(prodKey, { ...order, resolvedProduct: resolvedProd });
+      } else {
+        const existing = map.get(prodKey);
+        // If any duplicate order had the bump offer selected, make sure it stays unlocked
+        if (order.orderBumpSelected) {
+          existing.orderBumpSelected = true;
+          if (order.orderBumpName) existing.orderBumpName = order.orderBumpName;
+        }
+        // Keep the latest timestamp and transaction reference
+        const existingTime = existing.createdAtISO ? new Date(existing.createdAtISO).getTime() : 0;
+        const newTime = order.createdAtISO ? new Date(order.createdAtISO).getTime() : 0;
+        if (newTime >= existingTime) {
+          existing.createdAtISO = order.createdAtISO || existing.createdAtISO;
+          existing.paymentId = order.paymentId || existing.paymentId;
+          existing.totalAmount = order.totalAmount || existing.totalAmount;
+          existing.name = order.name || existing.name;
+        }
+      }
+    }
+
+    return Array.from(map.values());
+  })();
 
   return (
     <div className="policy-page-wrapper">
@@ -102,7 +134,7 @@ export default function MyDownloads({ onNavigate }) {
           )}
 
           {/* Found Orders Display */}
-          {foundOrders.length > 0 && (
+          {uniqueOrders.length > 0 && (
             <div className="found-orders-section animate-fadeIn">
               <div style={{
                 background: 'rgba(138, 201, 38, 0.1)',
@@ -114,11 +146,11 @@ export default function MyDownloads({ onNavigate }) {
                 fontWeight: 700,
                 fontSize: '0.9rem'
               }}>
-                ✓ {foundOrders.length} Verified Order{foundOrders.length > 1 ? 's' : ''} Found! Access your ebooks below:
+                ✓ {uniqueOrders.length} Purchased Product{uniqueOrders.length > 1 ? 's' : ''} Unlocked! Access your files below:
               </div>
 
-              {foundOrders.map((order, idx) => {
-                const prod = PRODUCTS[order.productId] || PRODUCTS['adre-combo'];
+              {uniqueOrders.map((order, idx) => {
+                const prod = order.resolvedProduct || getProductById(order.productId) || PRODUCTS[order.productId] || PRODUCTS['adre-combo'];
                 const hasBump = order.orderBumpSelected;
                 const formattedDate = order.createdAtISO 
                   ? new Date(order.createdAtISO).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
