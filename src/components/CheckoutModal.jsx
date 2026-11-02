@@ -103,6 +103,30 @@ export default function CheckoutModal({
         console.error('Firebase save error:', fbErr);
       }
 
+      // Send automated delivery confirmation email via Hostinger SMTP Netlify Function
+      try {
+        fetch('/api/send-order-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerEmail: email,
+            customerName: name,
+            customerPhone: phone,
+            orderId: payload.paymentId,
+            productName: product.name,
+            totalAmount: payload.totalAmount,
+            downloadUrl: product.downloadUrl,
+            files: product.files,
+            orderBumpSelected: payload.orderBumpSelected,
+            orderBumpName: payload.orderBump?.name,
+            orderBumpDownloadUrl: payload.orderBump?.downloadUrl,
+            orderBumpFiles: payload.orderBump?.files
+          })
+        }).catch((err) => console.warn('Background email dispatch notice:', err));
+      } catch (mailErr) {
+        console.warn('Background email trigger error:', mailErr);
+      }
+
       setIsProcessing(false);
       handleModalClose();
       if (onSuccess) {
