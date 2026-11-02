@@ -68,6 +68,42 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
       img: '/presets/preset-moody-mirage.jpg',
       tag: 'URBAN & ARCHITECTURE',
       desc: 'Tailored for moody urban aesthetics, street photography, and cloudy days. Gently mutes harsh highlights while rendering rich, velvety blacks and elegant architectural tones.'
+    },
+    {
+      id: 4,
+      num: '4',
+      title: 'Blue Mirage',
+      subtitle: 'Clean Coastal & Sky Tones',
+      img: '/presets/preset-blue-mirage.jpg',
+      tag: 'BEACH & TRAVEL',
+      desc: 'Designed for coastal landscapes, vacation photos, and open skies. Delivers serene sea blues, clean whites, and subtle skin warmth with perfect highlight balance.'
+    },
+    {
+      id: 5,
+      num: '5',
+      title: 'City Portrait',
+      subtitle: 'Crisp Urban Fashion & Street Depth',
+      img: '/presets/preset-city-portrait.jpg',
+      tag: 'FASHION & LIFESTYLE',
+      desc: 'Optimized for street fashion and city portraits. Brings out rich denim textures, punchy contrast, and creamy background bokeh that makes your subject stand out.'
+    },
+    {
+      id: 6,
+      num: '6',
+      title: 'Dreamy Mirage',
+      subtitle: 'Pastoral Green & Soft Film Glow',
+      img: '/presets/preset-dreamy-mirage.jpg',
+      tag: 'NATURE & LANDSCAPE',
+      desc: 'Perfect for outdoor green fields, village views, and sunlight. Softens contrast while giving lush greens and earthy tones a nostalgic, dreamy cinematic atmosphere.'
+    },
+    {
+      id: 7,
+      num: '7',
+      title: 'Sunset Mirage',
+      subtitle: 'Golden Hour Warmth & Creamy Highlights',
+      img: '/presets/preset-sunset-mirage.jpg',
+      tag: 'GOLDEN HOUR & CLOSEUP',
+      desc: 'Captures the magic of the golden hour. Infuses portraits with rich amber warmth, radiant skin glows, and film-like highlight rolloff for breathtaking evening shots.'
     }
   ];
 
@@ -238,7 +274,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             <div className="lr-callout-inner">
               <span className="lr-callout-icon">✨</span>
               <div>
-                <h4>+ Plus 47 More Exclusive Cinematic Styles Included in Your Download!</h4>
+                <h4>+ Plus 43 More Exclusive Cinematic Styles Included in Your 50+ Pack!</h4>
                 <p>Including Vintage Film, Moody Dark Forest, Cyberpunk Night, Desaturated Urban, Warm Sunset Glow, and Black & White Film Grain.</p>
               </div>
             </div>
@@ -396,3 +432,4 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
     </div>
   );
 }
+

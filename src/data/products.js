@@ -87,7 +87,7 @@ export const PRODUCTS = {
       '📖 Step-by-Step Mobile & Desktop Video/PDF Installation Guide Included',
       '🚀 Instant Digital Access & Lifetime Validity with Free Future Updates'
     ],
-    downloadUrl: 'https://drive.google.com/drive/folders/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag?usp=sharing',
+    downloadUrl: 'https://drive.google.com/drive/folders/10r0oO0i0Uqa_b8ujxc9uxTcobQBMXmmC?usp=drive_link',
     files: [
       'CineMood 50+ Mobile DNG Presets Pack (Instant Mobile Import)',
       'CineMood Desktop XMP Presets Collection (PC & Mac)',
@@ -119,7 +119,7 @@ export const PRODUCTS = {
       '📖 Step-by-Step Mobile & Desktop Video/PDF Installation Guide Included',
       '🚀 Instant Digital Access & Lifetime Validity with Free Future Updates'
     ],
-    downloadUrl: 'https://drive.google.com/drive/folders/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag?usp=sharing',
+    downloadUrl: 'https://drive.google.com/drive/folders/10r0oO0i0Uqa_b8ujxc9uxTcobQBMXmmC?usp=drive_link',
     files: [
       'CineMood 50+ Mobile DNG Presets Pack (Instant Mobile Import)',
       'CineMood Desktop XMP Presets Collection (PC & Mac)',
