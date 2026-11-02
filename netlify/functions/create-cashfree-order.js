@@ -38,7 +38,8 @@ export const handler = async (event, context) => {
 
     const appId = process.env.CASHFREE_APP_ID;
     const secretKey = process.env.CASHFREE_SECRET_KEY;
-    const isSandbox = process.env.CASHFREE_ENV === 'sandbox' || (appId && appId.startsWith('TEST'));
+    const envVal = (process.env.CASHFREE_ENV || '').trim().toLowerCase();
+    const isSandbox = envVal === 'sandbox' || (appId && appId.startsWith('TEST'));
 
     if (!appId || !secretKey) {
       // Mock / Preview Mode when credentials are not yet set
@@ -105,7 +106,8 @@ export const handler = async (event, context) => {
       body: JSON.stringify({
         order_id: result.order_id,
         payment_session_id: result.payment_session_id,
-        environment: isSandbox ? 'sandbox' : 'production'
+        environment: isSandbox ? 'sandbox' : 'production',
+        app_id_prefix: appId ? (appId.substring(0, 4) + '***') : 'none'
       })
     };
   } catch (err) {
