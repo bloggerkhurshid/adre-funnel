@@ -28,6 +28,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -36,10 +37,18 @@ body {
   font-family: var(--font-body);
   line-height: 1.6;
   overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background-image: 
     radial-gradient(ellipse 80% 50% at 50% -10%, rgba(138, 201, 38, 0.12), transparent 70%),
     radial-gradient(ellipse 60% 40% at 90% 70%, rgba(16, 185, 129, 0.08), transparent 60%);
-  background-attachment: fixed;
+  background-attachment: scroll; /* Scroll avoids heavy GPU repaint freezes during touch scroll */
+}
+
+/* Modal Open Body Lock */
+body.modal-open {
+  overflow: hidden !important;
+  touch-action: none;
 }
 
 .container {
@@ -1936,10 +1945,16 @@ body {
    ======================================================== */
 
 @media (max-width: 640px) {
-  /* Prevent horizontal overflow on phones */
-  html, body {
+  /* Prevent horizontal overflow on phones without locking vertical touch momentum */
+  html {
     overflow-x: hidden;
+  }
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     width: 100%;
+    background-attachment: scroll !important;
   }
 
   .container {

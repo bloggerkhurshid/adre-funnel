@@ -21,15 +21,16 @@ export default function CheckoutModal({
     setIncludeOrderBump(initialOrderBumpSelected);
   }, [initialOrderBumpSelected, isOpen]);
 
-  // Lock body scroll on phone/desktop when modal is open
+  // Lock body scroll cleanly using class when modal is open
   useEffect(() => {
     if (isOpen) {
-      const originalStyle = window.getComputedStyle(document.body).overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = originalStyle;
-      };
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
     }
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
   }, [isOpen]);
 
   // Escape key to close modal

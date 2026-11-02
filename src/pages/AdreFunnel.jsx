@@ -59,9 +59,16 @@ export default function AdreFunnel({ onBuyProduct, onNavigate }) {
       }, 4500);
     }, 12000);
 
-    // Sticky Scroll Listener
+    // Optimized 60FPS Non-Blocking Sticky Scroll Listener
+    let isTicking = false;
     const handleScroll = () => {
-      setShowSticky(window.scrollY > 450);
+      if (!isTicking) {
+        window.requestAnimationFrame(() => {
+          setShowSticky(window.scrollY > 450);
+          isTicking = false;
+        });
+        isTicking = true;
+      }
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
 
