@@ -38,7 +38,7 @@ export const handler = async (event, context) => {
 
     const appId = process.env.CASHFREE_APP_ID;
     const secretKey = process.env.CASHFREE_SECRET_KEY;
-    const isSandbox = process.env.CASHFREE_ENV === 'sandbox';
+    const isSandbox = process.env.CASHFREE_ENV === 'sandbox' || (appId && appId.startsWith('TEST'));
 
     if (!appId || !secretKey) {
       // Mock / Preview Mode when credentials are not yet set
