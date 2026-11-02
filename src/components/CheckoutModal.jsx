@@ -79,18 +79,23 @@ export default function CheckoutModal({
       handler: function (response) {
         setIsProcessing(false);
         const paymentId = response.razorpay_payment_id || `pay_${Date.now()}`;
+        const payload = {
+          product,
+          orderBumpSelected: includeOrderBump && hasOrderBump,
+          orderBump: product.orderBump,
+          totalAmount,
+          paymentId,
+          name,
+          email,
+          phone,
+          timestamp: Date.now()
+        };
+        try {
+          sessionStorage.setItem('pj_verified_order', JSON.stringify(payload));
+        } catch (e) {}
         onClose();
         if (onSuccess) {
-          onSuccess({
-            product,
-            orderBumpSelected: includeOrderBump && hasOrderBump,
-            orderBump: product.orderBump,
-            totalAmount,
-            paymentId,
-            name,
-            email,
-            phone
-          });
+          onSuccess(payload);
         }
       },
       modal: {
@@ -107,18 +112,23 @@ export default function CheckoutModal({
       // Fallback preview mode
       setTimeout(() => {
         setIsProcessing(false);
+        const payload = {
+          product,
+          orderBumpSelected: includeOrderBump && hasOrderBump,
+          orderBump: product.orderBump,
+          totalAmount,
+          paymentId: `pay_preview_${Date.now()}`,
+          name,
+          email,
+          phone,
+          timestamp: Date.now()
+        };
+        try {
+          sessionStorage.setItem('pj_verified_order', JSON.stringify(payload));
+        } catch (e) {}
         onClose();
         if (onSuccess) {
-          onSuccess({
-            product,
-            orderBumpSelected: includeOrderBump && hasOrderBump,
-            orderBump: product.orderBump,
-            totalAmount,
-            paymentId: `pay_preview_${Date.now()}`,
-            name,
-            email,
-            phone
-          });
+          onSuccess(payload);
         }
       }, 1000);
     }

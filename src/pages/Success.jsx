@@ -1,28 +1,114 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MetaPixel } from '../components/MetaPixel';
 import { PRODUCTS } from '../data/products';
 
 export default function Success({ purchaseData, onNavigate }) {
-  const product = purchaseData?.product || PRODUCTS['adre-combo'];
-  const paymentId = purchaseData?.paymentId || `pay_live_${Date.now()}`;
-  const buyerName = purchaseData?.name || 'Valued Learner';
-  const buyerEmail = purchaseData?.email || 'your registered email';
-  const orderBump = purchaseData?.orderBumpSelected 
-    ? (purchaseData.orderBump || product.orderBump) 
-    : null;
-  const totalAmount = purchaseData?.totalAmount || product.price;
+  // Look for verified in-memory purchaseData OR valid sessionStorage from completed Razorpay checkout
+  const activeOrder = (() => {
+    if (purchaseData && purchaseData.paymentId) return purchaseData;
+    try {
+      const raw = sessionStorage.getItem('pj_verified_order');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Valid for 2 hours only after successful payment
+        if (parsed.timestamp && Date.now() - parsed.timestamp < 2 * 60 * 60 * 1000) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    return null;
+  })();
 
+  const [countdown, setCountdown] = useState(5);
+
+  // If no verified active order, auto-redirect back to storefront
   useEffect(() => {
-    window.scrollTo(0, 0);
-    // 1. Fire PageView
-    MetaPixel.pageView('Purchase Success');
-    // 2. Fire Purchase Event on Meta Pixel
-    MetaPixel.purchase({
-      ...product,
-      price: totalAmount,
-      name: orderBump ? `${product.name} + ${orderBump.name}` : product.name
-    }, paymentId);
-  }, [product, paymentId, totalAmount, orderBump]);
+    if (!activeOrder) {
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            if (onNavigate) onNavigate('home');
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [activeOrder, onNavigate]);
+
+  // If verified order exists, fire Meta Pixel tracking once
+  useEffect(() => {
+    if (activeOrder && activeOrder.paymentId) {
+      window.scrollTo(0, 0);
+      MetaPixel.pageView('Purchase Success');
+      MetaPixel.purchase({
+        ...activeOrder.product,
+        price: activeOrder.totalAmount,
+        name: activeOrder.orderBumpSelected && activeOrder.orderBump
+          ? `${activeOrder.product.name} + ${activeOrder.orderBump.name}`
+          : activeOrder.product.name
+      }, activeOrder.paymentId);
+    }
+  }, [activeOrder]);
+
+  // ========================================================
+  // ACCESS RESTRICTED SCREEN (Direct URL Typing / Shared Link)
+  // ========================================================
+  if (!activeOrder) {
+    return (
+      <div className="success-page-wrapper">
+        <div className="success-container access-denied-card">
+          <div className="brand-top">
+            <img src="/logo.png" alt="ProjuktiSoft Logo" />
+            <span>ProjuktiSoft</span>
+          </div>
+
+          <div className="restricted-badge">
+            <div className="restricted-icon">🔒</div>
+            <h2>Access Restricted: No Verified Order Found</h2>
+          </div>
+
+          <p className="delivery-note" style={{ color: '#cbd5e1' }}>
+            Direct access to this download URL is blocked. This page is strictly accessible to customers with a verified, completed Razorpay transaction on <strong>projuktisoft.shop</strong>.
+          </p>
+
+          <div className="redirect-notice-box">
+            <span>⚡ Automatically redirecting to official store in <strong>{countdown}s</strong>...</span>
+          </div>
+
+          <div className="access-denied-actions">
+            <button 
+              type="button" 
+              className="btn-primary-cta"
+              onClick={() => onNavigate && onNavigate('home')}
+            >
+              <span>← Go to Official Storefront</span>
+            </button>
+            <div style={{ marginTop: '14px' }}>
+              <a 
+                href="/contact" 
+                onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('contact'); }}
+                style={{ color: '#94a3b8', fontSize: '0.85rem', textDecoration: 'underline' }}
+              >
+                Already paid? Contact Support with your Payment Screenshot
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ========================================================
+  // AUTHENTICATED SUCCESS SCREEN (Real Buyer Only)
+  // ========================================================
+  const product = activeOrder.product || PRODUCTS['adre-combo'];
+  const paymentId = activeOrder.paymentId;
+  const buyerName = activeOrder.name || 'Valued Learner';
+  const buyerEmail = activeOrder.email || 'your registered email';
+  const orderBump = activeOrder.orderBumpSelected ? (activeOrder.orderBump || product.orderBump) : null;
 
   return (
     <div className="success-page-wrapper">
