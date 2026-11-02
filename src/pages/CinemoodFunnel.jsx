@@ -6,7 +6,6 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
   const product = PRODUCTS['cinemood-presets'] || PRODUCTS['english-bundle'];
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 52);
   const [showSticky, setShowSticky] = useState(false);
-  const [selectedBump, setSelectedBump] = useState(false);
   const [activeFaq, setActiveFaq] = useState(0);
 
   useEffect(() => {
@@ -224,55 +223,95 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             </div>
           </div>
 
-          {/* Wedding & Prewedding Order Bump Offer */}
-          {product?.orderBump && (
-            <div className={`lr-bump-card ${selectedBump ? 'is-selected' : ''}`} onClick={() => setSelectedBump(!selectedBump)}>
-              <div className="lr-bump-header">
-                <label className="lr-bump-checkbox-label" onClick={(e) => e.stopPropagation()}>
-                  <input
-                    type="checkbox"
-                    checked={selectedBump}
-                    onChange={(e) => setSelectedBump(e.target.checked)}
-                    className="lr-bump-input"
-                  />
-                  <span>
-                    <strong>⚡ ONE-TIME OFFER: Add {product.orderBump.name}</strong> for just <span className="lr-bump-highlight">₹{product.orderBump.price}</span> <del className="lr-bump-del">₹{product.orderBump.originalPrice}</del>
-                  </span>
-                </label>
-                <span className="lr-bump-badge">90% OFF</span>
+          {/* Main Product Breakdown & Highlight Card */}
+          <div className="lr-product-deep-dive-card">
+            <div className="lr-dive-header text-center">
+              <span className="lr-dive-badge">💎 100% UNLOCKED • INSTANT ACCESS</span>
+              <h3 className="lr-dive-title">Everything Included in The CineMood 50+ DNG Pack</h3>
+              <p className="lr-dive-desc">
+                Everything you need to turn raw, ordinary smartphone and camera pictures into high-end cinematic edits with just 1-tap in the FREE Lightroom app.
+              </p>
+            </div>
+
+            <div className="lr-dive-grid">
+              <div className="lr-dive-item">
+                <span className="lr-dive-icon">🎨</span>
+                <div>
+                  <strong>50+ Curated Cinematic Tones (.DNG)</strong>
+                  <p>Includes Moody Brown, Teal & Orange, Golden Mirage, Dark Forest, Urban Street, City Portrait, Cyber Night & 43+ more aesthetic looks.</p>
+                </div>
               </div>
 
-              <div className="lr-bump-content">
-                <p>{product.orderBump.pitch}</p>
-                
-                <div className="lr-bump-bullets">
-                  <strong>What’s Included:</strong>
-                  <ul>
-                    {product.orderBump.features.map((feat, fIdx) => (
-                      <li key={fIdx}>✓ {feat}</li>
-                    ))}
-                  </ul>
+              <div className="lr-dive-item">
+                <span className="lr-dive-icon">📱</span>
+                <div>
+                  <strong>100% Free Lightroom Mobile Compatible</strong>
+                  <p>Works right away inside the completely FREE Adobe Lightroom app (iOS & Android). Zero monthly Adobe subscriptions required.</p>
                 </div>
+              </div>
 
-                <div className="lr-bump-tagline">
-                  💍 <em>Perfect For: Wedding photography, pre-wedding shoots, engagement portraits, couple photography, and bridal portraits.</em>
+              <div className="lr-dive-item">
+                <span className="lr-dive-icon">⚡</span>
+                <div>
+                  <strong>1-Click Copy & Paste Workflow</strong>
+                  <p>No prior editing skills required. Simply copy settings and paste them onto any photo for instant Instagram-ready color harmony.</p>
+                </div>
+              </div>
+
+              <div className="lr-dive-item">
+                <span className="lr-dive-icon">📸</span>
+                <div>
+                  <strong>Calibrated For All Devices & Cameras</strong>
+                  <p>Optimized for iPhone (all models), Samsung, OnePlus, Xiaomi, Vivo, DSLR/Mirrorless RAW & JPEG files.</p>
+                </div>
+              </div>
+
+              <div className="lr-dive-item">
+                <span className="lr-dive-icon">💎</span>
+                <div>
+                  <strong>Skin-Tone Protection Engine</strong>
+                  <p>Guarantees natural, radiant skin tones without awkward color cast, while enriching shadows and highlights.</p>
+                </div>
+              </div>
+
+              <div className="lr-dive-item">
+                <span className="lr-dive-icon">📖</span>
+                <div>
+                  <strong>Step-by-Step Video & PDF Guide</strong>
+                  <p>Easy 2-minute visual tutorial showing you how to import the .DNG files into Lightroom and organize your presets.</p>
                 </div>
               </div>
             </div>
-          )}
+
+            {/* Quick Specs Pill Row */}
+            <div className="lr-specs-row">
+              <div className="lr-spec-pill">
+                <span className="lr-spec-label">Format:</span>
+                <span className="lr-spec-val">Universal .DNG High-Res</span>
+              </div>
+              <div className="lr-spec-pill">
+                <span className="lr-spec-label">Platform:</span>
+                <span className="lr-spec-val">Lightroom Mobile, iPad & Desktop</span>
+              </div>
+              <div className="lr-spec-pill">
+                <span className="lr-spec-label">Delivery:</span>
+                <span className="lr-spec-val">Instant Google Drive Access</span>
+              </div>
+              <div className="lr-spec-pill">
+                <span className="lr-spec-label">License:</span>
+                <span className="lr-spec-val">Lifetime Personal & Commercial</span>
+              </div>
+            </div>
+          </div>
 
           {/* Hero CTA Block */}
           <div className="lr-cta-box">
             <button
               type="button"
               className="lr-btn-primary"
-              onClick={() => onBuyProduct(product, selectedBump)}
+              onClick={() => onBuyProduct(product)}
             >
-              <span>
-                {selectedBump 
-                  ? `GET 50+ DNG PRESETS + WEDDING XML PACK (₹${product.price + product.orderBump.price})`
-                  : `GET 50+ CINEMATIC DNG PRESETS NOW — ₹${product.price}`}
-              </span>
+              <span>GET 50+ CINEMATIC DNG PRESETS NOW — ₹{product.price}</span>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
@@ -280,7 +319,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
 
             <div className="lr-price-meta">
               <span className="lr-old-price">
-                Regular Price: <del>₹{selectedBump ? (product.originalPrice + product.orderBump.originalPrice) : product.originalPrice}</del>
+                Regular Price: <del>₹{product.originalPrice}</del>
               </span>
               <span className="lr-save-tag">SAVE 90% TODAY</span>
               <span className="lr-ssl-tag">🔒 100% Safe & Instant Delivery</span>
@@ -337,13 +376,9 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             <button
               type="button"
               className="lr-btn-primary"
-              onClick={() => onBuyProduct(product, selectedBump)}
+              onClick={() => onBuyProduct(product)}
             >
-              <span>
-                {selectedBump 
-                  ? `DOWNLOAD 50+ DNG PRESETS + WEDDING XML PACK (₹${product.price + product.orderBump.price})`
-                  : `DOWNLOAD ALL 50+ DNG PRESETS (₹${product.price})`}
-              </span>
+              <span>DOWNLOAD ALL 50+ DNG PRESETS (₹{product.price})</span>
             </button>
           </div>
 
@@ -448,13 +483,9 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
               <button
                 type="button"
                 className="lr-btn-primary"
-                onClick={() => onBuyProduct(product, selectedBump)}
+                onClick={() => onBuyProduct(product)}
               >
-                <span>
-                  {selectedBump 
-                    ? `GET 50+ DNG PRESETS + WEDDING XML PACK (₹${product.price + product.orderBump.price})`
-                    : `GET INSTANT ACCESS NOW (₹${product.price})`}
-                </span>
+                <span>GET INSTANT ACCESS NOW (₹{product.price})</span>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
@@ -476,19 +507,18 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             <div className="lr-sticky-info">
               <span className="lr-sticky-app-badge">Lr</span>
               <div>
-                <strong>{selectedBump ? 'CineMood DNG + Wedding XML Pack' : 'CineMood 50+ DNG Presets'}</strong>
+                <strong>CineMood 50+ DNG Presets</strong>
                 <span className="lr-sticky-price">
-                  ₹{selectedBump ? (product.price + product.orderBump.price) : product.price} 
-                  <del>₹{selectedBump ? (product.originalPrice + product.orderBump.originalPrice) : product.originalPrice}</del>
+                  ₹{product.price} <del>₹{product.originalPrice}</del>
                 </span>
               </div>
             </div>
             <button
               type="button"
               className="lr-sticky-btn"
-              onClick={() => onBuyProduct(product, selectedBump)}
+              onClick={() => onBuyProduct(product)}
             >
-              <span>{selectedBump ? `BUY BUNDLE (₹${product.price + product.orderBump.price}) →` : `BUY NOW (₹${product.price}) →`}</span>
+              <span>BUY NOW (₹{product.price}) →</span>
             </button>
           </div>
         </div>
