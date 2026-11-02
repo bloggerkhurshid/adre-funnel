@@ -243,39 +243,6 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
 
   return (
     <div className={`checkout-page ${isCinemood ? 'theme-cinemood' : 'theme-adre'}`}>
-      {/* Top Header */}
-      <header className="checkout-header">
-        <div className="checkout-header-inner">
-          <button type="button" className="checkout-back-btn" onClick={handleBack}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            <span>{isCinemood ? 'Back to Presets' : 'Back to Store'}</span>
-          </button>
-
-          <div className="checkout-brand-center">
-            {isCinemood ? (
-              <div className="checkout-lr-badge">
-                <span className="checkout-lr-icon">Lr</span>
-                <span>CineMood Presets Checkout</span>
-              </div>
-            ) : (
-              <div className="checkout-brand-title">
-                <span>📚 ProjuktiSoft Checkout</span>
-              </div>
-            )}
-          </div>
-
-          <div className="checkout-secure-badge">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-            <span>256-Bit SSL Secure</span>
-          </div>
-        </div>
-      </header>
-
       {/* Urgency Countdown Bar */}
       <div className="checkout-urgency-bar">
         <div className="checkout-urgency-inner">
@@ -552,3 +519,4 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
     </div>
   );
 }
+
