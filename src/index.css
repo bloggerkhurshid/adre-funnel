@@ -967,6 +967,22 @@ body.modal-open {
 .sticky-price { font-size: 1.4rem; font-weight: 900; color: var(--accent); }
 .sticky-old-price { font-size: 0.85rem; text-decoration: line-through; color: #64748b; margin-left: 8px; }
 
+.sticky-timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  color: #fca5a5;
+  font-size: 0.78rem;
+  font-weight: 800;
+  font-family: monospace;
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
 .sticky-cta-btn {
   background: var(--accent-gradient);
   color: #040809;
@@ -2339,16 +2355,36 @@ body.modal-open {
     display: none; /* Hide on mobile to give space to price & button */
   }
 
+  .sticky-price-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
   .sticky-timer-pill {
-    display: none;
+    display: inline-flex;
+    font-size: 0.74rem;
+    padding: 2px 6px;
+    margin-left: 4px;
+    background: rgba(239, 68, 68, 0.22);
+    border: 1px solid rgba(239, 68, 68, 0.55);
+    color: #fecaca;
+    font-weight: 800;
+    font-family: monospace;
+    border-radius: 6px;
+    white-space: nowrap;
   }
 
   .sticky-price {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
+  }
+
+  .sticky-old-price {
+    display: none; /* Hide old price on narrow phones so timer fits comfortably */
   }
 
   .sticky-cta-btn {
-    padding: 10px 18px;
+    padding: 10px 16px;
     font-size: 0.88rem;
     border-radius: 20px;
     white-space: nowrap;
@@ -3317,12 +3353,12 @@ body.modal-open {
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(3, 7, 18, 0.94);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  background: rgba(3, 7, 18, 0.95);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   border-top: 1px solid rgba(0, 180, 216, 0.35);
-  padding: 12px 18px;
-  box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.8);
+  padding: 10px 18px;
+  box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.85);
 }
 
 .lr-sticky-content {
@@ -3331,13 +3367,13 @@ body.modal-open {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 12px;
 }
 
 .lr-sticky-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .lr-sticky-app-badge {
@@ -3349,39 +3385,132 @@ body.modal-open {
   font-family: monospace;
   font-weight: 900;
   font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
-.lr-sticky-info strong {
+.lr-sticky-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lr-sticky-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lr-sticky-title {
   display: block;
   color: #ffffff;
-  font-size: 0.98rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.lr-sticky-timer-desktop {
+  font-size: 0.76rem;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 1px 7px;
+  border-radius: 12px;
+  font-family: monospace;
+}
+
+.lr-sticky-price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .lr-sticky-price {
   color: #38bdf8;
-  font-weight: 800;
-  font-size: 0.9rem;
+  font-weight: 900;
+  font-size: 1.05rem;
 }
 
 .lr-sticky-price del {
   color: #ef4444;
-  margin-left: 6px;
+  margin-left: 4px;
   font-weight: normal;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+}
+
+.lr-sticky-timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+  font-size: 0.76rem;
+  font-weight: 800;
+  font-family: monospace;
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
 .lr-sticky-btn {
   background: linear-gradient(135deg, #38bdf8 0%, #00b4d8 100%);
   color: #030712;
   font-family: var(--font-heading);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 800;
-  padding: 12px 24px;
+  padding: 11px 22px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 180, 216, 0.4);
   white-space: nowrap;
+  flex-shrink: 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.lr-sticky-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 180, 216, 0.6);
+}
+
+@media (max-width: 640px) {
+  .lr-sticky-bottom-bar {
+    padding: 8px 12px;
+  }
+
+  .lr-sticky-content {
+    gap: 8px;
+  }
+
+  .lr-sticky-title-row {
+    display: none; /* Hide top title line on phone so price, timer & button fit cleanly on 1 row */
+  }
+
+  .lr-sticky-app-badge {
+    padding: 3px 6px;
+    font-size: 0.8rem;
+  }
+
+  .lr-sticky-price {
+    font-size: 1.15rem;
+  }
+
+  .lr-sticky-price del {
+    display: none; /* Hide old price on narrow phones */
+  }
+
+  .lr-sticky-timer-pill {
+    font-size: 0.74rem;
+    padding: 2px 6px;
+    background: rgba(239, 68, 68, 0.24);
+    border-color: #ef4444;
+    color: #fecaca;
+  }
+
+  .lr-sticky-btn {
+    padding: 10px 16px;
+    font-size: 0.86rem;
+  }
 }
 
 /* Wedding & Prewedding Order Bump Offer Card */

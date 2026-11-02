@@ -579,7 +579,7 @@ export default function AdreFunnel({ onBuyProduct, onNavigate }) {
             <div className="sticky-price-row">
               <span className="sticky-price">₹99</span>
               <span className="sticky-old-price">₹999</span>
-              <span className="sticky-timer-pill">Ends: {formattedTime}</span>
+              <span className="sticky-timer-pill">⏳ {formattedTime}</span>
             </div>
           </div>
           <button

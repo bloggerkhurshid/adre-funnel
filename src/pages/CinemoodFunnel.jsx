@@ -506,11 +506,17 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
           <div className="lr-sticky-content">
             <div className="lr-sticky-info">
               <span className="lr-sticky-app-badge">Lr</span>
-              <div>
-                <strong>CineMood 50+ DNG Presets</strong>
-                <span className="lr-sticky-price">
-                  ₹{product.price} <del>₹{product.originalPrice}</del>
-                </span>
+              <div className="lr-sticky-text">
+                <div className="lr-sticky-title-row">
+                  <strong className="lr-sticky-title">CineMood 50+ DNG Presets</strong>
+                  <span className="lr-sticky-timer-desktop">🔥 Ends in: {formattedTime}</span>
+                </div>
+                <div className="lr-sticky-price-row">
+                  <span className="lr-sticky-price">
+                    ₹{product.price} <del>₹{product.originalPrice}</del>
+                  </span>
+                  <span className="lr-sticky-timer-pill">⏳ {formattedTime}</span>
+                </div>
               </div>
             </div>
             <button
