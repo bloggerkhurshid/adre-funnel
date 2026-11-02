@@ -85,11 +85,11 @@ export const handler = async (event, context) => {
     const bumpSection = orderBumpSelected ? `
       <div style="background: #111d24; border: 1px solid #eab308; border-radius: 12px; padding: 18px 20px; margin-top: 24px;">
         <span style="display: inline-block; background: #eab308; color: #000; font-size: 11px; font-weight: 800; padding: 2px 10px; border-radius: 20px; margin-bottom: 8px;">ORDER BUMP INCLUDED</span>
-        <h3 style="color: #fef08a; font-size: 16px; margin: 0 0 10px 0;">🎁 ${orderBumpName || 'CTET Paper I & II MCQ Practice Ebook'}</h3>
-        <p style="color: #cbd5e1; font-size: 14px; margin: 0 0 16px 0;">Complete CTET Paper I & II Practice Question Bank with Detailed Answers.</p>
+        <h3 style="color: #fef08a; font-size: 16px; margin: 0 0 10px 0;">🎁 ${orderBumpName || 'Order Bump Bonus'}</h3>
+        <p style="color: #cbd5e1; font-size: 14px; margin: 0 0 16px 0;">Exclusive bonus add-on unlocked with your purchase.</p>
         <div style="text-align: center;">
           <a href="${bumpDownload}" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #000; font-weight: 800; font-size: 14px; padding: 12px 24px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 14px rgba(234, 179, 8, 0.4);">
-            📥 DOWNLOAD CTET EBOOK (GOOGLE DRIVE)
+            📥 ACCESS ORDER BUMP FILES (GOOGLE DRIVE)
           </a>
         </div>
       </div>

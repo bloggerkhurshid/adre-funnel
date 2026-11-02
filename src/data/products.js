@@ -46,7 +46,7 @@ export const WEDDING_ORDER_BUMP = {
     'Professional Wedding and Pre-wedding XML Editing Styles',
     'Quick, Easy-to-Apply XML Templates to Speed Up Your Workflow'
   ],
-  downloadUrl: 'https://drive.google.com/drive/folders/10r0oO0i0Uqa_b8ujxc9uxTcobQBMXmmC?usp=drive_link',
+  downloadUrl: 'https://drive.google.com/drive/folders/1Quks7G3WhmxgBP5RNIZFKcjvFKkVpJnG?usp=drive_link',
   files: [
     'Wedding & Prewedding Collection (20+ XML Templates)'
   ],
