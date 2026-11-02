@@ -104,7 +104,8 @@ export const handler = async (event, context) => {
       headers,
       body: JSON.stringify({
         order_id: result.order_id,
-        payment_session_id: result.payment_session_id
+        payment_session_id: result.payment_session_id,
+        environment: isSandbox ? 'sandbox' : 'production'
       })
     };
   } catch (err) {

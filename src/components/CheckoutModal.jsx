@@ -170,7 +170,8 @@ export default function CheckoutModal({
           saveOrderToFirestore(livePayload);
         } catch (e) {}
 
-        const cashfree = window.Cashfree({ mode: 'production' });
+        const cashfreeMode = orderData.environment === 'sandbox' ? 'sandbox' : 'production';
+        const cashfree = window.Cashfree({ mode: cashfreeMode });
         cashfree.checkout({
           paymentSessionId: orderData.payment_session_id,
           redirectTarget: '_modal'
