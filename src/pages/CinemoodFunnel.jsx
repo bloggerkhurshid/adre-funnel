@@ -6,6 +6,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
   const product = PRODUCTS['cinemood-presets'] || PRODUCTS['english-bundle'];
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 52);
   const [showSticky, setShowSticky] = useState(false);
+  const [selectedBump, setSelectedBump] = useState(false);
   const [activeFaq, setActiveFaq] = useState(0);
 
   useEffect(() => {
@@ -104,6 +105,33 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
       img: '/presets/preset-sunset-mirage.jpg',
       tag: 'GOLDEN HOUR & CLOSEUP',
       desc: 'Captures the magic of the golden hour. Infuses portraits with rich amber warmth, radiant skin glows, and film-like highlight rolloff for breathtaking evening shots.'
+    },
+    {
+      id: 8,
+      num: '8',
+      title: 'Faded Green',
+      subtitle: 'Moody Urban Foliage & Deep Contrast',
+      img: '/presets/preset-faded-green.jpg',
+      tag: 'STREET & URBAN',
+      desc: 'Infuses lush green foliage and city pavements with deep, moody contrast and muted shadows, creating a timeless European film atmosphere.'
+    },
+    {
+      id: 9,
+      num: '9',
+      title: 'Faded Sea',
+      subtitle: 'Atmospheric Ocean & Muted Water Tones',
+      img: '/presets/preset-faded-sea.jpg',
+      tag: 'RIVER & ARCHITECTURE',
+      desc: 'Tailored for water bodies, waterfronts, and coastal cities. Delivers subtle desaturation, cinematic clarity, and calm editorial tones.'
+    },
+    {
+      id: 10,
+      num: '10',
+      title: 'Dreamy Girl',
+      subtitle: 'Vibrant Cultural Reds & Radiant Skin',
+      img: '/presets/preset-dreamy-girl.jpg',
+      tag: 'TRADITIONAL & PORTRAIT',
+      desc: 'Masterfully preserves vibrant traditional outfits and rich ethnic colors while rendering flattering skin tones and soft, dreamy contrast.'
     }
   ];
 
@@ -196,21 +224,64 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             </div>
           </div>
 
+          {/* Wedding & Prewedding Order Bump Offer */}
+          {product?.orderBump && (
+            <div className={`lr-bump-card ${selectedBump ? 'is-selected' : ''}`} onClick={() => setSelectedBump(!selectedBump)}>
+              <div className="lr-bump-header">
+                <label className="lr-bump-checkbox-label" onClick={(e) => e.stopPropagation()}>
+                  <input
+                    type="checkbox"
+                    checked={selectedBump}
+                    onChange={(e) => setSelectedBump(e.target.checked)}
+                    className="lr-bump-input"
+                  />
+                  <span>
+                    <strong>⚡ ONE-TIME OFFER: Add {product.orderBump.name}</strong> for just <span className="lr-bump-highlight">₹{product.orderBump.price}</span> <del className="lr-bump-del">₹{product.orderBump.originalPrice}</del>
+                  </span>
+                </label>
+                <span className="lr-bump-badge">90% OFF</span>
+              </div>
+
+              <div className="lr-bump-content">
+                <p>{product.orderBump.pitch}</p>
+                
+                <div className="lr-bump-bullets">
+                  <strong>What’s Included:</strong>
+                  <ul>
+                    {product.orderBump.features.map((feat, fIdx) => (
+                      <li key={fIdx}>✓ {feat}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="lr-bump-tagline">
+                  💍 <em>Perfect For: Wedding photography, pre-wedding shoots, engagement portraits, couple photography, and bridal portraits.</em>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Hero CTA Block */}
           <div className="lr-cta-box">
             <button
               type="button"
               className="lr-btn-primary"
-              onClick={() => onBuyProduct(product)}
+              onClick={() => onBuyProduct(product, selectedBump)}
             >
-              <span>GET 50+ CINEMATIC PRESETS NOW — ₹99</span>
+              <span>
+                {selectedBump 
+                  ? `GET 50+ PRESETS + WEDDING PACK (₹${product.price + product.orderBump.price})`
+                  : `GET 50+ CINEMATIC PRESETS NOW — ₹${product.price}`}
+              </span>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </button>
 
             <div className="lr-price-meta">
-              <span className="lr-old-price">Regular Price: <del>₹999</del></span>
+              <span className="lr-old-price">
+                Regular Price: <del>₹{selectedBump ? (product.originalPrice + product.orderBump.originalPrice) : product.originalPrice}</del>
+              </span>
               <span className="lr-save-tag">SAVE 90% TODAY</span>
               <span className="lr-ssl-tag">🔒 100% Safe & Instant Delivery</span>
             </div>
@@ -274,7 +345,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             <div className="lr-callout-inner">
               <span className="lr-callout-icon">✨</span>
               <div>
-                <h4>+ Plus 43 More Exclusive Cinematic Styles Included in Your 50+ Pack!</h4>
+                <h4>+ Plus 40 More Exclusive Cinematic Styles Included in Your 50+ Pack!</h4>
                 <p>Including Vintage Film, Moody Dark Forest, Cyberpunk Night, Desaturated Urban, Warm Sunset Glow, and Black & White Film Grain.</p>
               </div>
             </div>
@@ -284,9 +355,13 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             <button
               type="button"
               className="lr-btn-primary"
-              onClick={() => onBuyProduct(product)}
+              onClick={() => onBuyProduct(product, selectedBump)}
             >
-              <span>DOWNLOAD ALL 50+ PRESETS (₹99)</span>
+              <span>
+                {selectedBump 
+                  ? `DOWNLOAD ALL 50+ PRESETS + WEDDING PACK (₹${product.price + product.orderBump.price})`
+                  : `DOWNLOAD ALL 50+ PRESETS (₹${product.price})`}
+              </span>
             </button>
           </div>
 
@@ -391,9 +466,13 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
               <button
                 type="button"
                 className="lr-btn-primary"
-                onClick={() => onBuyProduct(product)}
+                onClick={() => onBuyProduct(product, selectedBump)}
               >
-                <span>GET INSTANT ACCESS NOW (₹99)</span>
+                <span>
+                  {selectedBump 
+                    ? `GET 50+ PRESETS + WEDDING PACK (₹${product.price + product.orderBump.price})`
+                    : `GET INSTANT ACCESS NOW (₹${product.price})`}
+                </span>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
@@ -415,16 +494,19 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
             <div className="lr-sticky-info">
               <span className="lr-sticky-app-badge">Lr</span>
               <div>
-                <strong>CineMood 50+ Presets</strong>
-                <span className="lr-sticky-price">₹99 <del>₹999</del></span>
+                <strong>{selectedBump ? 'CineMood + Wedding Pack' : 'CineMood 50+ Presets'}</strong>
+                <span className="lr-sticky-price">
+                  ₹{selectedBump ? (product.price + product.orderBump.price) : product.price} 
+                  <del>₹{selectedBump ? (product.originalPrice + product.orderBump.originalPrice) : product.originalPrice}</del>
+                </span>
               </div>
             </div>
             <button
               type="button"
               className="lr-sticky-btn"
-              onClick={() => onBuyProduct(product)}
+              onClick={() => onBuyProduct(product, selectedBump)}
             >
-              <span>BUY NOW (₹99) →</span>
+              <span>{selectedBump ? `BUY BUNDLE (₹${product.price + product.orderBump.price}) →` : `BUY NOW (₹${product.price}) →`}</span>
             </button>
           </div>
         </div>

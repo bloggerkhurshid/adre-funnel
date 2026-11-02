@@ -27,6 +27,30 @@ export const CTET_ORDER_BUMP = {
   ]
 };
 
+export const WEDDING_ORDER_BUMP = {
+  id: 'wedding-bump-49',
+  name: 'XMP - Wedding & Prewedding Collection (20+ Presets)',
+  shortName: 'Wedding & Prewedding Pack',
+  tagline: '20+ Timeless Cinematic Wedding & Pre-wedding Lightroom Presets',
+  price: 49,
+  originalPrice: 499,
+  discountPercent: '90% OFF',
+  coverImage: '/presets/cinemood-banner.jpg',
+  pitch: 'Transform your wedding photographs into timeless, cinematic masterpieces with the Wedding Lightroom Presets Bundle. Featuring 20+ premium presets, this collection helps you achieve elegant skin tones, warm golden highlights, soft romantic colours, and professional cinematic looks with just one click.',
+  features: [
+    '20+ Premium Wedding Lightroom Presets (.XMP & .DNG)',
+    'Cinematic and Romantic Colour Tones',
+    'Warm, Golden-Hour-Inspired Looks',
+    'Elegant and Natural Skin-Tone Enhancement',
+    'Professional Wedding and Pre-wedding Editing Styles',
+    'Quick, Easy-to-Apply Presets to Speed Up Your Workflow'
+  ],
+  downloadUrl: 'https://drive.google.com/drive/folders/10r0oO0i0Uqa_b8ujxc9uxTcobQBMXmmC?usp=drive_link',
+  files: [
+    'Wedding & Prewedding Collection (20+ Presets) [.XMP & .DNG]'
+  ]
+};
+
 export const PRODUCTS = {
   'adre-combo': {
     id: 'adre-combo',
@@ -92,7 +116,8 @@ export const PRODUCTS = {
       'CineMood 50+ Mobile DNG Presets Pack (Instant Mobile Import)',
       'CineMood Desktop XMP Presets Collection (PC & Mac)',
       'Step-by-Step Installation & Usage Guide [PDF]'
-    ]
+    ],
+    orderBump: WEDDING_ORDER_BUMP
   },
   'english-bundle': {
     id: 'cinemood-presets',
@@ -124,7 +149,8 @@ export const PRODUCTS = {
       'CineMood 50+ Mobile DNG Presets Pack (Instant Mobile Import)',
       'CineMood Desktop XMP Presets Collection (PC & Mac)',
       'Step-by-Step Installation & Usage Guide [PDF]'
-    ]
+    ],
+    orderBump: WEDDING_ORDER_BUMP
   }
 };
 

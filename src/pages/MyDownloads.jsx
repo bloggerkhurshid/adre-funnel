@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { findOrdersByEmailOrPhone } from '../firebase';
-import { PRODUCTS, CTET_ORDER_BUMP } from '../data/products';
+import { PRODUCTS, CTET_ORDER_BUMP, WEDDING_ORDER_BUMP } from '../data/products';
 
 export default function MyDownloads({ onNavigate }) {
   const [queryInput, setQueryInput] = useState('');
@@ -178,36 +178,39 @@ export default function MyDownloads({ onNavigate }) {
                       </a>
                     </div>
 
-                    {/* CTET Order Bump Download Box (If Purchased) */}
-                    {hasBump && (
-                      <div className="downloads-box downloads-box-addon" style={{ margin: '18px 0 6px' }}>
-                        <div className="addon-header-row">
-                          <h3 style={{ fontSize: '1.05rem' }}>
-                            <span>🎁</span> {CTET_ORDER_BUMP.name}
-                          </h3>
-                          <span className="addon-success-pill">ORDER BUMP UNLOCKED</span>
+                    {/* Order Bump Download Box (If Purchased) */}
+                    {hasBump && (() => {
+                      const bumpObj = prod.orderBump || (order.orderBumpName?.includes('Wedding') ? WEDDING_ORDER_BUMP : CTET_ORDER_BUMP);
+                      return (
+                        <div className="downloads-box downloads-box-addon" style={{ margin: '18px 0 6px' }}>
+                          <div className="addon-header-row">
+                            <h3 style={{ fontSize: '1.05rem' }}>
+                              <span>🎁</span> {order.orderBumpName || bumpObj.name}
+                            </h3>
+                            <span className="addon-success-pill">ORDER BUMP UNLOCKED</span>
+                          </div>
+                          <div className="files-list" style={{ marginBottom: '14px' }}>
+                            {bumpObj.files && bumpObj.files.map((f, i) => (
+                              <div key={i} className="file-item">
+                                <span>{f}</span>
+                                <span className="file-tag addon-tag">INCLUDED</span>
+                              </div>
+                            ))}
+                          </div>
+                          <a
+                            href={bumpObj.downloadUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-download-addon"
+                          >
+                            <span>ACCESS & DOWNLOAD {bumpObj.shortName || bumpObj.name}</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                            </svg>
+                          </a>
                         </div>
-                        <div className="files-list" style={{ marginBottom: '14px' }}>
-                          {CTET_ORDER_BUMP.files.map((f, i) => (
-                            <div key={i} className="file-item">
-                              <span>{f}</span>
-                              <span className="file-tag addon-tag">INCLUDED</span>
-                            </div>
-                          ))}
-                        </div>
-                        <a
-                          href={CTET_ORDER_BUMP.downloadUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-download-addon"
-                        >
-                          <span>DOWNLOAD CTET PAPER I & II MCQ EBOOK</span>
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                          </svg>
-                        </a>
-                      </div>
-                    )}
+                      );
+                    })()}
                   </div>
                 );
               })}
