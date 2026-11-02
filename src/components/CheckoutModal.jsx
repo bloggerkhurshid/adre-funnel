@@ -9,41 +9,58 @@ export default function CheckoutModal({
   initialOrderBumpSelected = false, 
   onSuccess 
 }) {
-  if (!isOpen || !product) return null;
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [includeOrderBump, setIncludeOrderBump] = useState(initialOrderBumpSelected);
 
+  // Dedicated reliable close handler that cleans up scroll lock styles
+  const handleModalClose = () => {
+    document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('overflow');
+    document.documentElement.style.removeProperty('overflow');
+    if (onClose) {
+      onClose();
+    }
+  };
+
   // Sync state whenever modal opens or initial selection changes
   useEffect(() => {
-    setIncludeOrderBump(initialOrderBumpSelected);
+    if (isOpen) {
+      setIncludeOrderBump(initialOrderBumpSelected);
+    }
   }, [initialOrderBumpSelected, isOpen]);
 
-  // Lock body scroll cleanly using class when modal is open
+  // Lock body scroll cleanly using class when modal is open, and guaranteed release on close/unmount
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('modal-open');
     } else {
       document.body.classList.remove('modal-open');
+      document.body.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('overflow');
     }
     return () => {
       document.body.classList.remove('modal-open');
+      document.body.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('overflow');
     };
   }, [isOpen]);
 
   // Escape key to close modal
   useEffect(() => {
+    if (!isOpen) return;
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
-        onClose();
+        handleModalClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  }, [isOpen]);
+
+  if (!isOpen || !product) return null;
 
   const hasOrderBump = !!product.orderBump;
   const bumpPrice = hasOrderBump ? product.orderBump.price : 0;
@@ -87,7 +104,7 @@ export default function CheckoutModal({
       }
 
       setIsProcessing(false);
-      onClose();
+      handleModalClose();
       if (onSuccess) {
         onSuccess(payload);
       }
@@ -137,6 +154,9 @@ export default function CheckoutModal({
           if (result.error) {
             setIsProcessing(false);
             console.log('Cashfree modal closed/error:', result.error);
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.documentElement.style.removeProperty('overflow');
           } else if (result.paymentDetails) {
             handleSuccessfulPayment(orderData.order_id);
           }
@@ -154,11 +174,11 @@ export default function CheckoutModal({
   };
 
   return (
-    <div className="p-modal-overlay" onClick={onClose}>
+    <div className="p-modal-overlay" onClick={handleModalClose}>
       <div className="p-modal-card" onClick={(e) => e.stopPropagation()}>
         <button 
           className="p-modal-close-btn" 
-          onClick={onClose} 
+          onClick={handleModalClose} 
           aria-label="Close Checkout"
           type="button"
         >

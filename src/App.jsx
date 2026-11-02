@@ -102,7 +102,17 @@ export default function App() {
     setIsCheckoutOpen(true);
   };
 
+  const handleCloseCheckout = () => {
+    document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('overflow');
+    document.documentElement.style.removeProperty('overflow');
+    setIsCheckoutOpen(false);
+  };
+
   const handlePaymentSuccess = (data) => {
+    document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('overflow');
+    document.documentElement.style.removeProperty('overflow');
     setPurchaseData(data);
     setIsCheckoutOpen(false);
     navigateTo('success');
@@ -145,10 +155,10 @@ export default function App() {
       {/* Global Footer - Hidden on Funnel Pages & Admin */}
       {!isFunnelPage && <Footer onNavigate={navigateTo} />}
 
-      {/* Universal Direct Razorpay Checkout Modal */}
+      {/* Universal Direct Cashfree Checkout Modal */}
       <CheckoutModal
         isOpen={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
+        onClose={handleCloseCheckout}
         product={checkoutProduct}
         initialOrderBumpSelected={initialOrderBumpSelected}
         onSuccess={handlePaymentSuccess}

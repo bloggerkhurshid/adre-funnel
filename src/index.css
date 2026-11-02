@@ -47,8 +47,7 @@ body {
 
 /* Modal Open Body Lock */
 body.modal-open {
-  overflow: hidden !important;
-  touch-action: none;
+  overflow: hidden;
 }
 
 .container {
