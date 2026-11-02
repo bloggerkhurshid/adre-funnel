@@ -55,19 +55,7 @@ export const handler = async (event, context) => {
     const smtpHost = process.env.SMTP_HOST || 'smtp.hostinger.com';
     const smtpPort = Number(process.env.SMTP_PORT || 465);
     const smtpUser = process.env.SMTP_USER || 'support@projuktisoft.shop';
-    const smtpPass = process.env.SMTP_PASS;
-
-    if (!smtpPass) {
-      console.warn('SMTP_PASS is not configured in environment variables');
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({
-          success: false,
-          warning: 'SMTP_PASS environment variable not set. Email not sent.'
-        })
-      };
-    }
+    const smtpPass = process.env.SMTP_PASS || 'Numun@2026';
 
     const transporter = nodemailer.createTransport({
       host: smtpHost,
@@ -76,6 +64,9 @@ export const handler = async (event, context) => {
       auth: {
         user: smtpUser,
         pass: smtpPass
+      },
+      tls: {
+        rejectUnauthorized: false
       }
     });
 

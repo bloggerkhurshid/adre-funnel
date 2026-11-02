@@ -38,7 +38,7 @@ export default function Success({ purchaseData, onNavigate }) {
     }
   }, [activeOrder, onNavigate]);
 
-  // If verified order exists, fire Meta Pixel tracking once
+  // If verified order exists, fire Meta Pixel tracking once and dispatch delivery email
   useEffect(() => {
     if (activeOrder && activeOrder.paymentId) {
       window.scrollTo(0, 0);
@@ -50,6 +50,36 @@ export default function Success({ purchaseData, onNavigate }) {
           ? `${activeOrder.product.name} + ${activeOrder.orderBump.name}`
           : activeOrder.product.name
       }, activeOrder.paymentId);
+
+      // Automated delivery confirmation email dispatch (runs once per verified payment)
+      if (activeOrder.email) {
+        const emailSentKey = `email_dispatched_${activeOrder.paymentId}`;
+        if (!sessionStorage.getItem(emailSentKey)) {
+          sessionStorage.setItem(emailSentKey, 'true');
+          fetch('/api/send-order-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            keepalive: true,
+            body: JSON.stringify({
+              customerEmail: activeOrder.email,
+              customerName: activeOrder.name,
+              customerPhone: activeOrder.phone,
+              orderId: activeOrder.paymentId,
+              productName: activeOrder.product?.name,
+              totalAmount: activeOrder.totalAmount,
+              downloadUrl: activeOrder.product?.downloadUrl,
+              files: activeOrder.product?.files,
+              orderBumpSelected: activeOrder.orderBumpSelected,
+              orderBumpName: activeOrder.orderBump?.name,
+              orderBumpDownloadUrl: activeOrder.orderBump?.downloadUrl,
+              orderBumpFiles: activeOrder.orderBump?.files
+            })
+          })
+          .then(res => res.json())
+          .then(data => console.log('Delivery email status from success page:', data))
+          .catch(err => console.warn('Delivery email dispatch warning:', err));
+        }
+      }
     }
   }, [activeOrder]);
 
