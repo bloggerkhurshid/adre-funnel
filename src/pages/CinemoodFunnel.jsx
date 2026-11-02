@@ -303,39 +303,21 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
 
           <div className="lr-presets-grid">
             {demoPresets.map((preset) => (
-              <div key={preset.id} className="lr-preset-card">
+              <div 
+                key={preset.id} 
+                className="lr-preset-card"
+                onClick={() => onBuyProduct(product)}
+                role="button"
+                tabIndex={0}
+                title={`Get ${preset.title} Preset - ₹99 CineMood Pack`}
+              >
                 <div className="lr-preset-img-wrapper">
                   <img 
                     src={preset.img} 
                     alt={`CineMood Preset ${preset.title}`} 
                     className="lr-preset-card-img"
+                    loading="lazy"
                   />
-                  <div className="lr-preset-badge-top">
-                    <span>PRESET #{preset.num}</span>
-                  </div>
-                </div>
-
-                <div className="lr-preset-info">
-                  <div className="lr-preset-header-row">
-                    <div>
-                      <h3 className="lr-preset-title">{preset.title}</h3>
-                      <span className="lr-preset-sub">{preset.subtitle}</span>
-                    </div>
-                    <span className="lr-category-pill">{preset.tag}</span>
-                  </div>
-
-                  <p className="lr-preset-text">{preset.desc}</p>
-
-                  <div className="lr-preset-card-footer">
-                    <span className="lr-verified-tick">✓ Included in ₹99 Pack</span>
-                    <button 
-                      type="button" 
-                      className="lr-card-buy-btn"
-                      onClick={() => onBuyProduct(product)}
-                    >
-                      Unlock Preset →
-                    </button>
-                  </div>
                 </div>
               </div>
             ))}

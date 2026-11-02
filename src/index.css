@@ -2788,23 +2788,27 @@ body.modal-open {
   border: 1px solid rgba(0, 180, 216, 0.25);
   border-radius: 16px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  display: block;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
 }
 
 .lr-preset-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(56, 189, 248, 0.6);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 180, 216, 0.3);
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 180, 216, 0.35);
+}
+
+.lr-preset-card:active {
+  transform: translateY(-1px) scale(0.99);
 }
 
 .lr-preset-img-wrapper {
   position: relative;
   background: #020610;
   overflow: hidden;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 819 / 1024;
 }
 
 .lr-preset-card-img {
@@ -2812,6 +2816,11 @@ body.modal-open {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
+}
+
+.lr-preset-card:hover .lr-preset-card-img {
+  transform: scale(1.02);
 }
 
 .lr-preset-badge-top {
