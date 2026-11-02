@@ -3,7 +3,7 @@
  * Endpoint: /.netlify/functions/create-cashfree-order (or /api/create-cashfree-order)
  */
 
-exports.handler = async (event, context) => {
+export const handler = async (event, context) => {
   // CORS Headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -115,3 +115,4 @@ exports.handler = async (event, context) => {
     };
   }
 };
+
