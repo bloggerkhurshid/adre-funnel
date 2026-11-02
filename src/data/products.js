@@ -13,6 +13,7 @@ export const CTET_ORDER_BUMP = {
   discountPercent: '50% OFF',
   coverImage: '/ctet-bump.jpg',
   pitch: 'Preparing for ADRE or a teaching exam? Get CTET Paper I & II MCQs with answers for just ₹49. This special price is available only with this order.',
+  shortPitch: 'Get CTET Paper I & II Complete Practice MCQs with detailed answers. 100% exam-oriented bilingual question bank.',
   features: [
     'Child Development and Pedagogy',
     'Language I & II with Detailed Answers',
@@ -36,8 +37,9 @@ export const WEDDING_ORDER_BUMP = {
   price: 49,
   originalPrice: 499,
   discountPercent: '90% OFF',
-  coverImage: '/presets/cinemood-banner.jpg',
+  coverImage: '/presets/preset-dreamy-girl.jpg',
   pitch: 'Transform your wedding photographs into timeless, cinematic masterpieces with the Wedding Lightroom Presets Bundle. Featuring 20+ premium presets in XML format, this collection helps you achieve elegant skin tones, warm golden highlights, soft romantic colours, and professional cinematic looks with just one click.',
+  shortPitch: 'Add 20+ timeless Wedding & Pre-wedding XML templates to your collection. Soft romantic tones & elegant skin tones in 1 click.',
   features: [
     '20+ Premium Wedding Lightroom XML Templates',
     'Cinematic and Romantic Colour Tones',

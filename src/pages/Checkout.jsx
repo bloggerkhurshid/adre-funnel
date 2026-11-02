@@ -273,47 +273,44 @@ export default function Checkout({ product: propProduct, initialOrderBumpSelecte
             </div>
           </div>
 
-          {/* Order Bump Checkbox Card with Detailed Description */}
+          {/* Order Bump Checkbox Card with Thumbnail & Clean Text */}
           {hasOrderBump && (
             <div 
               className={`checkout-bump-mini-box ${includeOrderBump ? 'active' : ''}`}
               onClick={() => handleBumpToggle(!includeOrderBump)}
             >
-              <div className="checkout-bump-top-row">
-                <label className="checkout-bump-checkbox-label" onClick={(e) => e.stopPropagation()}>
+              <div className="checkout-bump-main-row">
+                <div className="checkout-bump-left">
                   <input
                     type="checkbox"
                     checked={includeOrderBump}
                     onChange={(e) => handleBumpToggle(e.target.checked)}
+                    onClick={(e) => e.stopPropagation()}
                     className="checkout-bump-checkbox"
+                    aria-label="Add order bump offer"
                   />
-                  <span className="checkout-bump-label-title">
-                    ⚡ <strong>ONE-TIME OFFER: Add {product.orderBump.name}</strong>
-                  </span>
-                </label>
-                <span className="checkout-bump-price-badge">
-                  +₹{product.orderBump.price} <del>₹{product.orderBump.originalPrice}</del>
-                </span>
-              </div>
-
-              <div className="checkout-bump-desc-wrap">
-                <p className="checkout-bump-pitch-text">
-                  {product.orderBump.pitch}
-                </p>
-
-                <div className="checkout-bump-bullets-mini">
-                  <strong>What’s Included:</strong>
-                  <ul>
-                    {product.orderBump.features.map((feat, fIdx) => (
-                      <li key={fIdx}>✓ {feat}</li>
-                    ))}
-                  </ul>
+                  <img 
+                    src={product.orderBump.coverImage || (isCinemood ? '/presets/preset-dreamy-girl.jpg' : '/ctet-bump.jpg')} 
+                    alt={product.orderBump.name}
+                    className="checkout-bump-thumb"
+                  />
                 </div>
 
-                <div className="checkout-bump-footer-note">
-                  <em>{product.orderBump.perfectFor || (isCinemood 
-                    ? '💍 Perfect For: Wedding photography, pre-wedding shoots, engagement portraits, couple photography, and cinematic storytelling.'
-                    : '📚 Perfect For: CTET Paper I & II candidates, Assam TET aspirants, and government teaching exam preparation.')}</em>
+                <div className="checkout-bump-right">
+                  <div className="checkout-bump-top-meta">
+                    <span className="checkout-bump-tag">⚡ ONE-TIME OFFER</span>
+                    <span className="checkout-bump-price-badge">
+                      +₹{product.orderBump.price} <del>₹{product.orderBump.originalPrice}</del>
+                    </span>
+                  </div>
+
+                  <h3 className="checkout-bump-heading">
+                    Add {product.orderBump.shortName || product.orderBump.name}
+                  </h3>
+
+                  <p className="checkout-bump-desc">
+                    {product.orderBump.shortPitch || product.orderBump.pitch}
+                  </p>
                 </div>
               </div>
             </div>
