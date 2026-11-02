@@ -2757,37 +2757,47 @@ body.modal-open {
   margin: 0 auto;
 }
 
+.lr-demo-container {
+  max-width: 1360px;
+}
+
+/* Demo Presets Grid: Exactly 5 cols on Desktop (2 rows) & 2 cols on Phone (2x5 grid) */
 .lr-presets-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
   margin-bottom: 35px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) and (min-width: 769px) {
   .lr-presets-grid {
-    grid-template-columns: 1fr;
-    max-width: 520px;
-    margin-left: auto;
-    margin-right: auto;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lr-presets-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 }
 
 .lr-preset-card {
   background: #071322;
   border: 1px solid rgba(0, 180, 216, 0.25);
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
 }
 
 .lr-preset-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   border-color: rgba(56, 189, 248, 0.6);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 180, 216, 0.3);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 180, 216, 0.3);
 }
 
 .lr-preset-img-wrapper {
@@ -2806,19 +2816,19 @@ body.modal-open {
 
 .lr-preset-badge-top {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 10px;
+  right: 10px;
   background: rgba(3, 7, 18, 0.85);
   border: 1px solid rgba(56, 189, 248, 0.4);
   color: #38bdf8;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 800;
-  padding: 3px 10px;
-  border-radius: 12px;
+  padding: 2px 7px;
+  border-radius: 10px;
 }
 
 .lr-preset-info {
-  padding: 22px 20px;
+  padding: 14px 12px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -2826,22 +2836,22 @@ body.modal-open {
 
 .lr-preset-header-row {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 10px;
-  gap: 8px;
+  margin-bottom: 8px;
+  gap: 4px;
 }
 
 .lr-preset-title {
   font-family: var(--font-heading);
-  font-size: 1.3rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: #ffffff;
-  margin-bottom: 2px;
+  line-height: 1.25;
 }
 
 .lr-preset-sub {
-  font-size: 0.8rem;
+  font-size: 0.74rem;
   color: #38bdf8;
   font-weight: 600;
   display: block;
@@ -2851,50 +2861,72 @@ body.modal-open {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #cbd5e1;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 8px;
-  white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-top: 2px;
 }
 
 .lr-preset-text {
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   color: #94a3b8;
-  line-height: 1.55;
-  margin-bottom: 18px;
+  line-height: 1.45;
+  margin-bottom: 12px;
   flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .lr-preset-card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 14px;
+  padding-top: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 4px;
 }
 
 .lr-verified-tick {
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   color: #10b981;
   font-weight: 700;
 }
 
 .lr-card-buy-btn {
-  background: transparent;
+  background: rgba(56, 189, 248, 0.1);
   border: 1px solid rgba(56, 189, 248, 0.4);
   color: #38bdf8;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 0.82rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.74rem;
   font-weight: 700;
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.2s ease;
 }
 
 .lr-card-buy-btn:hover {
   background: #38bdf8;
   color: #030712;
+}
+
+@media (max-width: 480px) {
+  .lr-preset-info {
+    padding: 10px 8px;
+  }
+  .lr-preset-title {
+    font-size: 0.92rem;
+  }
+  .lr-preset-sub {
+    font-size: 0.68rem;
+  }
+  .lr-card-buy-btn {
+    font-size: 0.68rem;
+    padding: 3px 6px;
+  }
 }
 
 .lr-more-presets-callout {

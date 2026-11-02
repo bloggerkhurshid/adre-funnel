@@ -292,7 +292,7 @@ export default function CinemoodFunnel({ onBuyProduct, onNavigate }) {
 
       {/* Demo Presets Preview Showcase Section */}
       <section className="lr-demo-section">
-        <div className="container">
+        <div className="container lr-demo-container">
           <div className="lr-section-header text-center">
             <span className="lr-section-tag">LOOK AT THE RESULTS</span>
             <h2 className="lr-section-title">Demo Preset Preview (Before / After Showcase)</h2>
