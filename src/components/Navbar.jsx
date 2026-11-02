@@ -36,6 +36,11 @@ export default function Navbar({ onNavigate }) {
               Contact Us
             </a>
           </li>
+          <li>
+            <a href="/my-downloads" onClick={(e) => { e.preventDefault(); onNavigate('my-downloads'); }} style={{ color: '#8ac926', fontWeight: 700 }}>
+              📥 Access Downloads
+            </a>
+          </li>
         </ul>
       </div>
     </nav>

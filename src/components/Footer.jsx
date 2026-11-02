@@ -15,8 +15,12 @@ export default function Footer({ onNavigate }) {
           Empowering competitive exam aspirants and students across India with premium, verified digital ebooks and interactive study bundles.
         </p>
 
-        {/* Mandatory Razorpay Compliance Policy Links */}
+        {/* Mandatory Policy & Customer Access Links */}
         <div className="policy-links-row">
+          <a href="/my-downloads" onClick={(e) => { e.preventDefault(); onNavigate('my-downloads'); }} style={{ color: '#8ac926', fontWeight: 700 }}>
+            ⚡ Access My Downloads
+          </a>
+          <span>•</span>
           <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate('contact'); }}>
             Contact Us
           </a>
@@ -31,6 +35,10 @@ export default function Footer({ onNavigate }) {
           <span>•</span>
           <a href="/privacy-policy" onClick={(e) => { e.preventDefault(); onNavigate('privacy'); }}>
             Privacy Policy
+          </a>
+          <span>•</span>
+          <a href="/admin" onClick={(e) => { e.preventDefault(); onNavigate('admin'); }} style={{ color: '#64748b', fontSize: '0.74rem' }}>
+            Admin
           </a>
         </div>
 

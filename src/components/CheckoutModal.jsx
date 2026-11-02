@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MetaPixel } from './MetaPixel';
+import { saveOrderToFirestore } from '../firebase';
 
 export default function CheckoutModal({ 
   isOpen, 
@@ -61,7 +62,7 @@ export default function CheckoutModal({
     // 1. Fire InitiateCheckout on Meta Pixel
     MetaPixel.initiateCheckout(trackingProduct);
 
-    const handleSuccessfulPayment = (paymentId) => {
+    const handleSuccessfulPayment = async (paymentId) => {
       const payload = {
         product,
         orderBumpSelected: includeOrderBump && hasOrderBump,
@@ -77,6 +78,14 @@ export default function CheckoutModal({
       try {
         sessionStorage.setItem('pj_verified_order', JSON.stringify(payload));
       } catch (err) {}
+
+      // Save order to Firebase Firestore
+      try {
+        await saveOrderToFirestore(payload);
+      } catch (fbErr) {
+        console.error('Firebase save error:', fbErr);
+      }
+
       setIsProcessing(false);
       onClose();
       if (onSuccess) {

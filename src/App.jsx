@@ -10,6 +10,8 @@ import ContactUs from './pages/ContactUs';
 import Terms from './pages/Terms';
 import RefundPolicy from './pages/RefundPolicy';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import MyDownloads from './pages/MyDownloads';
+import AdminDashboard from './pages/AdminDashboard';
 import { PRODUCTS } from './data/products';
 
 // Helper to determine route from clean pathname (e.g. /adre-combo, /ebook) or fallback hash
@@ -24,6 +26,8 @@ const resolveCurrentRoute = () => {
   if (target === 'terms' || target === 'terms-and-conditions') return 'terms';
   if (target === 'refund-policy' || target === 'refund' || target === 'refunds') return 'refund';
   if (target === 'privacy-policy' || target === 'privacy') return 'privacy';
+  if (target === 'my-downloads' || target === 'downloads' || target === 'download') return 'my-downloads';
+  if (target === 'admin' || target === 'dashboard') return 'admin';
   if (target === 'success') return 'success';
   return 'home';
 };
@@ -70,6 +74,12 @@ export default function App() {
     } else if (route === 'privacy') {
       urlPath = '/privacy-policy';
       normalized = 'privacy';
+    } else if (route === 'my-downloads' || route === 'downloads') {
+      urlPath = '/my-downloads';
+      normalized = 'my-downloads';
+    } else if (route === 'admin') {
+      urlPath = '/admin';
+      normalized = 'admin';
     } else if (route === 'success') {
       urlPath = '/success';
       normalized = 'success';
@@ -98,12 +108,12 @@ export default function App() {
     navigateTo('success');
   };
 
-  // Funnel pages and success screen must have ZERO header/footer distractions
-  const isFunnelPage = currentRoute === 'adre-combo' || currentRoute === 'english-bundle' || currentRoute === 'success';
+  // Funnel pages, success screen, and admin must have ZERO global nav distractions
+  const isFunnelPage = currentRoute === 'adre-combo' || currentRoute === 'english-bundle' || currentRoute === 'success' || currentRoute === 'admin';
 
   return (
     <div className={`app-root ${isFunnelPage ? 'is-funnel-mode' : ''}`}>
-      {/* Top Navbar - Hidden on Funnel Pages (/adre-combo, /english-bundle) */}
+      {/* Top Navbar - Hidden on Funnel Pages (/adre-combo, /english-bundle) & Admin */}
       {!isFunnelPage && <Navbar onNavigate={navigateTo} />}
 
       {/* Main Content Router */}
@@ -121,12 +131,18 @@ export default function App() {
         {currentRoute === 'terms' && <Terms />}
         {currentRoute === 'refund' && <RefundPolicy />}
         {currentRoute === 'privacy' && <PrivacyPolicy />}
+        {currentRoute === 'my-downloads' && (
+          <MyDownloads onNavigate={navigateTo} />
+        )}
+        {currentRoute === 'admin' && (
+          <AdminDashboard onNavigate={navigateTo} />
+        )}
         {currentRoute === 'success' && (
           <Success purchaseData={purchaseData} onNavigate={navigateTo} />
         )}
       </main>
 
-      {/* Global Footer - Hidden on Funnel Pages */}
+      {/* Global Footer - Hidden on Funnel Pages & Admin */}
       {!isFunnelPage && <Footer onNavigate={navigateTo} />}
 
       {/* Universal Direct Razorpay Checkout Modal */}
