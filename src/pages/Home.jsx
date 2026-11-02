@@ -9,7 +9,7 @@ export default function Home({ onNavigate, onBuyProduct }) {
   }, []);
 
   const adreProduct = PRODUCTS['adre-combo'];
-  const englishProduct = PRODUCTS['english-bundle'];
+  const cinemoodProduct = PRODUCTS['cinemood-presets'] || PRODUCTS['english-bundle'];
 
   return (
     <div className="home-page">
@@ -94,32 +94,29 @@ export default function Home({ onNavigate, onBuyProduct }) {
               </div>
             </div>
 
-            {/* Card 2: English Learning Mega Bundle */}
-            <div className="product-card">
-              <div className="product-ribbon" style={{ background: 'linear-gradient(135deg, #38bdf8, #0284c7)', color: '#fff' }}>
-                {englishProduct.featuredBadge}
+            {/* Card 2: CineMood Lightroom Presets */}
+            <div className="product-card" style={{ borderColor: 'rgba(0, 180, 216, 0.4)' }}>
+              <div className="product-ribbon" style={{ background: 'linear-gradient(135deg, #38bdf8, #00b4d8)', color: '#030712' }}>
+                {cinemoodProduct.featuredBadge}
               </div>
-              <div className="product-img-wrapper" style={{ background: 'linear-gradient(135deg, #131b2e, #0a0e17)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <span style={{ background: 'rgba(245,158,11,0.2)', color: '#fbbf24', border: '1px solid rgba(245,158,11,0.4)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '700' }}>
-                    10 EBOOKS + 3 BONUSES
-                  </span>
-                  <h4 style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.45rem', color: '#fff', marginTop: '12px' }}>
-                    Complete English Learning
-                  </h4>
-                  <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '4px' }}>
-                    Speak Confidently & Master Fluency
-                  </p>
-                </div>
+              <div className="product-img-wrapper" style={{ position: 'relative', background: '#020610' }}>
+                <img 
+                  src="/presets/cinemood-banner.jpg" 
+                  alt={cinemoodProduct.name} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+                <span style={{ position: 'absolute', bottom: '10px', right: '10px', background: '#001b3a', color: '#38bdf8', border: '1px solid #38bdf8', padding: '3px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: '900', fontFamily: 'monospace' }}>
+                  Lr PRESETS
+                </span>
               </div>
               <div className="product-details">
-                <h3>{englishProduct.name}</h3>
-                <p className="product-desc">{englishProduct.description}</p>
+                <h3>{cinemoodProduct.name}</h3>
+                <p className="product-desc">{cinemoodProduct.description}</p>
 
                 <ul className="features-list">
-                  {englishProduct.features.map((feat, idx) => (
+                  {cinemoodProduct.features.slice(0, 5).map((feat, idx) => (
                     <li key={idx}>
-                      <span className="check">✓</span>
+                      <span className="check" style={{ color: '#38bdf8' }}>✓</span>
                       <span>{feat}</span>
                     </li>
                   ))}
@@ -127,26 +124,30 @@ export default function Home({ onNavigate, onBuyProduct }) {
 
                 <div className="pricing-row">
                   <div className="price-box">
-                    <span className="price-current">₹{englishProduct.price}</span>
-                    <span className="price-old">₹{englishProduct.originalPrice}</span>
+                    <span className="price-current" style={{ color: '#38bdf8' }}>₹{cinemoodProduct.price}</span>
+                    <span className="price-old">₹{cinemoodProduct.originalPrice}</span>
                   </div>
-                  <span className="discount-badge">{englishProduct.discountPercent}</span>
+                  <span className="discount-badge" style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
+                    {cinemoodProduct.discountPercent}
+                  </span>
                 </div>
 
                 <div className="buttons-group">
                   <button
                     type="button"
                     className="btn-view-details"
-                    onClick={() => onNavigate('english')}
+                    style={{ borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8' }}
+                    onClick={() => onNavigate('cinemood-presets')}
                   >
                     View Details →
                   </button>
                   <button
                     type="button"
                     className="btn-buy-direct"
-                    onClick={() => onBuyProduct(englishProduct)}
+                    style={{ background: 'linear-gradient(135deg, #38bdf8, #00b4d8)', color: '#030712' }}
+                    onClick={() => onBuyProduct(cinemoodProduct)}
                   >
-                    <span>⚡ Buy Now (₹{englishProduct.price})</span>
+                    <span>⚡ Buy Now (₹{cinemoodProduct.price})</span>
                   </button>
                 </div>
               </div>

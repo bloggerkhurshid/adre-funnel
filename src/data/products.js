@@ -62,37 +62,68 @@ export const PRODUCTS = {
     ],
     orderBump: CTET_ORDER_BUMP
   },
-  'english-bundle': {
-    id: 'english-bundle',
-    name: 'Complete English Learning Mega Bundle',
-    shortName: 'English Learning Mega Bundle',
-    tagline: '10 Premium Ebooks + 3 FREE Video & Pack Bonuses',
-    category: 'Skill Development & Spoken English',
+  'cinemood-presets': {
+    id: 'cinemood-presets',
+    name: 'CineMood Lightroom Presets (50+ Cinematic Pack)',
+    shortName: 'CineMood 50+ Presets Pack',
+    tagline: '50+ Curated Cinematic Presets for Mobile & Desktop',
+    category: 'Photography & Photo Editing',
     currency: 'INR',
     currencySymbol: '₹',
-    price: 199,
-    originalPrice: 2999,
-    discountPercent: '93% OFF',
+    price: 99,
+    originalPrice: 999,
+    discountPercent: '90% OFF',
     rating: 4.9,
-    totalReviews: '14,850+',
-    featuredBadge: '⚡ MOST POPULAR',
-    coverImage: '/logo.png',
-    description: 'All-in-one English learning system designed for Hindi & English speakers. Master spoken fluency, eliminate hesitation, and crack job interviews without expensive coaching.',
+    totalReviews: '3,840+',
+    featuredBadge: '🔥 TRENDING LIGHTROOM PACK',
+    coverImage: '/presets/cinemood-banner.jpg',
+    description: 'Transform your ordinary phone and camera photos into stunning cinematic film frames with 1-click. Curated specifically for cinematic color grading on Adobe Lightroom Mobile (Free App) & Desktop.',
     features: [
-      '📚 10 Premium Ebooks (1500 Idioms, 3000 Sentences, Grammar, Vocab)',
-      '💼 Job Interview Blueprint (Winning HR & Technical Answers)',
-      '🎥 Bonus 1: Animated Spoken English Video Course',
-      '⏱ Bonus 2: High-Performance Time Management Course',
-      '📖 Bonus 3: Self-Improvement Ebook Pack (10+ Ebooks)',
-      '🌐 Bilingual: Hindi & English Explanations',
-      '📱 Mobile, Tablet & PC Offline Access with Lifetime Validity'
+      '🎨 50+ Premium Cinematic Presets (Moody Brown, Teal & Orange, Mirage & more)',
+      '📱 100% Free Lightroom Mobile Compatible (iOS & Android - No Subscription Needed)',
+      '💻 Desktop Lightroom Classic & CC (.XMP) Included for PC & Mac',
+      '⚡ 1-Click Instant Import & Color Grading',
+      '💎 Clean Skin Tones, Rich Depth & Professional Balanced Contrast',
+      '📖 Step-by-Step Mobile & Desktop Video/PDF Installation Guide Included',
+      '🚀 Instant Digital Access & Lifetime Validity with Free Future Updates'
     ],
-    downloadUrl: 'https://drive.google.com/drive/folders/demo-english-bundle',
+    downloadUrl: 'https://drive.google.com/drive/folders/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag?usp=sharing',
     files: [
-      '10 Core English Mastery Ebooks (PDF Pack)',
-      'Bonus 1: Animated Spoken English Video Lessons',
-      'Bonus 2: Time Management Course Video Files',
-      'Bonus 3: Self-Improvement 10+ Ebooks Pack'
+      'CineMood 50+ Mobile DNG Presets Pack (Instant Mobile Import)',
+      'CineMood Desktop XMP Presets Collection (PC & Mac)',
+      'Step-by-Step Installation & Usage Guide [PDF]'
+    ]
+  },
+  'english-bundle': {
+    id: 'cinemood-presets',
+    name: 'CineMood Lightroom Presets (50+ Cinematic Pack)',
+    shortName: 'CineMood 50+ Presets Pack',
+    tagline: '50+ Curated Cinematic Presets for Mobile & Desktop',
+    category: 'Photography & Photo Editing',
+    currency: 'INR',
+    currencySymbol: '₹',
+    price: 99,
+    originalPrice: 999,
+    discountPercent: '90% OFF',
+    rating: 4.9,
+    totalReviews: '3,840+',
+    featuredBadge: '🔥 TRENDING LIGHTROOM PACK',
+    coverImage: '/presets/cinemood-banner.jpg',
+    description: 'Transform your ordinary phone and camera photos into stunning cinematic film frames with 1-click. Curated specifically for cinematic color grading on Adobe Lightroom Mobile (Free App) & Desktop.',
+    features: [
+      '🎨 50+ Premium Cinematic Presets (Moody Brown, Teal & Orange, Mirage & more)',
+      '📱 100% Free Lightroom Mobile Compatible (iOS & Android - No Subscription Needed)',
+      '💻 Desktop Lightroom Classic & CC (.XMP) Included for PC & Mac',
+      '⚡ 1-Click Instant Import & Color Grading',
+      '💎 Clean Skin Tones, Rich Depth & Professional Balanced Contrast',
+      '📖 Step-by-Step Mobile & Desktop Video/PDF Installation Guide Included',
+      '🚀 Instant Digital Access & Lifetime Validity with Free Future Updates'
+    ],
+    downloadUrl: 'https://drive.google.com/drive/folders/1Go8qAgTGTkRK6RZxIGSz6-b05HaCikag?usp=sharing',
+    files: [
+      'CineMood 50+ Mobile DNG Presets Pack (Instant Mobile Import)',
+      'CineMood Desktop XMP Presets Collection (PC & Mac)',
+      'Step-by-Step Installation & Usage Guide [PDF]'
     ]
   }
 };

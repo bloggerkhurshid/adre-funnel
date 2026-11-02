@@ -27,8 +27,8 @@ export default function Navbar({ onNavigate }) {
             </a>
           </li>
           <li>
-            <a href="/english-bundle" onClick={(e) => { e.preventDefault(); onNavigate('english-bundle'); }}>
-              English Mega Bundle
+            <a href="/cinemood-presets" onClick={(e) => { e.preventDefault(); onNavigate('cinemood-presets'); }}>
+              CineMood Presets
             </a>
           </li>
           <li>

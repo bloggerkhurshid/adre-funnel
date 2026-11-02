@@ -4,7 +4,7 @@ import Footer from './components/Footer';
 import CheckoutModal from './components/CheckoutModal';
 import Home from './pages/Home';
 import AdreFunnel from './pages/AdreFunnel';
-import EnglishFunnel from './pages/EnglishFunnel';
+import CinemoodFunnel from './pages/CinemoodFunnel';
 import Success from './pages/Success';
 import ContactUs from './pages/ContactUs';
 import Terms from './pages/Terms';
@@ -21,7 +21,7 @@ const resolveCurrentRoute = () => {
   const target = path || hash;
 
   if (target === 'adre-combo' || target === 'ebook' || target === 'adre') return 'adre-combo';
-  if (target === 'english-bundle' || target === 'english') return 'english-bundle';
+  if (target === 'cinemood-presets' || target === 'cinemood' || target === 'presets' || target === 'english-bundle' || target === 'english') return 'cinemood-presets';
   if (target === 'contact' || target === 'contact-us') return 'contact';
   if (target === 'terms' || target === 'terms-and-conditions') return 'terms';
   if (target === 'refund-policy' || target === 'refund' || target === 'refunds') return 'refund';
@@ -59,9 +59,9 @@ export default function App() {
     if (route === 'adre-combo' || route === 'adre' || route === 'ebook') {
       urlPath = '/adre-combo';
       normalized = 'adre-combo';
-    } else if (route === 'english-bundle' || route === 'english') {
-      urlPath = '/english-bundle';
-      normalized = 'english-bundle';
+    } else if (route === 'cinemood-presets' || route === 'cinemood' || route === 'presets' || route === 'english-bundle' || route === 'english') {
+      urlPath = '/cinemood-presets';
+      normalized = 'cinemood-presets';
     } else if (route === 'contact') {
       urlPath = '/contact';
       normalized = 'contact';
@@ -119,11 +119,11 @@ export default function App() {
   };
 
   // Funnel pages, success screen, and admin must have ZERO global nav distractions
-  const isFunnelPage = currentRoute === 'adre-combo' || currentRoute === 'english-bundle' || currentRoute === 'success' || currentRoute === 'admin';
+  const isFunnelPage = currentRoute === 'adre-combo' || currentRoute === 'cinemood-presets' || currentRoute === 'english-bundle' || currentRoute === 'success' || currentRoute === 'admin';
 
   return (
     <div className={`app-root ${isFunnelPage ? 'is-funnel-mode' : ''}`}>
-      {/* Top Navbar - Hidden on Funnel Pages (/adre-combo, /english-bundle) & Admin */}
+      {/* Top Navbar - Hidden on Funnel Pages (/adre-combo, /cinemood-presets) & Admin */}
       {!isFunnelPage && <Navbar onNavigate={navigateTo} />}
 
       {/* Main Content Router */}
@@ -134,8 +134,8 @@ export default function App() {
         {currentRoute === 'adre-combo' && (
           <AdreFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
         )}
-        {currentRoute === 'english-bundle' && (
-          <EnglishFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
+        {(currentRoute === 'cinemood-presets' || currentRoute === 'english-bundle') && (
+          <CinemoodFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
         )}
         {currentRoute === 'contact' && <ContactUs />}
         {currentRoute === 'terms' && <Terms />}
