@@ -81,14 +81,7 @@ export default function Home({ onNavigate, onBuyProduct }) {
                     className="btn-view-details"
                     onClick={() => onNavigate('adre')}
                   >
-                    View Details →
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-buy-direct"
-                    onClick={() => onBuyProduct(adreProduct)}
-                  >
-                    <span>⚡ Buy Now (₹{adreProduct.price})</span>
+                    <span>View Product Details →</span>
                   </button>
                 </div>
               </div>
@@ -139,15 +132,7 @@ export default function Home({ onNavigate, onBuyProduct }) {
                     style={{ borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8' }}
                     onClick={() => onNavigate('cinemood-presets')}
                   >
-                    View Details →
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-buy-direct"
-                    style={{ background: 'linear-gradient(135deg, #38bdf8, #00b4d8)', color: '#030712' }}
-                    onClick={() => onBuyProduct(cinemoodProduct)}
-                  >
-                    <span>⚡ Buy Now (₹{cinemoodProduct.price})</span>
+                    <span>View Presets & Before/After →</span>
                   </button>
                 </div>
               </div>
