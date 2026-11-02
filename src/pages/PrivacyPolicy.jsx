@@ -37,9 +37,9 @@ export default function PrivacyPolicy() {
               <li>Prevent unauthorized access and fraudulent transactions.</li>
             </ul>
 
-            <h3>4. Payment Security & Razorpay</h3>
+            <h3>4. Payment Security & Cashfree</h3>
             <p>
-              We do <strong>not</strong> collect or store your Debit/Credit Card numbers, CVV, Net Banking credentials, or UPI PINs on our servers. All financial transactions are securely processed through RBI-authorized payment gateways (Razorpay) using industry-standard 256-bit SSL encryption.
+              We do <strong>not</strong> collect or store your Debit/Credit Card numbers, CVV, Net Banking credentials, or UPI PINs on our servers. All financial transactions are securely processed through RBI-authorized payment gateways (Cashfree Payments) using industry-standard 256-bit SSL encryption.
             </p>
 
             <h3>5. Cookies & Advertising Pixels</h3>

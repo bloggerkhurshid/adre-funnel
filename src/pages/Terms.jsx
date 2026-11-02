@@ -28,7 +28,7 @@ export default function Terms() {
 
             <h3>3. Nature of Digital Products & Instant Delivery</h3>
             <p>
-              All products sold on this website are <strong>strictly digital products</strong> (PDF ebooks, video streaming links, and downloadable resources). No physical goods or paper books will be shipped. Access to the digital products is granted immediately upon successful payment via Razorpay. A confirmation email with download links is also sent automatically to the email address provided during checkout.
+              All products sold on this website are <strong>strictly digital products</strong> (PDF ebooks, video streaming links, and downloadable resources). No physical goods or paper books will be shipped. Access to the digital products is granted immediately upon successful payment via Cashfree / UPI. A confirmation email with download links is also sent automatically to the email address provided during checkout.
             </p>
 
             <h3>4. License & Intellectual Property</h3>

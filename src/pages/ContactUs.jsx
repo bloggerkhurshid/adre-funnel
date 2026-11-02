@@ -50,7 +50,7 @@ export default function ContactUs() {
 
           <div className="policy-content-body" style={{ marginTop: '30px' }}>
             <h3>Send Us a Direct Message</h3>
-            <p>If you face any issues downloading your bundle after completing payment, please write to us with your registered Email ID and Razorpay Payment ID. Our team will verify and resend the download links immediately.</p>
+            <p>If you face any issues downloading your bundle after completing payment, please write to us with your registered Email ID and Cashfree Transaction / Order ID. Our team will verify and resend the download links immediately.</p>
           </div>
         </div>
       </div>

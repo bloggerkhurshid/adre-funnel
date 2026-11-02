@@ -29,7 +29,7 @@ export default function Home({ onNavigate, onBuyProduct }) {
           <div className="trust-badges-row">
             <span>⭐ 4.9/5 Rating (25,000+ Downloads)</span>
             <span>•</span>
-            <span>🔒 Bank-Grade Razorpay Checkout (UPI / Cards)</span>
+            <span>🔒 Bank-Grade Cashfree Checkout (UPI / Cards)</span>
             <span>•</span>
             <span>⚡ 100% Instant Delivery</span>
           </div>
@@ -176,7 +176,7 @@ export default function Home({ onNavigate, onBuyProduct }) {
             </div>
             <div className="perk-box">
               <div className="perk-icon">🔒</div>
-              <h4>Razorpay 256-Bit SSL</h4>
+              <h4>Cashfree 256-Bit SSL</h4>
               <p>Official UPI intent (GPay, PhonePe, Paytm, QR) with bank-grade encryption.</p>
             </div>
             <div className="perk-box">

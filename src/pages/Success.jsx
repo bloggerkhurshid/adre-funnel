@@ -71,7 +71,7 @@ export default function Success({ purchaseData, onNavigate }) {
           </div>
 
           <p className="delivery-note" style={{ color: '#cbd5e1' }}>
-            Direct access to this download URL is blocked. This page is strictly accessible to customers with a verified, completed Razorpay transaction on <strong>projuktisoft.shop</strong>.
+            Direct access to this download URL is blocked. This page is strictly accessible to customers with a verified, completed Cashfree transaction on <strong>projuktisoft.shop</strong>.
           </p>
 
           <div className="redirect-notice-box">

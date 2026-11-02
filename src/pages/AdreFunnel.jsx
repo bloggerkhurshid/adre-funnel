@@ -80,7 +80,7 @@ export default function AdreFunnel({ onBuyProduct, onNavigate }) {
   const faqs = [
     {
       q: 'How will I receive the ebooks after payment?',
-      a: 'Delivery is 100% instant and automated! Immediately after completing the ₹99 payment on Razorpay, you will be redirected to the download screen to access all 4 PDF ebooks right away. An email with download links is also sent automatically.'
+      a: 'Delivery is 100% instant and automated! Immediately after completing payment on Cashfree, you will be redirected to the download screen to access all 4 PDF ebooks right away. An email with download links is also sent automatically.'
     },
     {
       q: 'Are the questions in Assamese or English?',

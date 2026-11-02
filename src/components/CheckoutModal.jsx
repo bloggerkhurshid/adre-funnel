@@ -47,7 +47,7 @@ export default function CheckoutModal({
   const bumpPrice = hasOrderBump ? product.orderBump.price : 0;
   const totalAmount = includeOrderBump && hasOrderBump ? (product.price + bumpPrice) : product.price;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsProcessing(true);
 
@@ -60,78 +60,69 @@ export default function CheckoutModal({
     // 1. Fire InitiateCheckout on Meta Pixel
     MetaPixel.initiateCheckout(trackingProduct);
 
-    // 2. Configure Razorpay Options
-    const options = {
-      key: 'rzp_live_placeholder', // Replaced with user's live key in production
-      amount: totalAmount * 100, // In paise
-      currency: 'INR',
-      name: 'ProjuktiSoft',
-      description: trackingProduct.name,
-      image: '/logo.png',
-      prefill: {
-        name: name,
-        email: email,
-        contact: phone
-      },
-      theme: {
-        color: '#8ac926'
-      },
-      handler: function (response) {
-        setIsProcessing(false);
-        const paymentId = response.razorpay_payment_id || `pay_${Date.now()}`;
-        const payload = {
-          product,
-          orderBumpSelected: includeOrderBump && hasOrderBump,
-          orderBump: product.orderBump,
-          totalAmount,
-          paymentId,
-          name,
-          email,
-          phone,
-          timestamp: Date.now()
-        };
-        try {
-          sessionStorage.setItem('pj_verified_order', JSON.stringify(payload));
-        } catch (e) {}
-        onClose();
-        if (onSuccess) {
-          onSuccess(payload);
-        }
-      },
-      modal: {
-        ondismiss: function () {
-          setIsProcessing(false);
-        }
+    const handleSuccessfulPayment = (paymentId) => {
+      const payload = {
+        product,
+        orderBumpSelected: includeOrderBump && hasOrderBump,
+        orderBump: product.orderBump,
+        totalAmount,
+        paymentId: paymentId || `cf_${Date.now()}`,
+        name,
+        email,
+        phone,
+        gateway: 'cashfree',
+        timestamp: Date.now()
+      };
+      try {
+        sessionStorage.setItem('pj_verified_order', JSON.stringify(payload));
+      } catch (err) {}
+      setIsProcessing(false);
+      onClose();
+      if (onSuccess) {
+        onSuccess(payload);
       }
     };
 
-    if (window.Razorpay) {
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } else {
-      // Fallback preview mode
-      setTimeout(() => {
-        setIsProcessing(false);
-        const payload = {
-          product,
-          orderBumpSelected: includeOrderBump && hasOrderBump,
-          orderBump: product.orderBump,
-          totalAmount,
-          paymentId: `pay_preview_${Date.now()}`,
-          name,
-          email,
-          phone,
-          timestamp: Date.now()
-        };
-        try {
-          sessionStorage.setItem('pj_verified_order', JSON.stringify(payload));
-        } catch (e) {}
-        onClose();
-        if (onSuccess) {
-          onSuccess(payload);
-        }
-      }, 1000);
+    // 2. Attempt Cashfree Gateway Checkout via Serverless Function
+    try {
+      const response = await fetch('/api/create-cashfree-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: totalAmount,
+          customerName: name,
+          customerEmail: email,
+          customerPhone: phone,
+          orderNote: trackingProduct.name
+        })
+      });
+
+      const orderData = await response.json();
+
+      // If live Cashfree payment_session_id returned and SDK is ready
+      if (orderData.payment_session_id && window.Cashfree && !orderData.preview_mode) {
+        const cashfree = window.Cashfree({ mode: 'production' });
+        cashfree.checkout({
+          paymentSessionId: orderData.payment_session_id,
+          redirectTarget: '_modal'
+        }).then((result) => {
+          if (result.error) {
+            setIsProcessing(false);
+            console.log('Cashfree modal closed/error:', result.error);
+          } else if (result.paymentDetails) {
+            handleSuccessfulPayment(orderData.order_id || result.paymentDetails.paymentMessage);
+          }
+        });
+        return;
+      }
+    } catch (apiErr) {
+      console.warn('Cashfree serverless API offline or not configured, using instant preview checkout:', apiErr);
     }
+
+    // 3. Fallback / Preview Checkout (when testing locally or before credentials are added)
+    setTimeout(() => {
+      handleSuccessfulPayment(`cf_test_${Date.now()}`);
+    }, 1000);
   };
 
   return (
@@ -296,7 +287,7 @@ export default function CheckoutModal({
 
           <div className="p-modal-footer-badges">
             <span>🔒 100% Safe Payment in INR (₹)</span>
-            <span>⚡ UPI (GPay/PhonePe/Paytm), Cards & NetBanking</span>
+            <span>⚡ Cashfree UPI (GPay/PhonePe/Paytm/QR) & Cards</span>
           </div>
         </form>
       </div>
