@@ -7,6 +7,9 @@ import {
   query, 
   where, 
   orderBy, 
+  doc,
+  deleteDoc,
+  writeBatch,
   serverTimestamp 
 } from 'firebase/firestore';
 
@@ -117,6 +120,50 @@ export async function fetchAllOrdersForAdmin() {
   } catch (error) {
     console.error('Error fetching admin orders:', error);
     return [];
+  }
+}
+
+/**
+ * Delete a single order from Firestore
+ */
+export async function deleteOrderFromFirestore(orderId) {
+  if (!orderId) return { success: false, error: 'No orderId provided' };
+  try {
+    const docRef = doc(db, 'orders', orderId);
+    await deleteDoc(docRef);
+    return { success: true };
+  } catch (error) {
+    console.error(`Error deleting order ${orderId}:`, error);
+    return { success: false, error };
+  }
+}
+
+/**
+ * Bulk delete multiple orders from Firestore
+ */
+export async function deleteOrdersBulkFromFirestore(orderIds = []) {
+  if (!orderIds || orderIds.length === 0) return { success: true, count: 0 };
+  
+  try {
+    // Try batch delete first
+    const batch = writeBatch(db);
+    orderIds.forEach((id) => {
+      const docRef = doc(db, 'orders', id);
+      batch.delete(docRef);
+    });
+    await batch.commit();
+    return { success: true, count: orderIds.length };
+  } catch (batchErr) {
+    console.warn('Batch delete failed, falling back to Promise.all individual deletes:', batchErr);
+    try {
+      await Promise.all(
+        orderIds.map((id) => deleteDoc(doc(db, 'orders', id)))
+      );
+      return { success: true, count: orderIds.length };
+    } catch (fallbackErr) {
+      console.error('Bulk delete fallback error:', fallbackErr);
+      return { success: false, error: fallbackErr };
+    }
   }
 }
 
