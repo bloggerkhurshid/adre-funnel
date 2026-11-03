@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient: Deep Navy -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050e1f" />
+      <stop offset="50%" stop-color="#091830" />
+      <stop offset="100%" stop-color="#030812" />
+    </linearGradient>
+
+    <!-- Warm Amber & Coral Gradients -->
+    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+
+    <linearGradient id="coralGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb7185" />
+      <stop offset="100%" stop-color="#f43f5e" />
+    </linearGradient>
+
+    <linearGradient id="glowCircle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#f43f5e" stop-opacity="0" />
+    </linearGradient>
+
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="600" height="800" rx="16" fill="url(#bgGrad)" />
+
+  <!-- Subtle Geometric Grid / Accents -->
+  <circle cx="500" cy="180" r="160" fill="url(#glowCircle)" />
+  <circle cx="80" cy="650" r="140" fill="url(#glowCircle)" />
+
+  <!-- Top Decorative Badge -->
+  <g transform="translate(60, 50)">
+    <rect width="180" height="28" rx="14" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="1.5" />
+    <text x="90" y="18" fill="#fbbf24" font-family="'Poppins', sans-serif" font-size="11" font-weight="800" text-anchor="middle" letter-spacing="1.5">30-DAY PRACTICE BLUEPRINT</text>
+  </g>
+
+  <!-- Main Title: SPOKE ENGLISH -->
+  <g transform="translate(60, 140)">
+    <text x="0" y="0" fill="#ffffff" font-family="'Poppins', 'Inter', sans-serif" font-size="54" font-weight="900" letter-spacing="-1">SPOKE</text>
+    <text x="0" y="55" fill="url(#amberGrad)" font-family="'Poppins', 'Inter', sans-serif" font-size="54" font-weight="900" letter-spacing="-1">ENGLISH</text>
+    
+    <!-- Subtitle: [INTERVIEW • OFFICE • DAILY TALK] -->
+    <rect x="0" y="78" width="340" height="2" fill="url(#coralGrad)" opacity="0.8" />
+    <text x="0" y="102" fill="#cbd5e1" font-family="'Poppins', sans-serif" font-size="13" font-weight="700" letter-spacing="2.5">[ INTERVIEW • OFFICE • DAILY TALK ]</text>
+  </g>
+
+  <!-- Floating Abstract Speech Bubbles -->
+  <g transform="translate(420, 240)">
+    <rect width="110" height="42" rx="12" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="1.5" />
+    <text x="55" y="26" fill="#fef08a" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">"Tell me about..."</text>
+  </g>
+
+  <g transform="translate(70, 390)">
+    <rect width="130" height="42" rx="12" fill="#f43f5e" fill-opacity="0.2" stroke="#f43f5e" stroke-width="1.5" />
+    <text x="65" y="26" fill="#fecdd3" font-family="'Inter', sans-serif" font-size="12" font-weight="700" text-anchor="middle">"Yes, absolutely!"</text>
+  </g>
+
+  <!-- Central Vector Illustration of Confident Young Professional Woman -->
+  <g transform="translate(160, 300)" filter="url(#shadow)">
+    <!-- Aura Glow Background -->
+    <circle cx="140" cy="180" r="130" fill="#0c1f3d" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="2" />
+    
+    <!-- Woman Vector Silhouette & Professional Styling -->
+    <!-- Head / Hair -->
+    <path d="M140 100 C115 100 95 125 95 155 C95 185 110 200 140 200 C170 200 185 185 185 155 C185 125 165 100 140 100 Z" fill="#1e293b" />
+    <!-- Face / Skin Tone (Warm Amber Undertone) -->
+    <path d="M140 120 C125 120 115 132 115 150 C115 168 125 180 140 180 C155 180 165 168 165 150 C165 132 155 120 140 120 Z" fill="#d97706" />
+    <!-- Hair overlay -->
+    <path d="M100 140 C95 110 130 90 155 95 C175 100 185 125 180 150 C175 130 160 115 140 115 C120 115 105 125 100 140 Z" fill="#0f172a" />
+    
+    <!-- Phone in Hand Raised Mid-Conversation -->
+    <rect x="175" y="135" width="22" height="42" rx="4" fill="#fbbf24" stroke="#ffffff" stroke-width="1.5" transform="rotate(15 185 155)" />
+    <!-- Earphone / Soundwaves -->
+    <circle cx="165" cy="150" r="3" fill="#ffffff" />
+    
+    <!-- Professional Blazer: Coral Accent -->
+    <path d="M90 220 L140 200 L190 220 L215 310 L65 310 Z" fill="url(#coralGrad)" />
+    <!-- Inner Formal Shirt: Crisp White V-neck -->
+    <polygon points="140,200 122,250 158,250" fill="#ffffff" />
+    <polygon points="140,225 130,270 150,270" fill="#f8fafc" />
+  </g>
+
+  <!-- Bottom Strip: 4 Ebooks in 1 Complete Pack -->
+  <g transform="translate(60, 670)">
+    <rect width="480" height="75" rx="14" fill="#040b17" stroke="#334155" stroke-width="1" />
+    
+    <!-- 4 Mini Book Tag Indicators -->
+    <g transform="translate(20, 18)">
+      <rect width="95" height="40" rx="6" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="1" />
+      <text x="47" y="17" fill="#fbbf24" font-family="'Inter', sans-serif" font-size="9" font-weight="800" text-anchor="middle">BOOK 1</text>
+      <text x="47" y="30" fill="#ffffff" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">INTERVIEW</text>
+    </g>
+
+    <g transform="translate(130, 18)">
+      <rect width="95" height="40" rx="6" fill="#f43f5e" fill-opacity="0.15" stroke="#f43f5e" stroke-width="1" />
+      <text x="47" y="17" fill="#fb7185" font-family="'Inter', sans-serif" font-size="9" font-weight="800" text-anchor="middle">BOOK 2</text>
+      <text x="47" y="30" fill="#ffffff" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">OFFICE TALK</text>
+    </g>
+
+    <g transform="translate(240, 18)">
+      <rect width="95" height="40" rx="6" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1" />
+      <text x="47" y="17" fill="#38bdf8" font-family="'Inter', sans-serif" font-size="9" font-weight="800" text-anchor="middle">BOOK 3</text>
+      <text x="47" y="30" fill="#ffffff" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">DAILY LIFE</text>
+    </g>
+
+    <g transform="translate(350, 18)">
+      <rect width="105" height="40" rx="6" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1" />
+      <text x="52" y="17" fill="#34d399" font-family="'Inter', sans-serif" font-size="9" font-weight="800" text-anchor="middle">BOOK 4</text>
+      <text x="52" y="30" fill="#ffffff" font-family="'Inter', sans-serif" font-size="8" font-weight="600" text-anchor="middle">1000+ PHRASES</text>
+    </g>
+  </g>
+</svg>

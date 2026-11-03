@@ -9,7 +9,8 @@ export default function Home({ onNavigate, onBuyProduct }) {
   }, []);
 
   const adreProduct = PRODUCTS['adre-combo'];
-  const cinemoodProduct = PRODUCTS['cinemood-presets'] || PRODUCTS['english-bundle'];
+  const cinemoodProduct = PRODUCTS['cinemood-presets'];
+  const spokenProduct = PRODUCTS['spoken-english'];
 
   return (
     <div className="home-page">
@@ -137,6 +138,59 @@ export default function Home({ onNavigate, onBuyProduct }) {
                 </div>
               </div>
             </div>
+
+            {/* Card 3: Spoken English Bundle */}
+            {spokenProduct && (
+              <div className="product-card" style={{ borderColor: 'rgba(245, 158, 11, 0.45)' }}>
+                <div className="product-ribbon" style={{ background: 'linear-gradient(135deg, #fbbf24, #f59e0b)', color: '#030712' }}>
+                  {spokenProduct.featuredBadge}
+                </div>
+                <div className="product-img-wrapper" style={{ position: 'relative', background: '#050d1a' }}>
+                  <img 
+                    src={spokenProduct.coverImage} 
+                    alt={spokenProduct.name} 
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '10px' }}
+                  />
+                  <span style={{ position: 'absolute', bottom: '10px', right: '10px', background: '#1c1303', color: '#fbbf24', border: '1px solid #f59e0b', padding: '3px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: '900', fontFamily: 'monospace' }}>
+                    4 EBOOKS
+                  </span>
+                </div>
+                <div className="product-details">
+                  <h3>{spokenProduct.name}</h3>
+                  <p className="product-desc">{spokenProduct.description}</p>
+
+                  <ul className="features-list">
+                    {spokenProduct.features.slice(0, 5).map((feat, idx) => (
+                      <li key={idx}>
+                        <span className="check" style={{ color: '#fbbf24' }}>✓</span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="pricing-row">
+                    <div className="price-box">
+                      <span className="price-current" style={{ color: '#fbbf24' }}>₹{spokenProduct.price}</span>
+                      <span className="price-old">₹{spokenProduct.originalPrice}</span>
+                    </div>
+                    <span className="discount-badge" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', border: '1px solid rgba(245, 158, 11, 0.4)' }}>
+                      {spokenProduct.discountPercent}
+                    </span>
+                  </div>
+
+                  <div className="buttons-group">
+                    <button
+                      type="button"
+                      className="btn-view-details"
+                      style={{ borderColor: 'rgba(245, 158, 11, 0.45)', color: '#fbbf24' }}
+                      onClick={() => onNavigate('spoken-english')}
+                    >
+                      <span>View Spoken English Funnel →</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

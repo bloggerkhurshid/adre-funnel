@@ -5,6 +5,7 @@ import Checkout from './pages/Checkout';
 import Home from './pages/Home';
 import AdreFunnel from './pages/AdreFunnel';
 import CinemoodFunnel from './pages/CinemoodFunnel';
+import SpokenEnglishFunnel from './pages/SpokenEnglishFunnel';
 import Success from './pages/Success';
 import ContactUs from './pages/ContactUs';
 import Terms from './pages/Terms';
@@ -22,7 +23,7 @@ const resolveCurrentRoute = () => {
 
   if (target === 'adre-combo' || target === 'ebook' || target === 'adre' || target === 'assam') return 'adre-combo';
   if (target === 'cinemood-presets' || target === 'cinemood' || target === 'presets' || target === 'preset' || target === 'lightroom' || target === 'lr' || target === 'dng') return 'cinemood-presets';
-  if (target === 'english-bundle' || target === 'english') return 'cinemood-presets';
+  if (target === 'spoken-english' || target === 'english-bundle' || target === 'english' || target === 'spoken') return 'spoken-english';
   if (target === 'checkout' || target === 'pay' || target === 'order') return 'checkout';
   if (target === 'contact' || target === 'contact-us') return 'contact';
   if (target === 'terms' || target === 'terms-and-conditions') return 'terms';
@@ -87,9 +88,12 @@ export default function App() {
     if (route === 'adre-combo' || route === 'adre' || route === 'ebook') {
       urlPath = '/adre-combo';
       normalized = 'adre-combo';
-    } else if (route === 'cinemood-presets' || route === 'cinemood' || route === 'presets' || route === 'english-bundle' || route === 'english') {
+    } else if (route === 'cinemood-presets' || route === 'cinemood' || route === 'presets') {
       urlPath = '/cinemood-presets';
       normalized = 'cinemood-presets';
+    } else if (route === 'spoken-english' || route === 'english' || route === 'english-bundle' || route === 'spoken') {
+      urlPath = '/spoken-english';
+      normalized = 'spoken-english';
     } else if (route === 'checkout' || route === 'pay') {
       const targetProd = options.product || checkoutProduct || PRODUCTS['cinemood-presets'];
       const bump = options.withBump !== undefined ? options.withBump : initialOrderBumpSelected;
@@ -147,11 +151,11 @@ export default function App() {
   };
 
   // Funnel pages, checkout page, success screen, and admin must have ZERO global nav distractions
-  const isFunnelPage = currentRoute === 'adre-combo' || currentRoute === 'cinemood-presets' || currentRoute === 'english-bundle' || currentRoute === 'checkout' || currentRoute === 'success' || currentRoute === 'admin';
+  const isFunnelPage = currentRoute === 'adre-combo' || currentRoute === 'cinemood-presets' || currentRoute === 'spoken-english' || currentRoute === 'checkout' || currentRoute === 'success' || currentRoute === 'admin';
 
   return (
     <div className={`app-root ${isFunnelPage ? 'is-funnel-mode' : ''}`}>
-      {/* Top Navbar - Hidden on Funnel Pages (/adre-combo, /cinemood-presets, /checkout) & Admin */}
+      {/* Top Navbar - Hidden on Funnel Pages (/adre-combo, /cinemood-presets, /spoken-english, /checkout) & Admin */}
       {!isFunnelPage && <Navbar onNavigate={navigateTo} />}
 
       {/* Main Content Router */}
@@ -162,8 +166,11 @@ export default function App() {
         {currentRoute === 'adre-combo' && (
           <AdreFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
         )}
-        {(currentRoute === 'cinemood-presets' || currentRoute === 'english-bundle') && (
+        {currentRoute === 'cinemood-presets' && (
           <CinemoodFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
+        )}
+        {currentRoute === 'spoken-english' && (
+          <SpokenEnglishFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
         )}
         {currentRoute === 'checkout' && (
           <Checkout

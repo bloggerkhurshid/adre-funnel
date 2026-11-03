@@ -122,34 +122,75 @@ export const PRODUCTS = {
     ],
     orderBump: WEDDING_ORDER_BUMP
   },
-  'english-bundle': {
-    id: 'cinemood-presets',
-    name: 'CineMood Lightroom Presets (50+ Cinematic DNG Pack)',
-    shortName: 'CineMood 50+ DNG Presets',
-    tagline: '50+ Curated Cinematic DNG Presets for Mobile & Desktop',
-    category: 'Photography & Photo Editing',
+  'spoken-english': {
+    id: 'spoken-english',
+    name: 'Spoken English Mastery Practice Bundle (4 Ebooks)',
+    shortName: 'Spoken English Bundle',
+    tagline: 'Interview, Office, Daily Talk & 1000+ Real Phrases in 30 Days',
+    category: 'Skill Building & Career',
+    currency: 'INR',
+    currencySymbol: '₹',
+    price: 99,
+    originalPrice: 696,
+    discountPercent: '86% OFF',
+    rating: 4.9,
+    totalReviews: '450+ Learners',
+    featuredBadge: '🔥 30-DAY PRACTICE BLUEPRINT',
+    coverImage: '/spoken-english/cover-bundle.svg',
+    description: 'Interview ke waqt English mein ghabrahat khatam — 30 din mein, bina kisi course ke. 4 practical ebooks tailored for real situations: interview, office, phone calls, and banking.',
+    features: [
+      '📕 Book 1: Job Interview English Mastery (50+ Real Scenarios)',
+      '📗 Book 2: Corporate & Office Meeting Conversations',
+      '📘 Book 3: Daily Real-Life Dialogues (Banking, Travel, Phone)',
+      '📙 Book 4: 1000+ Everyday Essential Phrases & Idioms',
+      '🗣️ Actionable Speaking Exercises at the End of Every Section',
+      '📱 Offline PDF Format for Mobile, Tablet & Laptop'
+    ],
+    downloadUrl: 'https://drive.google.com/drive/folders/1x5XWr2uextv3b3eSoKIpYjoWvu-nqv0n?usp=sharing',
+    files: [
+      'Book 1: Job Interview English Mastery [PDF]',
+      'Book 2: Corporate & Office Meeting Guide [PDF]',
+      'Book 3: Daily Real-Life Situations Handbook [PDF]',
+      'Book 4: 1000+ Must-Know Daily Phrases & Idioms [PDF]'
+    ],
+    orderBump: WEDDING_ORDER_BUMP
+  },
+  'spoken-english-single': {
+    id: 'spoken-english-single',
+    name: 'Job Interview English Mastery Ebook (Book 1 Only)',
+    shortName: 'Interview English Single',
+    tagline: '50+ Real Job Interview Questions & Winning Answers',
+    category: 'Skill Building & Career',
+    currency: 'INR',
+    currencySymbol: '₹',
+    price: 49,
+    originalPrice: 199,
+    discountPercent: '75% OFF',
+    coverImage: '/spoken-english/cover-interview.svg',
+    downloadUrl: 'https://drive.google.com/drive/folders/1x5XWr2uextv3b3eSoKIpYjoWvu-nqv0n?usp=sharing',
+    files: [
+      'Book 1: Job Interview English Mastery [PDF]'
+    ]
+  },
+  'spoken-english-vip': {
+    id: 'spoken-english-vip',
+    name: 'Spoken English 4-in-1 Bundle + CineMood 50+ Lightroom Presets VIP Pack',
+    shortName: 'English Bundle + Themes VIP',
+    tagline: 'Complete English Bundle + 50+ Cinematic Lightroom Presets',
+    category: 'Career & Creative Stack',
     currency: 'INR',
     currencySymbol: '₹',
     price: 149,
-    originalPrice: 999,
-    discountPercent: '85% OFF',
-    rating: 4.9,
-    totalReviews: '3,840+',
-    featuredBadge: '🔥 TRENDING LIGHTROOM PACK',
-    coverImage: '/presets/cinemood-banner.jpg',
-    description: 'Transform your ordinary phone and camera photos into stunning cinematic film frames with 1-click. Curated specifically for cinematic color grading in high-fidelity DNG format on Adobe Lightroom Mobile (Free App) & Desktop.',
-    features: [
-      '🎨 50+ Premium Cinematic DNG Presets (Moody Brown, Teal & Orange, Mirage & more)',
-      '📱 100% Free Lightroom Mobile Compatible (.DNG format for iOS & Android)',
-      '⚡ 1-Click Instant Import & Color Grading (No Adobe Subscription Needed)',
-      '💎 Clean Skin Tones, Rich Depth & Professional Balanced Contrast',
-      '📖 Step-by-Step Installation Video/PDF Tutorial Included',
-      '🚀 Instant Digital Access & Lifetime Validity with Free Future Updates'
-    ],
-    downloadUrl: 'https://drive.google.com/drive/folders/10r0oO0i0Uqa_b8ujxc9uxTcobQBMXmmC?usp=drive_link',
+    originalPrice: 1299,
+    discountPercent: '88% OFF',
+    coverImage: '/spoken-english/cover-bundle.svg',
+    downloadUrl: 'https://drive.google.com/drive/folders/1x5XWr2uextv3b3eSoKIpYjoWvu-nqv0n?usp=sharing',
     files: [
-      'CineMood 50+ Cinematic DNG Presets Pack (Instant Mobile & Desktop Import)',
-      'Step-by-Step Installation & Usage Guide [PDF]'
+      'Book 1: Job Interview English Mastery [PDF]',
+      'Book 2: Corporate & Office Meeting Guide [PDF]',
+      'Book 3: Daily Real-Life Situations Handbook [PDF]',
+      'Book 4: 1000+ Must-Know Daily Phrases & Idioms [PDF]',
+      'BONUS: CineMood 50+ Cinematic DNG Presets Pack'
     ],
     orderBump: WEDDING_ORDER_BUMP
   }
@@ -166,7 +207,10 @@ PRODUCTS['preset'] = PRODUCTS['cinemood-presets'];
 PRODUCTS['lightroom'] = PRODUCTS['cinemood-presets'];
 PRODUCTS['lr'] = PRODUCTS['cinemood-presets'];
 PRODUCTS['dng'] = PRODUCTS['cinemood-presets'];
-PRODUCTS['english'] = PRODUCTS['english-bundle'];
+PRODUCTS['spoken-english'] = PRODUCTS['spoken-english'];
+PRODUCTS['spoken'] = PRODUCTS['spoken-english'];
+PRODUCTS['english-bundle'] = PRODUCTS['spoken-english'];
+PRODUCTS['english'] = PRODUCTS['spoken-english'];
 
 /**
  * Universal helper to safely retrieve any product by ID or alias

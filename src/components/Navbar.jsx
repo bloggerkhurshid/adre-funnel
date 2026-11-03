@@ -33,6 +33,11 @@ export default function Navbar({ onNavigate }) {
             </a>
           </li>
           <li>
+            <a href="/spoken-english" onClick={(e) => { e.preventDefault(); handleNavClick('spoken-english'); }}>
+              Spoken English (₹99)
+            </a>
+          </li>
+          <li>
             <a href="/adre-combo" onClick={(e) => { e.preventDefault(); handleNavClick('adre-combo'); }}>
               ADRE Exam Combo
             </a>
@@ -95,6 +100,12 @@ export default function Navbar({ onNavigate }) {
             <li>
               <a href="/" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}>
                 <span>🏠 All Products</span>
+                <span className="mobile-chevron">→</span>
+              </a>
+            </li>
+            <li>
+              <a href="/spoken-english" onClick={(e) => { e.preventDefault(); handleNavClick('spoken-english'); }}>
+                <span>🗣️ Spoken English Bundle (₹99)</span>
                 <span className="mobile-chevron">→</span>
               </a>
             </li>
