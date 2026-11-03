@@ -27,7 +27,17 @@ export default function AdminDashboard({ onNavigate }) {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Filter & Search Controls
+  // Time Period & Analytics Controls
+  // 'today', 'yesterday', 'this-week', 'this-month', 'all-time'
+  const [analyticsPeriod, setAnalyticsPeriod] = useState('today');
+  // 'revenue', 'orders'
+  const [chartMetric, setChartMetric] = useState('revenue');
+  // Interactive Hovered Bar state for chart tooltip
+  const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
+  // Option to filter table to match active analytics period
+  const [filterTableByPeriod, setFilterTableByPeriod] = useState(false);
+
+  // Filter & Search Controls for Orders Table
   const [searchTerm, setSearchTerm] = useState('');
   const [productFilter, setProductFilter] = useState('all'); // 'all', 'adre-combo', 'cinemood-presets', 'bump-only'
   const [sortOption, setSortOption] = useState('date-desc'); // 'date-desc', 'date-asc', 'amount-desc', 'amount-asc'
@@ -85,7 +95,6 @@ export default function AdminDashboard({ onNavigate }) {
     try {
       const data = await fetchAllOrdersForAdmin();
       setOrders(data);
-      // Clean up any stale selected IDs
       setSelectedOrderIds(new Set());
     } catch (err) {
       console.error('Failed to load orders:', err);
@@ -226,7 +235,6 @@ export default function AdminDashboard({ onNavigate }) {
         const result = await deleteOrderFromFirestore(orderId);
         if (result.success) {
           setOrders(prev => prev.filter(o => o.id !== orderId));
-          // If was selected, remove from selected
           if (selectedOrderIds.has(orderId)) {
             const nextSet = new Set(selectedOrderIds);
             nextSet.delete(orderId);
@@ -259,9 +267,293 @@ export default function AdminDashboard({ onNavigate }) {
     });
   };
 
-  // Filtered & Sorted Orders
+  // ========================================================
+  // TIME PERIOD CALCULATIONS & GRAPH ANALYTICS
+  // ========================================================
+  const dateRanges = useMemo(() => {
+    const now = new Date();
+
+    // Today (00:00:00 to 23:59:59)
+    const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    const endToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
+    // Yesterday (00:00:00 to 23:59:59)
+    const startYesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 0, 0, 0, 0);
+    const endYesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59, 999);
+
+    // Day Before Yesterday (for comparing Yesterday)
+    const startDayBefore = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2, 0, 0, 0, 0);
+    const endDayBefore = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2, 23, 59, 59, 999);
+
+    // This Week: Last 7 Days (6 days ago to today)
+    const startThisWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6, 0, 0, 0, 0);
+    // Previous Week (7 to 13 days ago)
+    const startPrevWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 13, 0, 0, 0, 0);
+    const endPrevWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7, 23, 59, 59, 999);
+
+    // This Month: 1st of current month to today
+    const startThisMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+    // Previous Month: 1st to last day of last month
+    const startPrevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1, 0, 0, 0, 0);
+    const endPrevMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+
+    return {
+      startToday, endToday,
+      startYesterday, endYesterday,
+      startDayBefore, endDayBefore,
+      startThisWeek, startPrevWeek, endPrevWeek,
+      startThisMonth, startPrevMonth, endPrevMonth
+    };
+  }, []);
+
+  // Filter orders strictly by active analytics period
+  const periodOrders = useMemo(() => {
+    return orders.filter(order => {
+      const orderTime = new Date(order.createdAtISO || 0).getTime();
+      if (analyticsPeriod === 'today') {
+        return orderTime >= dateRanges.startToday.getTime() && orderTime <= dateRanges.endToday.getTime();
+      }
+      if (analyticsPeriod === 'yesterday') {
+        return orderTime >= dateRanges.startYesterday.getTime() && orderTime <= dateRanges.endYesterday.getTime();
+      }
+      if (analyticsPeriod === 'this-week') {
+        return orderTime >= dateRanges.startThisWeek.getTime() && orderTime <= dateRanges.endToday.getTime();
+      }
+      if (analyticsPeriod === 'this-month') {
+        return orderTime >= dateRanges.startThisMonth.getTime() && orderTime <= dateRanges.endToday.getTime();
+      }
+      return true; // 'all-time'
+    });
+  }, [orders, analyticsPeriod, dateRanges]);
+
+  // Comparative Period Statistics (e.g. Today vs Yesterday)
+  const periodStats = useMemo(() => {
+    let prevOrders = [];
+    let compareLabel = 'vs Yesterday';
+
+    if (analyticsPeriod === 'today') {
+      prevOrders = orders.filter(o => {
+        const t = new Date(o.createdAtISO || 0).getTime();
+        return t >= dateRanges.startYesterday.getTime() && t <= dateRanges.endYesterday.getTime();
+      });
+      compareLabel = 'vs Yesterday';
+    } else if (analyticsPeriod === 'yesterday') {
+      prevOrders = orders.filter(o => {
+        const t = new Date(o.createdAtISO || 0).getTime();
+        return t >= dateRanges.startDayBefore.getTime() && t <= dateRanges.endDayBefore.getTime();
+      });
+      compareLabel = 'vs Day Before';
+    } else if (analyticsPeriod === 'this-week') {
+      prevOrders = orders.filter(o => {
+        const t = new Date(o.createdAtISO || 0).getTime();
+        return t >= dateRanges.startPrevWeek.getTime() && t <= dateRanges.endPrevWeek.getTime();
+      });
+      compareLabel = 'vs Previous 7 Days';
+    } else if (analyticsPeriod === 'this-month') {
+      prevOrders = orders.filter(o => {
+        const t = new Date(o.createdAtISO || 0).getTime();
+        return t >= dateRanges.startPrevMonth.getTime() && t <= dateRanges.endPrevMonth.getTime();
+      });
+      compareLabel = 'vs Last Month';
+    } else {
+      compareLabel = 'All-time lifetime metrics';
+    }
+
+    const currentRev = periodOrders.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
+    const prevRev = prevOrders.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
+    const currentOrders = periodOrders.length;
+    const prevOrdersCount = prevOrders.length;
+
+    const currentBump = periodOrders.filter(o => o.orderBumpSelected).length;
+    const bumpRate = currentOrders > 0 ? ((currentBump / currentOrders) * 100).toFixed(1) : '0';
+    const aov = currentOrders > 0 ? Math.round(currentRev / currentOrders) : 0;
+
+    // Calculate growth percentages
+    const calcGrowth = (curr, prev) => {
+      if (prev === 0) return curr > 0 ? 100 : 0;
+      return Math.round(((curr - prev) / prev) * 100);
+    };
+
+    const revGrowth = calcGrowth(currentRev, prevRev);
+    const orderGrowth = calcGrowth(currentOrders, prevOrdersCount);
+
+    return {
+      currentRev,
+      prevRev,
+      currentOrders,
+      prevOrdersCount,
+      currentBump,
+      bumpRate,
+      aov,
+      compareLabel,
+      revGrowth,
+      orderGrowth
+    };
+  }, [orders, periodOrders, analyticsPeriod, dateRanges]);
+
+  // Visual Graph Timeline Intervals Generator
+  const chartIntervals = useMemo(() => {
+    // 1. TODAY & YESTERDAY: 8 Hourly blocks (every 3 hours)
+    if (analyticsPeriod === 'today' || analyticsPeriod === 'yesterday') {
+      const isToday = analyticsPeriod === 'today';
+      const base = isToday ? dateRanges.startToday : dateRanges.startYesterday;
+
+      const blocks = [
+        { label: '12 AM', startH: 0, endH: 3 },
+        { label: '3 AM', startH: 3, endH: 6 },
+        { label: '6 AM', startH: 6, endH: 9 },
+        { label: '9 AM', startH: 9, endH: 12 },
+        { label: '12 PM', startH: 12, endH: 15 },
+        { label: '3 PM', startH: 15, endH: 18 },
+        { label: '6 PM', startH: 18, endH: 21 },
+        { label: '9 PM', startH: 21, endH: 24 }
+      ];
+
+      return blocks.map((b) => {
+        const slotStart = new Date(base.getFullYear(), base.getMonth(), base.getDate(), b.startH, 0, 0, 0).getTime();
+        const slotEnd = new Date(base.getFullYear(), base.getMonth(), base.getDate(), b.endH, 0, 0, 0).getTime();
+
+        const inSlot = periodOrders.filter(o => {
+          const t = new Date(o.createdAtISO || 0).getTime();
+          return t >= slotStart && t < slotEnd;
+        });
+
+        const rev = inSlot.reduce((s, o) => s + (Number(o.totalAmount) || 0), 0);
+        return {
+          title: b.label,
+          subtitle: `${b.startH}:00 - ${b.endH}:00`,
+          revenue: rev,
+          orders: inSlot.length
+        };
+      });
+    }
+
+    // 2. THIS WEEK: 7 Daily Columns (6 days ago to Today)
+    if (analyticsPeriod === 'this-week') {
+      const now = new Date();
+      const days = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+        const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0).getTime();
+        const end = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999).getTime();
+
+        const inDay = periodOrders.filter(o => {
+          const t = new Date(o.createdAtISO || 0).getTime();
+          return t >= start && t <= end;
+        });
+
+        const rev = inDay.reduce((s, o) => s + (Number(o.totalAmount) || 0), 0);
+        const dayLabel = i === 0 ? 'Today' : d.toLocaleDateString('en-IN', { weekday: 'short' });
+        const dateSub = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+
+        days.push({
+          title: dayLabel,
+          subtitle: dateSub,
+          revenue: rev,
+          orders: inDay.length
+        });
+      }
+      return days;
+    }
+
+    // 3. THIS MONTH: Daily bars from 1st of month to Current Date
+    if (analyticsPeriod === 'this-month') {
+      const now = new Date();
+      const currentDay = now.getDate();
+      const days = [];
+
+      for (let day = 1; day <= currentDay; day++) {
+        const start = new Date(now.getFullYear(), now.getMonth(), day, 0, 0, 0, 0).getTime();
+        const end = new Date(now.getFullYear(), now.getMonth(), day, 23, 59, 59, 999).getTime();
+
+        const inDay = periodOrders.filter(o => {
+          const t = new Date(o.createdAtISO || 0).getTime();
+          return t >= start && t <= end;
+        });
+
+        const rev = inDay.reduce((s, o) => s + (Number(o.totalAmount) || 0), 0);
+        days.push({
+          title: `${day}`,
+          subtitle: `${day} ${now.toLocaleDateString('en-IN', { month: 'short' })}`,
+          revenue: rev,
+          orders: inDay.length
+        });
+      }
+      return days;
+    }
+
+    // 4. ALL TIME: Last 6 Months
+    const now = new Date();
+    const months = [];
+    for (let m = 5; m >= 0; m--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - m, 1);
+      const start = new Date(d.getFullYear(), d.getMonth(), 1, 0, 0, 0, 0).getTime();
+      const end = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999).getTime();
+
+      const inMonth = periodOrders.filter(o => {
+        const t = new Date(o.createdAtISO || 0).getTime();
+        return t >= start && t <= end;
+      });
+
+      const rev = inMonth.reduce((s, o) => s + (Number(o.totalAmount) || 0), 0);
+      months.push({
+        title: d.toLocaleDateString('en-IN', { month: 'short' }),
+        subtitle: `${d.getFullYear()}`,
+        revenue: rev,
+        orders: inMonth.length
+      });
+    }
+    return months;
+  }, [analyticsPeriod, periodOrders, dateRanges]);
+
+  // Product Distribution Breakdown for Active Period
+  const productDistribution = useMemo(() => {
+    let adreRev = 0, adreCount = 0;
+    let cinemoodRev = 0, cinemoodCount = 0;
+    let bumpRev = 0, bumpCount = 0;
+
+    periodOrders.forEach(o => {
+      const isCinemood = (o.productId || '').includes('cinemood') || (o.productName || '').toLowerCase().includes('preset') || (o.productName || '').toLowerCase().includes('cinemood');
+      const amt = Number(o.totalAmount) || 0;
+
+      if (o.orderBumpSelected) {
+        bumpRev += 49;
+        bumpCount += 1;
+      }
+
+      if (isCinemood) {
+        cinemoodCount += 1;
+        cinemoodRev += (amt - (o.orderBumpSelected ? 49 : 0));
+      } else {
+        adreCount += 1;
+        adreRev += (amt - (o.orderBumpSelected ? 49 : 0));
+      }
+    });
+
+    const totalPeriodRev = periodOrders.reduce((s, o) => s + (Number(o.totalAmount) || 0), 0) || 1;
+
+    return {
+      adre: { rev: adreRev, count: adreCount, pct: Math.round((adreRev / totalPeriodRev) * 100) },
+      cinemood: { rev: cinemoodRev, count: cinemoodCount, pct: Math.round((cinemoodRev / totalPeriodRev) * 100) },
+      bump: { rev: bumpRev, count: bumpCount, pct: Math.round((bumpRev / totalPeriodRev) * 100) }
+    };
+  }, [periodOrders]);
+
+  // Find Maximum Value in Active Chart for scaling
+  const chartMax = useMemo(() => {
+    const values = chartIntervals.map(i => chartMetric === 'revenue' ? i.revenue : i.orders);
+    const maxVal = Math.max(...values, 0);
+    if (chartMetric === 'revenue') {
+      return maxVal > 0 ? maxVal : 500;
+    }
+    return maxVal > 0 ? maxVal : 5;
+  }, [chartIntervals, chartMetric]);
+
+  // ========================================================
+  // FILTERED & SORTED ORDERS FOR TABLE VIEW
+  // ========================================================
   const processedOrders = useMemo(() => {
-    let result = [...orders];
+    let result = filterTableByPeriod ? [...periodOrders] : [...orders];
 
     // 1. Text Search Filter
     if (searchTerm.trim()) {
@@ -303,7 +595,7 @@ export default function AdminDashboard({ onNavigate }) {
     });
 
     return result;
-  }, [orders, searchTerm, productFilter, sortOption]);
+  }, [orders, periodOrders, filterTableByPeriod, searchTerm, productFilter, sortOption]);
 
   // Select / Deselect All for CURRENT filtered view
   const isAllFilteredSelected = processedOrders.length > 0 && processedOrders.every(o => selectedOrderIds.has(o.id));
@@ -316,29 +608,6 @@ export default function AdminDashboard({ onNavigate }) {
       setSelectedOrderIds(next);
     }
   };
-
-  // Metrics Calculation
-  const metrics = useMemo(() => {
-    const totalRev = orders.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
-    const totalBump = orders.filter(o => o.orderBumpSelected).length;
-    const bumpRate = orders.length > 0 ? ((totalBump / orders.length) * 100).toFixed(1) : '0';
-    const aov = orders.length > 0 ? Math.round(totalRev / orders.length) : 0;
-
-    // Today's orders
-    const todayStr = new Date().toDateString();
-    const todayOrders = orders.filter(o => o.createdAtISO && new Date(o.createdAtISO).toDateString() === todayStr);
-    const todayRev = todayOrders.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
-
-    return {
-      totalRev,
-      totalOrders: orders.length,
-      todayRev,
-      todayCount: todayOrders.length,
-      totalBump,
-      bumpRate,
-      aov
-    };
-  }, [orders]);
 
   // Export Filtered or All to CSV
   const handleExportCSV = () => {
@@ -402,7 +671,7 @@ export default function AdminDashboard({ onNavigate }) {
           </div>
 
           <p className="admin-login-desc">
-            Authorized management access for order delivery, customer communications, and database records.
+            Authorized management access for revenue analytics, customer dispatches, and Firestore database records.
           </p>
 
           <form onSubmit={handleLogin} className="admin-login-form">
@@ -511,66 +780,132 @@ export default function AdminDashboard({ onNavigate }) {
       {/* Main Container */}
       <main className="admin-main-wrap">
 
-        {/* Hero Section: Welcome & KPI Grid */}
-        <section className="admin-stats-section">
-          <div className="admin-section-title-row">
-            <div>
-              <h1 className="admin-page-title">Executive Revenue & Orders Dashboard</h1>
-              <p className="admin-page-subtitle">
-                Real-time tracking of candidate orders, automated delivery dispatches, and customer support channels.
-              </p>
+        {/* ========================================================
+            PERIOD FILTER SELECTOR & TOP EXECUTIVE STATS
+           ======================================================== */}
+        <section className="admin-period-bar-section">
+          <div className="admin-period-bar-wrap">
+            <div className="admin-period-title-block">
+              <span className="admin-section-tag">EXECUTIVE PERFORMANCE METRICS</span>
+              <h1 className="admin-page-title">Revenue & Order Analytics</h1>
             </div>
-            <div className="admin-timestamp-pill">
-              🕒 Local Time: {new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+
+            {/* Time Filter Pills: Today, Yesterday, This Week, This Month, All Time */}
+            <div className="admin-time-filter-pills">
+              <button
+                type="button"
+                onClick={() => { setAnalyticsPeriod('today'); setHoveredBarIndex(null); }}
+                className={`time-filter-pill ${analyticsPeriod === 'today' ? 'active' : ''}`}
+              >
+                <span>⚡ Today</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setAnalyticsPeriod('yesterday'); setHoveredBarIndex(null); }}
+                className={`time-filter-pill ${analyticsPeriod === 'yesterday' ? 'active' : ''}`}
+              >
+                <span>📅 Yesterday</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setAnalyticsPeriod('this-week'); setHoveredBarIndex(null); }}
+                className={`time-filter-pill ${analyticsPeriod === 'this-week' ? 'active' : ''}`}
+              >
+                <span>📊 This Week (7D)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setAnalyticsPeriod('this-month'); setHoveredBarIndex(null); }}
+                className={`time-filter-pill ${analyticsPeriod === 'this-month' ? 'active' : ''}`}
+              >
+                <span>🗓️ This Month</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setAnalyticsPeriod('all-time'); setHoveredBarIndex(null); }}
+                className={`time-filter-pill ${analyticsPeriod === 'all-time' ? 'active' : ''}`}
+              >
+                <span>🌐 All Time</span>
+              </button>
             </div>
           </div>
 
-          {/* 4 KPI Cards */}
+          {/* 4 Dynamic Period KPI Cards */}
           <div className="admin-kpi-grid">
             
-            {/* Card 1: Total Revenue */}
+            {/* KPI 1: Revenue in Period */}
             <div className="admin-kpi-card kpi-green">
               <div className="kpi-top">
-                <span className="kpi-label">TOTAL REVENUE (INR)</span>
+                <span className="kpi-label">
+                  {analyticsPeriod === 'today' ? "TODAY'S REVENUE" :
+                   analyticsPeriod === 'yesterday' ? "YESTERDAY'S REVENUE" :
+                   analyticsPeriod === 'this-week' ? "THIS WEEK'S REVENUE" :
+                   analyticsPeriod === 'this-month' ? "THIS MONTH'S REVENUE" : "LIFETIME REVENUE"}
+                </span>
                 <span className="kpi-icon">💰</span>
               </div>
-              <div className="kpi-value text-accent">₹{metrics.totalRev.toLocaleString('en-IN')}</div>
+              <div className="kpi-value text-accent">₹{periodStats.currentRev.toLocaleString('en-IN')}</div>
               <div className="kpi-subtext">
-                Average Order Value: <strong>₹{metrics.aov}</strong>
+                {analyticsPeriod !== 'all-time' ? (
+                  <span className={`growth-tag ${periodStats.revGrowth >= 0 ? 'growth-up' : 'growth-down'}`}>
+                    {periodStats.revGrowth >= 0 ? `▲ +${periodStats.revGrowth}%` : `▼ ${periodStats.revGrowth}%`} {periodStats.compareLabel}
+                  </span>
+                ) : (
+                  <span>From all verified completed checkouts</span>
+                )}
               </div>
             </div>
 
-            {/* Card 2: Total Orders */}
+            {/* KPI 2: Orders in Period */}
             <div className="admin-kpi-card kpi-blue">
               <div className="kpi-top">
-                <span className="kpi-label">TOTAL VERIFIED ORDERS</span>
+                <span className="kpi-label">
+                  {analyticsPeriod === 'today' ? "TODAY'S ORDERS" :
+                   analyticsPeriod === 'yesterday' ? "YESTERDAY'S ORDERS" :
+                   analyticsPeriod === 'this-week' ? "THIS WEEK'S ORDERS" :
+                   analyticsPeriod === 'this-month' ? "THIS MONTH'S ORDERS" : "TOTAL ORDERS"}
+                </span>
                 <span className="kpi-icon">📦</span>
               </div>
-              <div className="kpi-value">{metrics.totalOrders}</div>
+              <div className="kpi-value text-cyan">
+                {periodStats.currentOrders} <span className="kpi-small">Orders</span>
+              </div>
               <div className="kpi-subtext">
-                All-time successful customer checkouts
+                {analyticsPeriod !== 'all-time' ? (
+                  <span className={`growth-tag ${periodStats.orderGrowth >= 0 ? 'growth-up' : 'growth-down'}`}>
+                    {periodStats.orderGrowth >= 0 ? `▲ +${periodStats.orderGrowth}%` : `▼ ${periodStats.orderGrowth}%`} {periodStats.compareLabel}
+                  </span>
+                ) : (
+                  <span>All-time verified customer accounts</span>
+                )}
               </div>
             </div>
 
-            {/* Card 3: Today's Traction */}
+            {/* KPI 3: Average Order Value (AOV) */}
             <div className="admin-kpi-card kpi-purple">
               <div className="kpi-top">
-                <span className="kpi-label">TODAY'S ORDERS</span>
-                <span className="kpi-icon">⚡</span>
+                <span className="kpi-label">AVERAGE ORDER VALUE</span>
+                <span className="kpi-icon">🎯</span>
               </div>
-              <div className="kpi-value text-cyan">{metrics.todayCount} <span className="kpi-small">Orders</span></div>
+              <div className="kpi-value">₹{periodStats.aov}</div>
               <div className="kpi-subtext">
-                Today's Gross: <strong>₹{metrics.todayRev.toLocaleString('en-IN')}</strong>
+                Basket size for {analyticsPeriod.replace('-', ' ')}
               </div>
             </div>
 
-            {/* Card 4: Order Bump Uptake */}
+            {/* KPI 4: Order Bump Uptake */}
             <div className="admin-kpi-card kpi-amber">
               <div className="kpi-top">
                 <span className="kpi-label">ORDER BUMP UPTAKE</span>
                 <span className="kpi-icon">🎁</span>
               </div>
-              <div className="kpi-value text-amber">{metrics.totalBump} <span className="kpi-small">({metrics.bumpRate}%)</span></div>
+              <div className="kpi-value text-amber">
+                {periodStats.currentBump} <span className="kpi-small">({periodStats.bumpRate}%)</span>
+              </div>
               <div className="kpi-subtext">
                 Candidates who added +₹49 bump
               </div>
@@ -579,7 +914,127 @@ export default function AdminDashboard({ onNavigate }) {
           </div>
         </section>
 
-        {/* Filter, Search & Controls Bar */}
+        {/* ========================================================
+            INTERACTIVE VISUAL GRAPH SECTION (REVENUE & ORDERS)
+           ======================================================== */}
+        <section className="admin-graph-section">
+          <div className="admin-graph-card">
+            
+            {/* Graph Header: Title & Metric Switcher (Revenue vs Orders) */}
+            <div className="graph-card-header">
+              <div>
+                <h3 className="graph-title">
+                  {chartMetric === 'revenue' ? '📈 Revenue Trend Graph' : '📊 Order Volume Trend Graph'}
+                </h3>
+                <span className="graph-subtitle">
+                  Showing timeline breakdown for: <strong style={{ color: '#fff' }}>
+                    {analyticsPeriod === 'today' ? "Today (Hourly Slots)" :
+                     analyticsPeriod === 'yesterday' ? "Yesterday (Hourly Slots)" :
+                     analyticsPeriod === 'this-week' ? "This Week (Day by Day)" :
+                     analyticsPeriod === 'this-month' ? "This Month (Daily Breakdown)" : "All Time (Monthly Trend)"}
+                  </strong>
+                </span>
+              </div>
+
+              <div className="graph-metric-toggle">
+                <button
+                  type="button"
+                  onClick={() => setChartMetric('revenue')}
+                  className={`metric-toggle-btn ${chartMetric === 'revenue' ? 'active-green' : ''}`}
+                >
+                  <span>💰 Revenue (₹)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setChartMetric('orders')}
+                  className={`metric-toggle-btn ${chartMetric === 'orders' ? 'active-blue' : ''}`}
+                >
+                  <span>📦 Orders Count</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Interactive SVG Bar Chart */}
+            <div className="graph-canvas-container">
+              
+              {/* Tooltip on Hover */}
+              {hoveredBarIndex !== null && chartIntervals[hoveredBarIndex] && (
+                <div className="graph-tooltip-card animate-fadeIn">
+                  <div className="tooltip-title">{chartIntervals[hoveredBarIndex].title} ({chartIntervals[hoveredBarIndex].subtitle})</div>
+                  <div className="tooltip-values">
+                    <div>💰 <strong>₹{chartIntervals[hoveredBarIndex].revenue.toLocaleString('en-IN')}</strong> Revenue</div>
+                    <div>📦 <strong>{chartIntervals[hoveredBarIndex].orders}</strong> Order{chartIntervals[hoveredBarIndex].orders !== 1 ? 's' : ''}</div>
+                  </div>
+                </div>
+              )}
+
+              {/* Chart Bars Grid */}
+              <div className="graph-bars-flex">
+                {chartIntervals.map((item, idx) => {
+                  const val = chartMetric === 'revenue' ? item.revenue : item.orders;
+                  const heightPercent = chartMax > 0 
+                    ? Math.max(val > 0 ? (val / chartMax) * 100 : 0, val > 0 ? 6 : 2)
+                    : 2;
+
+                  const isHovered = hoveredBarIndex === idx;
+
+                  return (
+                    <div 
+                      key={idx} 
+                      className="graph-bar-col"
+                      onMouseEnter={() => setHoveredBarIndex(idx)}
+                      onMouseLeave={() => setHoveredBarIndex(null)}
+                      onClick={() => setHoveredBarIndex(hoveredBarIndex === idx ? null : idx)}
+                    >
+                      {/* Bar Track */}
+                      <div className="graph-bar-track">
+                        <div 
+                          className={`graph-bar-fill ${chartMetric === 'revenue' ? 'fill-revenue' : 'fill-orders'} ${isHovered ? 'bar-hovered' : ''}`}
+                          style={{ height: `${heightPercent}%` }}
+                        >
+                          {val > 0 && (
+                            <span className="graph-bar-val-pop">
+                              {chartMetric === 'revenue' ? `₹${val}` : val}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* X-Axis Label */}
+                      <div className="graph-axis-label" title={item.subtitle}>
+                        {item.title}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Chart Baseline */}
+              <div className="graph-baseline-line"></div>
+            </div>
+
+            {/* Bottom Product Revenue Distribution Row */}
+            <div className="graph-distribution-bar">
+              <div className="dist-item">
+                <span className="dist-dot dot-green"></span>
+                <span>ADRE Exam Combo: <strong>₹{productDistribution.adre.rev.toLocaleString('en-IN')}</strong> ({productDistribution.adre.count} orders • {productDistribution.adre.pct}%)</span>
+              </div>
+              <div className="dist-item">
+                <span className="dist-dot dot-blue"></span>
+                <span>CineMood Presets: <strong>₹{productDistribution.cinemood.rev.toLocaleString('en-IN')}</strong> ({productDistribution.cinemood.count} orders • {productDistribution.cinemood.pct}%)</span>
+              </div>
+              <div className="dist-item">
+                <span className="dist-dot dot-amber"></span>
+                <span>Bump Add-ons (+₹49): <strong>₹{productDistribution.bump.rev.toLocaleString('en-IN')}</strong> ({productDistribution.bump.count} orders • {productDistribution.bump.pct}%)</span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ========================================================
+            SEARCH, FILTER & TABLE CONTROLS BAR
+           ======================================================== */}
         <section className="admin-controls-card">
           <div className="admin-search-box">
             <span className="search-icon">🔍</span>
@@ -603,6 +1058,17 @@ export default function AdminDashboard({ onNavigate }) {
           </div>
 
           <div className="admin-filters-group">
+            {/* Filter Table by Period Toggle */}
+            <button
+              type="button"
+              onClick={() => setFilterTableByPeriod(!filterTableByPeriod)}
+              className={`period-table-toggle-btn ${filterTableByPeriod ? 'active' : ''}`}
+              title="Toggle table between showing all orders or only selected period orders"
+            >
+              <span>{filterTableByPeriod ? `Filtered: ${analyticsPeriod.toUpperCase()}` : 'Viewing: ALL ORDERS'}</span>
+              <span className="toggle-chip">{filterTableByPeriod ? 'Reset to All' : 'Sync to Graph'}</span>
+            </button>
+
             {/* Filter Tabs */}
             <div className="admin-tab-pills">
               <button 
@@ -610,7 +1076,7 @@ export default function AdminDashboard({ onNavigate }) {
                 className={`tab-pill ${productFilter === 'all' ? 'active' : ''}`}
                 onClick={() => setProductFilter('all')}
               >
-                All ({orders.length})
+                All Products
               </button>
               <button 
                 type="button" 
@@ -631,7 +1097,7 @@ export default function AdminDashboard({ onNavigate }) {
                 className={`tab-pill ${productFilter === 'bump-only' ? 'active' : ''}`}
                 onClick={() => setProductFilter('bump-only')}
               >
-                + Bump Orders ({metrics.totalBump})
+                + Bump Orders
               </button>
             </div>
 
@@ -735,7 +1201,7 @@ export default function AdminDashboard({ onNavigate }) {
                       {orders.length === 0 ? (
                         <div>
                           <div style={{ fontSize: '2rem', marginBottom: '8px' }}>📭</div>
-                          <strong style={{ color: '#fff', fontSize: '1.1rem' }}>No orders in database yet</strong>
+                          <strong style={{ color: '#fff', fontSize: '1.1rem' }}>No orders recorded in database yet</strong>
                           <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '4px' }}>
                             Perform a test checkout on the storefront to record your first verified customer order!
                           </p>
@@ -743,9 +1209,9 @@ export default function AdminDashboard({ onNavigate }) {
                       ) : (
                         <div>
                           <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔍</div>
-                          <strong style={{ color: '#fff' }}>No orders matching "{searchTerm}"</strong>
+                          <strong style={{ color: '#fff' }}>No orders found for this view</strong>
                           <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '4px' }}>
-                            Try adjusting your search query or reset the product category filter.
+                            {filterTableByPeriod ? `No orders recorded during "${analyticsPeriod}". Toggle "Reset to All" above.` : 'Try adjusting your search query or reset the product category filter.'}
                           </p>
                         </div>
                       )}
@@ -893,6 +1359,9 @@ export default function AdminDashboard({ onNavigate }) {
           {/* Table Footer Count */}
           <div className="admin-table-footer">
             <span>Showing <strong>{processedOrders.length}</strong> of <strong>{orders.length}</strong> total orders</span>
+            {filterTableByPeriod && (
+              <span className="selected-summary-count">(Period: {analyticsPeriod.toUpperCase()})</span>
+            )}
             {selectedOrderIds.size > 0 && (
               <span className="selected-summary-count">({selectedOrderIds.size} selected)</span>
             )}

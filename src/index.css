@@ -5549,49 +5549,411 @@ body.modal-open {
   to { opacity: 1; }
 }
 
+/* ===================================================
+   ADMIN PERIOD FILTER & INTERACTIVE GRAPH STYLES
+   =================================================== */
+
+/* Period Bar & Selector */
+.admin-period-bar-section {
+  margin-bottom: 26px;
+}
+
+.admin-period-bar-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-period-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-section-tag {
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.admin-time-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #081015;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 5px;
+  border-radius: 12px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.time-filter-pill {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.time-filter-pill:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.time-filter-pill.active {
+  background: linear-gradient(135deg, rgba(138, 201, 38, 0.2) 0%, rgba(138, 201, 38, 0.08) 100%);
+  border: 1px solid rgba(138, 201, 38, 0.5);
+  color: #a3e635;
+  box-shadow: 0 2px 10px rgba(138, 201, 38, 0.25);
+}
+
+/* Growth Indicator Tags */
+.growth-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.growth-up {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.growth-down {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Graph Section Card */
+.admin-graph-section {
+  margin-bottom: 26px;
+}
+
+.admin-graph-card {
+  background: #070e13;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+  position: relative;
+}
+
+.graph-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 16px;
+}
+
+.graph-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 3px;
+}
+
+.graph-subtitle {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.graph-metric-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #020508;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.metric-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.metric-toggle-btn.active-green {
+  background: var(--accent);
+  color: #040809;
+  box-shadow: 0 2px 10px rgba(138, 201, 38, 0.35);
+}
+
+.metric-toggle-btn.active-blue {
+  background: #38bdf8;
+  color: #03080c;
+  box-shadow: 0 2px 10px rgba(56, 189, 248, 0.35);
+}
+
+/* Graph Canvas & Bars */
+.graph-canvas-container {
+  position: relative;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px 10px 0;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 40px;
+}
+
+/* Floating Hover Tooltip */
+.graph-tooltip-card {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  z-index: 10;
+  background: #0d1b24;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.tooltip-title {
+  font-weight: 800;
+  font-size: 0.84rem;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.tooltip-values {
+  display: flex;
+  gap: 12px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.tooltip-values strong {
+  color: #a3e635;
+}
+
+/* Bars Flex Container */
+.graph-bars-flex {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 8px;
+  height: 180px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.graph-bar-col {
+  flex: 1;
+  min-width: 32px;
+  max-width: 70px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.graph-bar-track {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.graph-bar-fill {
+  width: 70%;
+  max-width: 34px;
+  min-height: 4px;
+  border-radius: 6px 6px 0 0;
+  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s, filter 0.2s;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.fill-revenue {
+  background: linear-gradient(to top, #4d7c0f 0%, #659a16 40%, #8ac926 100%);
+  box-shadow: 0 -4px 14px rgba(138, 201, 38, 0.35);
+}
+
+.fill-orders {
+  background: linear-gradient(to top, #0369a1 0%, #0284c7 40%, #38bdf8 100%);
+  box-shadow: 0 -4px 14px rgba(56, 189, 248, 0.35);
+}
+
+.graph-bar-fill.bar-hovered, 
+.graph-bar-col:hover .graph-bar-fill {
+  filter: brightness(1.25);
+  transform: scaleY(1.02);
+}
+
+.graph-bar-val-pop {
+  font-size: 0.68rem;
+  font-weight: 800;
+  font-family: monospace;
+  color: #ffffff;
+  position: absolute;
+  top: -20px;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.graph-axis-label {
+  margin-top: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.graph-baseline-line {
+  height: 1px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Product Revenue Distribution Strip */
+.graph-distribution-bar {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.dist-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dist-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dist-item strong {
+  color: #ffffff;
+}
+
+.dot-amber {
+  background: #f59e0b;
+  box-shadow: 0 0 6px #f59e0b;
+}
+
+/* Period Table Toggle Button */
+.period-table-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.period-table-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.period-table-toggle-btn.active {
+  background: rgba(138, 201, 38, 0.15);
+  border-color: rgba(138, 201, 38, 0.5);
+  color: #a3e635;
+}
+
+.toggle-chip {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+.period-table-toggle-btn.active .toggle-chip {
+  background: var(--accent);
+  color: #040809;
+  font-weight: 800;
+}
+
 /* Responsive Overrides */
 @media (max-width: 768px) {
-  .admin-page-title {
-    font-size: 1.45rem;
-  }
-  
-  .admin-nav-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .admin-controls-card {
+  .admin-period-bar-wrap {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .admin-search-box {
-    max-width: 100%;
-    min-width: 100%;
-  }
-
-  .admin-filters-group {
+  .admin-time-filter-pills {
     width: 100%;
-    justify-content: space-between;
-  }
-
-  .admin-bulk-toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .bulk-actions {
     justify-content: flex-start;
   }
 
-  .admin-toast-pill {
-    left: 14px;
-    right: 14px;
-    bottom: 14px;
-    text-align: center;
-    justify-content: center;
+  .time-filter-pill {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+
+  .graph-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .graph-distribution-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .graph-bars-flex {
+    justify-content: flex-start;
+  }
+
+  .graph-bar-col {
+    min-width: 44px;
   }
 }
+
 
 
 
