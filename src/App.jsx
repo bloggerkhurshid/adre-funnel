@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Checkout from './pages/Checkout';
 import Home from './pages/Home';
+import FbMasterclassFunnel from './pages/FbMasterclassFunnel';
 import AdreFunnel from './pages/AdreFunnel';
 import CinemoodFunnel from './pages/CinemoodFunnel';
 import SpokenEnglishFunnel from './pages/SpokenEnglishFunnel';
@@ -15,15 +16,22 @@ import MyDownloads from './pages/MyDownloads';
 import AdminDashboard from './pages/AdminDashboard';
 import { PRODUCTS, getProductById } from './data/products';
 
-// Helper to determine route from clean pathname (e.g. /adre-combo, /ebook) or fallback hash
+// Helper to determine route from clean pathname (e.g. /fb-masterclass) or fallback hash
 const resolveCurrentRoute = () => {
   const path = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '').toLowerCase();
   const hash = window.location.hash.replace('#', '').replace(/^\/+/, '').toLowerCase();
   const target = path || hash;
 
-  if (target === 'adre-combo' || target === 'ebook' || target === 'adre' || target === 'assam') return 'adre-combo';
-  if (target === 'cinemood-presets' || target === 'cinemood' || target === 'presets' || target === 'preset' || target === 'lightroom' || target === 'lr' || target === 'dng') return 'cinemood-presets';
-  if (target === 'spoken-english' || target === 'english-bundle' || target === 'english' || target === 'spoken') return 'spoken-english';
+  // Primary Single Product Funnel Route
+  if (target === 'fb-masterclass' || target === 'facebook' || target === 'fb' || target === 'masterclass' || target === 'fb-earning' || target === 'usa-fb') {
+    return 'fb-masterclass';
+  }
+
+  // Archived products (gracefully mapped to primary masterclass funnel or preserved for direct inspection)
+  if (target === 'adre-combo' || target === 'ebook' || target === 'adre' || target === 'assam') return 'fb-masterclass';
+  if (target === 'cinemood-presets' || target === 'cinemood' || target === 'presets' || target === 'preset' || target === 'lightroom' || target === 'lr' || target === 'dng') return 'fb-masterclass';
+  if (target === 'spoken-english' || target === 'english-bundle' || target === 'english' || target === 'spoken') return 'fb-masterclass';
+
   if (target === 'checkout' || target === 'pay' || target === 'order') return 'checkout';
   if (target === 'contact' || target === 'contact-us') return 'contact';
   if (target === 'terms' || target === 'terms-and-conditions') return 'terms';
@@ -32,7 +40,7 @@ const resolveCurrentRoute = () => {
   if (target === 'my-downloads' || target === 'downloads' || target === 'download') return 'my-downloads';
   if (target === 'admin' || target === 'dashboard') return 'admin';
   if (target === 'success') return 'success';
-  return 'home';
+  return 'home'; // Home defaults directly to the single-product FB Masterclass Funnel
 };
 
 const resolveInitialCheckoutProduct = () => {
@@ -45,7 +53,7 @@ const resolveInitialCheckoutProduct = () => {
     const savedProd = getProductById(saved);
     if (savedProd) return savedProd;
   } catch (e) {}
-  return PRODUCTS['cinemood-presets'] || PRODUCTS['adre-combo'];
+  return PRODUCTS['fb-masterclass'];
 };
 
 export default function App() {
@@ -85,17 +93,11 @@ export default function App() {
     let urlPath = '/';
     let normalized = route;
 
-    if (route === 'adre-combo' || route === 'adre' || route === 'ebook') {
-      urlPath = '/adre-combo';
-      normalized = 'adre-combo';
-    } else if (route === 'cinemood-presets' || route === 'cinemood' || route === 'presets') {
-      urlPath = '/cinemood-presets';
-      normalized = 'cinemood-presets';
-    } else if (route === 'spoken-english' || route === 'english' || route === 'english-bundle' || route === 'spoken') {
-      urlPath = '/spoken-english';
-      normalized = 'spoken-english';
+    if (route === 'fb-masterclass' || route === 'masterclass' || route === 'fb' || route === 'home') {
+      urlPath = '/';
+      normalized = 'home';
     } else if (route === 'checkout' || route === 'pay') {
-      const targetProd = options.product || checkoutProduct || PRODUCTS['cinemood-presets'];
+      const targetProd = options.product || checkoutProduct || PRODUCTS['fb-masterclass'];
       const bump = options.withBump !== undefined ? options.withBump : initialOrderBumpSelected;
       setCheckoutProduct(targetProd);
       if (options.withBump !== undefined) setInitialOrderBumpSelected(bump);
@@ -151,26 +153,17 @@ export default function App() {
   };
 
   // Funnel pages, checkout page, success screen, and admin must have ZERO global nav distractions
-  const isFunnelPage = currentRoute === 'adre-combo' || currentRoute === 'cinemood-presets' || currentRoute === 'spoken-english' || currentRoute === 'checkout' || currentRoute === 'success' || currentRoute === 'admin';
+  const isFunnelPage = currentRoute === 'home' || currentRoute === 'fb-masterclass' || currentRoute === 'checkout' || currentRoute === 'success' || currentRoute === 'admin';
 
   return (
     <div className={`app-root ${isFunnelPage ? 'is-funnel-mode' : ''}`}>
-      {/* Top Navbar - Hidden on Funnel Pages (/adre-combo, /cinemood-presets, /spoken-english, /checkout) & Admin */}
+      {/* Top Navbar - Hidden on Funnel Pages (/ & /checkout) & Admin */}
       {!isFunnelPage && <Navbar onNavigate={navigateTo} />}
 
       {/* Main Content Router */}
       <main className="main-content">
-        {currentRoute === 'home' && (
-          <Home onNavigate={navigateTo} onBuyProduct={handleBuyProduct} />
-        )}
-        {currentRoute === 'adre-combo' && (
-          <AdreFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
-        )}
-        {currentRoute === 'cinemood-presets' && (
-          <CinemoodFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
-        )}
-        {currentRoute === 'spoken-english' && (
-          <SpokenEnglishFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
+        {(currentRoute === 'home' || currentRoute === 'fb-masterclass') && (
+          <FbMasterclassFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
         )}
         {currentRoute === 'checkout' && (
           <Checkout

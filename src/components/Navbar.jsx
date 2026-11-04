@@ -29,22 +29,31 @@ export default function Navbar({ onNavigate }) {
         <ul className="nav-menu">
           <li>
             <a href="/" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}>
-              All Products
+              FB Masterclass (₹299)
             </a>
           </li>
           <li>
-            <a href="/spoken-english" onClick={(e) => { e.preventDefault(); handleNavClick('spoken-english'); }}>
-              Spoken English (₹99)
+            <a href="#starter-pack" onClick={(e) => { 
+              e.preventDefault(); 
+              handleNavClick('home'); 
+              setTimeout(() => {
+                const el = document.getElementById('starter-pack');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }}>
+              Free Starter Pack
             </a>
           </li>
           <li>
-            <a href="/adre-combo" onClick={(e) => { e.preventDefault(); handleNavClick('adre-combo'); }}>
-              ADRE Exam Combo
-            </a>
-          </li>
-          <li>
-            <a href="/cinemood-presets" onClick={(e) => { e.preventDefault(); handleNavClick('cinemood-presets'); }}>
-              CineMood Presets
+            <a href="#proofs" onClick={(e) => { 
+              e.preventDefault(); 
+              handleNavClick('home'); 
+              setTimeout(() => {
+                const el = document.getElementById('proofs');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }}>
+              Payment Proofs
             </a>
           </li>
           <li>
@@ -99,25 +108,33 @@ export default function Navbar({ onNavigate }) {
           <ul className="nav-mobile-list">
             <li>
               <a href="/" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}>
-                <span>🏠 All Products</span>
+                <span>🔥 USA FB Masterclass (₹299)</span>
                 <span className="mobile-chevron">→</span>
               </a>
             </li>
             <li>
-              <a href="/spoken-english" onClick={(e) => { e.preventDefault(); handleNavClick('spoken-english'); }}>
-                <span>🗣️ Spoken English Bundle (₹99)</span>
+              <a href="#starter-pack" onClick={(e) => { 
+                e.preventDefault(); 
+                handleNavClick('home'); 
+                setTimeout(() => {
+                  const el = document.getElementById('starter-pack');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+              }}>
+                <span>🎁 Free 2-Hour Starter Pack</span>
                 <span className="mobile-chevron">→</span>
               </a>
             </li>
             <li>
-              <a href="/adre-combo" onClick={(e) => { e.preventDefault(); handleNavClick('adre-combo'); }}>
-                <span>📚 ADRE 3.0 Exam Combo (₹99)</span>
-                <span className="mobile-chevron">→</span>
-              </a>
-            </li>
-            <li>
-              <a href="/cinemood-presets" onClick={(e) => { e.preventDefault(); handleNavClick('cinemood-presets'); }}>
-                <span>🎨 CineMood Lightroom Presets (₹149)</span>
+              <a href="#proofs" onClick={(e) => { 
+                e.preventDefault(); 
+                handleNavClick('home'); 
+                setTimeout(() => {
+                  const el = document.getElementById('proofs');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+              }}>
+                <span>📈 Verified Payout Proofs</span>
                 <span className="mobile-chevron">→</span>
               </a>
             </li>

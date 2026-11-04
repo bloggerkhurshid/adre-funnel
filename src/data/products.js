@@ -29,6 +29,31 @@ export const CTET_ORDER_BUMP = {
   perfectFor: '📚 Perfect For: CTET Paper I & II candidates, Assam TET aspirants, and government teaching exam preparation.'
 };
 
+export const FB_AUTOMATION_BUMP = {
+  id: 'fb-automation-bump-49',
+  name: '100+ USA Viral Hook Scripts & AI Video Prompts Toolkit',
+  shortName: 'Viral Hooks & AI Prompts Toolkit',
+  tagline: 'Ready-to-Use High RPM USA Hooks & Midjourney/Runway Prompts',
+  price: 49,
+  originalPrice: 499,
+  discountPercent: '90% OFF',
+  coverImage: '/fb-masterclass/cover-masterclass.svg',
+  pitch: 'USA Facebook audience ke liye 100+ proven high-retention viral hook scripts aur 50+ AI video generation prompts. Apne content ko pehle din se algorithm par boost karein.',
+  shortPitch: 'Add 100+ USA Viral Hook Scripts & AI Prompts. Guaranteed high RPM retention.',
+  features: [
+    '100+ Tested USA Viral Hook Scripts (0-3 sec Retention)',
+    '50+ High-Conversion AI Video & Image Generation Prompts',
+    'USA High-RPM Niche Cheat Sheet (2026 Edition)',
+    'Ban-Proof Safe Posting Schedule & Group Matrix',
+    'Instant Digital Download with Masterclass Access'
+  ],
+  downloadUrl: 'https://drive.google.com/drive/folders/1x5XWr2uextv3b3eSoKIpYjoWvu-nqv0n?usp=sharing',
+  files: [
+    '100+ USA Viral Hook Scripts & AI Video Prompts Toolkit [PDF]'
+  ],
+  perfectFor: '🔥 Perfect For: Anyone wanting ready-made viral hooks and AI prompt templates to fast-track Facebook monetization.'
+};
+
 export const WEDDING_ORDER_BUMP = {
   id: 'wedding-bump-49',
   name: 'XML - Wedding & Prewedding Collection (20+ Templates)',
@@ -56,8 +81,80 @@ export const WEDDING_ORDER_BUMP = {
 };
 
 export const PRODUCTS = {
+  'fb-masterclass': {
+    id: 'fb-masterclass',
+    name: 'USA Facebook Earning Masterclass 2026 — Zero se 7-Figure tak (10+ Hours)',
+    shortName: 'USA Facebook Masterclass',
+    tagline: 'USA Facebook Earning ka poora system — 3 proven methods, 10+ ghante, zero se automation tak',
+    category: 'Online Business & Facebook Monetization',
+    currency: 'INR',
+    currencySymbol: '₹',
+    price: 299,
+    originalPrice: 4999,
+    discountPercent: '94% OFF',
+    rating: 4.9,
+    totalReviews: '1,280+ Students',
+    featuredBadge: '🔥 2026 PROVEN BLUEPRINT',
+    coverImage: '/fb-masterclass/cover-masterclass.svg',
+    demoVideoId: 'qp0X4q3VRmo',
+    demoVideoUrl: 'https://www.youtube.com/watch?v=qp0X4q3VRmo',
+    description: 'Facebook se earning karni hai lekin kahan se shuru karna hai, yeh nahi pata? Is 10+ ghanton ke step-by-step course mein poori strategy hai — zero se lekar full automation tak.',
+    proofImages: [
+      {
+        url: '/fb-masterclass/proof-analytics-13m.webp',
+        title: '13M Views & $1,493.57 28-Days In-Stream Growth',
+        tag: '13M VIEWS'
+      },
+      {
+        url: '/fb-masterclass/proof-payout-transactions.png',
+        title: '$15,353.41 Payout Credited + Multi-Page Earnings',
+        tag: '$15,353 PAYOUT'
+      },
+      {
+        url: '/fb-masterclass/proof-payout-detail.jpg',
+        title: 'Bank Paid Confirmation: $15,353.41 to Punjab National Bank',
+        tag: 'BANK TRANSFERRED'
+      }
+    ],
+    features: [
+      '📍 USA Group Sharing Method — active USA groups mein ban-proof posting',
+      '💰 Paid Method — $10-20 budget se ad-based views, ROI-positive pages',
+      '📄 Page Sharing Method — bade USA pages se share requests, cross-promotion',
+      '📺 TV Show Repurposing — licensed content se ad revenue (copyright-safe)',
+      '🤖 Automation — AI se 10 pages ka content 1 din mein',
+      '📦 13 Modules (10+ Hours Full In-Depth Video Training)',
+      '📋 Har module ke end mein action checklist + step-by-step PDF guides',
+      '💬 Private VIP WhatsApp Support Group (Sirf buyers ke liye)',
+      '🔄 Free Lifetime Updates — Nayi method aaye toh course mein hi milegi'
+    ],
+    modules: [
+      { id: 1, title: 'Facebook ID & Pages — Setup se Pehla Page tak', duration: '45 mins' },
+      { id: 2, title: 'International (USA) Audience Targeting — TOS-Safe Tarika', duration: '50 mins' },
+      { id: 3, title: 'Growth & Invite Strategy (Safe Limits, Ban se Bachao)', duration: '40 mins' },
+      { id: 4, title: 'Advanced Prompt Engineering — Content Fast Banayein', duration: '55 mins' },
+      { id: 5, title: 'AI Movie Making — Viral Clips se Ad Revenue', duration: '60 mins' },
+      { id: 6, title: 'Competitor Page Analysis — Kisi Bhi Page Ka Model Copy Kiye Bina Khar Karna', duration: '45 mins' },
+      { id: 7, title: 'Trending & Evergreen Niches — 2026 Ke Hisaab Se', duration: '40 mins' },
+      { id: 8, title: 'Licensed Content Repurposing Method (Copyright-Safe)', duration: '65 mins' },
+      { id: 9, title: 'Views Boost: PC & Mobile Dono Methods', duration: '45 mins' },
+      { id: 10, title: 'Low-Monetization Pages Ki Earning Kaise 2x Karein', duration: '50 mins' },
+      { id: 11, title: 'Facebook Automation — Ek Din Mein 10 Pages Ka Content', duration: '70 mins' },
+      { id: 12, title: 'Payment & Payout Setup (Payoneer/Wise Se Direct Indian Bank Transfer)', duration: '45 mins' },
+      { id: 13, title: 'Full System — Sab Jod Ke Chalta Hai, Yeh Hai Playbook', duration: '55 mins' }
+    ],
+    downloadUrl: 'https://drive.google.com/drive/folders/1x5XWr2uextv3b3eSoKIpYjoWvu-nqv0n?usp=sharing',
+    files: [
+      'USA Facebook Earning Masterclass 2026 (All 13 Modules Full HD Video Training)',
+      '13 Action Checklists & Implementation Blueprints [PDF]',
+      'Private VIP WhatsApp Support Group Official Direct Invite Link',
+      'Payoneer & Wise Indian Bank Payout Setup Playbook [PDF]',
+      'Copyright-Safe TV Show & Licensed Content Repurposing Guide [PDF]'
+    ],
+    orderBump: FB_AUTOMATION_BUMP
+  },
   'adre-combo': {
     id: 'adre-combo',
+    isArchived: true,
     name: 'Assam Govt Exam 4-in-1 MCQ Ebook Combo',
     shortName: 'ADRE & Assam Police Combo',
     tagline: 'ADRE All Subject-Wise Ebook + 3 FREE Exam Bonuses',
@@ -196,7 +293,15 @@ export const PRODUCTS = {
   }
 };
 
-// Direct aliases to guarantee that URL params (?product=adre or ?product=presets) never fail or mismatch
+// Direct aliases to guarantee that URL params (?product=fb or ?product=masterclass) never fail or mismatch
+PRODUCTS['fb'] = PRODUCTS['fb-masterclass'];
+PRODUCTS['facebook'] = PRODUCTS['fb-masterclass'];
+PRODUCTS['masterclass'] = PRODUCTS['fb-masterclass'];
+PRODUCTS['facebook-masterclass'] = PRODUCTS['fb-masterclass'];
+PRODUCTS['fb-earning'] = PRODUCTS['fb-masterclass'];
+PRODUCTS['fb-course'] = PRODUCTS['fb-masterclass'];
+PRODUCTS['usa-fb'] = PRODUCTS['fb-masterclass'];
+
 PRODUCTS['adre'] = PRODUCTS['adre-combo'];
 PRODUCTS['combo'] = PRODUCTS['adre-combo'];
 PRODUCTS['ebook'] = PRODUCTS['adre-combo'];
