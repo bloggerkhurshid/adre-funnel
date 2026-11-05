@@ -280,9 +280,9 @@ export default function FbMasterclassFunnel({ onBuyProduct, onNavigate }) {
                   src={videoSource.src}
                   title="USA Facebook Earning Masterclass Starter Pack"
                   frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                   allowFullScreen
-                  sandbox="allow-scripts allow-same-origin allow-presentation"
+                  sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
                   className="fb-video-iframe"
                 ></iframe>
                 

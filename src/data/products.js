@@ -96,8 +96,8 @@ export const PRODUCTS = {
     totalReviews: '1,280+ Students',
     featuredBadge: '🔥 2026 PROVEN BLUEPRINT',
     coverImage: '/fb-masterclass/cover-masterclass.svg',
-    demoVideoId: 'qp0X4q3VRmo',
-    demoVideoUrl: 'https://www.youtube.com/watch?v=qp0X4q3VRmo',
+    demoVideoId: '1zxeZfgmfTwdZkHMOMIoJpb9A6Qh4EJvJ',
+    demoVideoUrl: 'https://drive.google.com/file/d/1zxeZfgmfTwdZkHMOMIoJpb9A6Qh4EJvJ/preview',
     description: 'Facebook se earning karni hai lekin kahan se shuru karna hai, yeh nahi pata? Is 10+ ghanton ke step-by-step course mein poori strategy hai — zero se lekar full automation tak.',
     proofImages: [
       {
