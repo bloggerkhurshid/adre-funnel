@@ -2,8 +2,40 @@ import React, { useState, useEffect } from 'react';
 import { PRODUCTS } from '../data/products';
 import { MetaPixel } from '../components/MetaPixel';
 
+// Helper to support both Google Drive and YouTube video embeds seamlessly
+const getVideoSource = (rawUrl) => {
+  if (!rawUrl) {
+    return {
+      type: 'youtube',
+      src: 'https://www.youtube-nocookie.com/embed/qp0X4q3VRmo?enablejsapi=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1'
+    };
+  }
+
+  // 1. Google Drive Share Link: drive.google.com/file/d/FILE_ID/view -> /preview
+  if (rawUrl.includes('drive.google.com')) {
+    const match = rawUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    const fileId = match ? match[1] : '';
+    if (fileId) {
+      return {
+        type: 'gdrive',
+        src: `https://drive.google.com/file/d/${fileId}/preview`
+      };
+    }
+  }
+
+  // 2. YouTube Video Link (watch?v=, youtu.be/, or raw ID)
+  const ytMatch = rawUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+  const videoId = ytMatch ? ytMatch[1] : (rawUrl.length === 11 ? rawUrl : 'qp0X4q3VRmo');
+  
+  return {
+    type: 'youtube',
+    src: `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`
+  };
+};
+
 export default function FbMasterclassFunnel({ onBuyProduct, onNavigate }) {
   const product = PRODUCTS['fb-masterclass'];
+  const videoSource = getVideoSource(product?.demoVideoUrl || product?.demoVideoId || 'qp0X4q3VRmo');
 
   // 15-Minute Countdown Timer
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 52);
@@ -242,10 +274,10 @@ export default function FbMasterclassFunnel({ onBuyProduct, onNavigate }) {
                 <span className="fb-shield-tag">Direct In-App Stream</span>
               </div>
 
-              {/* Sandboxed YouTube iframe: WITHOUT allow-popups and WITHOUT allow-top-navigation */}
+              {/* Sandboxed Video iframe: WITHOUT allow-popups and WITHOUT allow-top-navigation */}
               <div className="fb-iframe-responsive">
                 <iframe
-                  src="https://www.youtube-nocookie.com/embed/qp0X4q3VRmo?enablejsapi=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
+                  src={videoSource.src}
                   title="USA Facebook Earning Masterclass Starter Pack"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -254,17 +286,19 @@ export default function FbMasterclassFunnel({ onBuyProduct, onNavigate }) {
                   className="fb-video-iframe"
                 ></iframe>
                 
-                {/* Bottom-right watermark shield to block clicking the YouTube watermark logo */}
-                <div 
-                  className="fb-video-shield-watermark" 
-                  title="Watch right here on ProjuktiSoft"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                >
-                  <span>ProjuktiSoft HD</span>
-                </div>
+                {/* Bottom-right watermark shield (when playing YouTube embeds) */}
+                {videoSource.type === 'youtube' && (
+                  <div 
+                    className="fb-video-shield-watermark" 
+                    title="Watch right here on ProjuktiSoft"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                  >
+                    <span>ProjuktiSoft HD</span>
+                  </div>
+                )}
               </div>
 
               {/* Post-Video Unlock Notice */}
@@ -690,3 +724,4 @@ export default function FbMasterclassFunnel({ onBuyProduct, onNavigate }) {
     </div>
   );
 }
+
