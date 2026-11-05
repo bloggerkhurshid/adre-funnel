@@ -159,18 +159,9 @@ export default function FbMasterclassFunnel({ onBuyProduct, onNavigate }) {
               <span>•</span>
               <span>⭐ 4.9/5 Rating</span>
             </div>
-          </div>
-
-          {/* Visual Hero Mockup */}
-          <div className="fb-hero-cover-wrap">
-            <img 
-              src="/fb-masterclass/cover-masterclass.svg" 
-              alt="USA Facebook Earning Masterclass 2026" 
-              className="fb-hero-cover-img"
-            />
-            <div className="fb-verified-payout-chip">
+            <div className="fb-verified-payout-badge-hero">
               <span className="chip-dot"></span>
-              <span>Verified Payout: <strong>$15,353.41 (₹12,80,000+)</strong></span>
+              <span>Verified In-Stream Payout: <strong>$15,353.41 (₹12,80,000+)</strong> Credited</span>
             </div>
           </div>
 
