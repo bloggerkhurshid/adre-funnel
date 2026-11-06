@@ -6,18 +6,18 @@ export default function Footer({ onNavigate }) {
       <div className="container">
         <div className="footer-brand">
           <img src="/logo.png" alt="ProjuktiSoft Logo" />
-          <strong style={{ color: '#fff', fontSize: '1.15rem' }}>
+          <strong className="footer-brand-name">
             ProjuktiSoft
           </strong>
         </div>
 
-        <p style={{ maxWidth: '650px', margin: '0 auto 16px', color: '#94a3b8' }}>
+        <p className="footer-brand-desc">
           Empowering competitive exam aspirants and students across India with premium, verified digital ebooks and interactive study bundles.
         </p>
 
         {/* Mandatory Policy & Customer Access Links */}
         <div className="policy-links-row">
-          <a href="/my-downloads" onClick={(e) => { e.preventDefault(); onNavigate('my-downloads'); }} style={{ color: '#8ac926', fontWeight: 700 }}>
+          <a href="/my-downloads" onClick={(e) => { e.preventDefault(); onNavigate('my-downloads'); }} className="footer-downloads-link">
             ⚡ Access My Downloads
           </a>
           <span>•</span>
@@ -37,16 +37,16 @@ export default function Footer({ onNavigate }) {
             Privacy Policy
           </a>
           <span>•</span>
-          <a href="/admin" onClick={(e) => { e.preventDefault(); onNavigate('admin'); }} style={{ color: '#64748b', fontSize: '0.74rem' }}>
+          <a href="/admin" onClick={(e) => { e.preventDefault(); onNavigate('admin'); }} className="footer-admin-link">
             Admin
           </a>
         </div>
 
-        <p style={{ fontSize: '0.74rem', color: '#64748b', margin: '14px 0' }}>
+        <p className="footer-disclaimer-text">
           Disclaimer: All study materials are educational practice tools. Selection in competitive exams depends on individual merit, preparation, and dedication.
         </p>
 
-        <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+        <p className="footer-copyright-text">
           © 2026 ProjuktiSoft. All rights reserved.
         </p>
       </div>
