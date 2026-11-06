@@ -435,16 +435,31 @@ class FunnelManager {
    */
   getFunnelConfig(slug) {
     const cleanSlug = String(slug || this.defaultSlug).trim().toLowerCase();
-    
-    // If customized config exists
-    if (this.funnelConfigs.has(cleanSlug)) {
-      return this.funnelConfigs.get(cleanSlug);
-    }
-
-    // Otherwise generate default sections for this product
     const product = this.getProduct(cleanSlug) || this.getProduct('fb-masterclass') || STATIC_PRODUCTS['fb-masterclass'];
     const defaultSections = generateDefaultSections(product);
     
+    // If customized config exists
+    if (this.funnelConfigs.has(cleanSlug)) {
+      const cfg = this.funnelConfigs.get(cleanSlug);
+      if (cfg && Array.isArray(cfg.sections) && cfg.sections.length > 0) {
+        // Ensure proofs section is present if it's missing in older cache
+        const hasProofs = cfg.sections.some(s => s.type === 'proofs' || s.id === 'proofs');
+        if (!hasProofs) {
+          const defaultProofSec = defaultSections.find(s => s.type === 'proofs');
+          if (defaultProofSec) {
+            const vIdx = cfg.sections.findIndex(s => s.type === 'video_demo');
+            if (vIdx !== -1) {
+              cfg.sections.splice(vIdx + 1, 0, defaultProofSec);
+            } else {
+              cfg.sections.splice(2, 0, defaultProofSec);
+            }
+          }
+        }
+        return cfg;
+      }
+    }
+
+    // Otherwise generate default sections for this product
     const initialConfig = {
       slug: cleanSlug,
       productId: product?.id || cleanSlug,
@@ -481,3 +496,4 @@ class FunnelManager {
 }
 
 export const funnelManager = new FunnelManager();
+

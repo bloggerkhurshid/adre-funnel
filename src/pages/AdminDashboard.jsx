@@ -15,8 +15,15 @@ import AdminFunnelBuilder from '../components/AdminFunnelBuilder';
 import { funnelManager } from '../data/funnelManager';
 
 export default function AdminDashboard({ onNavigate }) {
-  // Navigation Tabs: 'orders', 'builder', 'products'
-  const [activeAdminTab, setActiveAdminTab] = useState('orders');
+  // Navigation Tabs: 'builder', 'products', 'orders'
+  const [activeAdminTab, setActiveAdminTab] = useState(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const tabParam = p.get('tab');
+      if (tabParam && ['builder', 'products', 'orders'].includes(tabParam)) return tabParam;
+    } catch (e) {}
+    return 'builder'; // Default directly to Funnel Builder so admin immediately sees the Drag & Drop editor
+  });
   const [builderSelectedProduct, setBuilderSelectedProduct] = useState(null);
 
   const handleSelectProductForBuilder = (product) => {
@@ -794,15 +801,6 @@ export default function AdminDashboard({ onNavigate }) {
         <div className="container admin-nav-tabs-container">
           <button
             type="button"
-            className={`admin-nav-tab ${activeAdminTab === 'orders' ? 'active' : ''}`}
-            onClick={() => setActiveAdminTab('orders')}
-          >
-            <span>📊 Orders &amp; Analytics</span>
-            <span className="admin-tab-count">{orders.length}</span>
-          </button>
-
-          <button
-            type="button"
             className={`admin-nav-tab ${activeAdminTab === 'builder' ? 'active' : ''}`}
             onClick={() => setActiveAdminTab('builder')}
           >
@@ -816,6 +814,16 @@ export default function AdminDashboard({ onNavigate }) {
             onClick={() => setActiveAdminTab('products')}
           >
             <span>📦 Products &amp; Pricing</span>
+            <span className="admin-tab-pill" style={{ background: '#3b82f6' }}>+ New Page</span>
+          </button>
+
+          <button
+            type="button"
+            className={`admin-nav-tab ${activeAdminTab === 'orders' ? 'active' : ''}`}
+            onClick={() => setActiveAdminTab('orders')}
+          >
+            <span>📊 Orders &amp; Analytics</span>
+            <span className="admin-tab-count">{orders.length}</span>
           </button>
         </div>
       </nav>

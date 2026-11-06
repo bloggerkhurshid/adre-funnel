@@ -1,6 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { funnelManager } from '../data/funnelManager';
+import { funnelManager, generateDefaultSections } from '../data/funnelManager';
 import { MetaPixel } from '../components/MetaPixel';
+
+// Guaranteed static image imports to avoid any 404 or path resolution issues
+import defaultProofAnalyticsImg from '../assets/fb-masterclass/proof-analytics-13m.webp';
+import defaultProofTransactionsImg from '../assets/fb-masterclass/proof-payout-transactions.png';
+import defaultProofDetailImg from '../assets/fb-masterclass/proof-payout-detail.jpg';
+
+// Standard fallback proofs guaranteed to render in all environments
+export const DEFAULT_FB_PROOFS = [
+  {
+    tag: '28 DAYS ANALYTICS',
+    tagColor: 'blue',
+    url: defaultProofAnalyticsImg,
+    fallbackUrl: '/fb-masterclass/proof-analytics-13m.webp',
+    title: '13 Million Views & $1,493.57',
+    desc: '28 Days Growth: 132% views hike aur 721K+ engagement rate.'
+  },
+  {
+    tag: 'META TRANSACTIONS',
+    tagColor: 'emerald',
+    url: defaultProofTransactionsImg,
+    fallbackUrl: '/fb-masterclass/proof-payout-transactions.png',
+    title: '$3,131.91 & $3,119.87 Multiple Pages',
+    desc: 'May 17 Payout: $15,353.41 Paid to Punjab National Bank.'
+  },
+  {
+    tag: 'BANK CREDITED DETAILS',
+    tagColor: 'purple',
+    url: defaultProofDetailImg,
+    fallbackUrl: '/fb-masterclass/proof-payout-detail.jpg',
+    title: 'Status: PAID ✓ ($15,353.41)',
+    desc: 'Direct bank transfer confirmation with verified Meta Transaction ID.'
+  }
+];
+
+export const DEFAULT_FB_METRICS = [
+  { value: '$15,353.41', label: 'Single Month Bank Payout', sub: '₹12,80,000+ Direct in Indian Bank', color: 'emerald' },
+  { value: '13M+ Views', label: '28-Day Video Reach', sub: '↑ 132% Verified Organic Growth', color: 'blue' },
+  { value: '$3,131+', label: 'Per-Page Monthly Ad Earning', sub: 'Consistent In-Stream Ads Revenue', color: 'amber' }
+];
 
 // Helper to support both Google Drive and YouTube video embeds seamlessly
 export const getVideoSource = (rawUrl) => {
@@ -49,7 +88,36 @@ export default function FbMasterclassFunnel({
   // Resolve product & funnel configuration
   const product = propProduct || funnelManager.getProduct(slug) || funnelManager.getProduct('fb-masterclass');
   const funnelConfig = propConfig || funnelManager.getFunnelConfig(product?.id || slug);
-  const sections = funnelConfig?.sections || [];
+  const rawSections = funnelConfig?.sections || [];
+
+  // Robust Section Resolver: ensures essential sections (especially proofs & video) ALWAYS exist
+  const defaultSections = generateDefaultSections(product);
+  let sections = (rawSections && rawSections.length > 0) ? [...rawSections] : defaultSections;
+
+  // If proofs section is missing from stored config, auto-insert it
+  if (!sections.some(s => s.type === 'proofs' || s.id === 'proofs')) {
+    const defaultProofSec = defaultSections.find(s => s.type === 'proofs') || {
+      id: 'proofs',
+      type: 'proofs',
+      name: 'Payment Proofs & Live Analytics Showcase',
+      enabled: true,
+      data: {}
+    };
+    const vIdx = sections.findIndex(s => s.type === 'video_demo');
+    if (vIdx !== -1) {
+      sections.splice(vIdx + 1, 0, defaultProofSec);
+    } else {
+      sections.splice(2, 0, defaultProofSec);
+    }
+  }
+
+  // Ensure proofs section is enabled if undefined
+  sections = sections.map(s => {
+    if (s.type === 'proofs' && s.enabled === undefined) {
+      return { ...s, enabled: true };
+    }
+    return s;
+  });
 
   // Countdown Timer
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 52);
@@ -273,8 +341,19 @@ export default function FbMasterclassFunnel({
 
       // 5. Payment Proofs Showcase
       case 'proofs': {
-        const metrics = data.metrics || [];
-        const proofs = data.proofImages || [];
+        const rawMetrics = data.metrics || [];
+        const metrics = rawMetrics.length > 0 ? rawMetrics : DEFAULT_FB_METRICS;
+
+        const rawProofs = data.proofImages || [];
+        const proofs = (rawProofs.length > 0 ? rawProofs : DEFAULT_FB_PROOFS).map((p, pIdx) => {
+          const fallbackObj = DEFAULT_FB_PROOFS[pIdx] || DEFAULT_FB_PROOFS[0];
+          return {
+            ...p,
+            url: p.url || fallbackObj.url,
+            fallbackUrl: fallbackObj.url
+          };
+        });
+
         return (
           <section key={section.id || idx} className="fb-proof-section" id="proofs">
             <div className="container">
@@ -301,13 +380,22 @@ export default function FbMasterclassFunnel({
               {proofs.length > 0 && (
                 <div className="fb-proofs-grid">
                   {proofs.map((proof, pfIdx) => (
-                    <div key={pfIdx} className="fb-proof-card" onClick={() => setPreviewImage(proof.url)}>
+                    <div key={pfIdx} className="fb-proof-card" onClick={() => setPreviewImage(proof.url || proof.fallbackUrl)}>
                       <div className="fb-proof-header">
                         <span className={`fb-proof-tag tag-${proof.tagColor || 'blue'}`}>{proof.tag}</span>
                         <span className="fb-proof-zoom-hint">🔍 Tap to Zoom</span>
                       </div>
                       <div className="fb-proof-img-wrap">
-                        <img src={proof.url} alt={proof.title} className="fb-proof-img" />
+                        <img 
+                          src={proof.url} 
+                          alt={proof.title} 
+                          className="fb-proof-img" 
+                          onError={(e) => {
+                            if (proof.fallbackUrl && e.target.src !== proof.fallbackUrl) {
+                              e.target.src = proof.fallbackUrl;
+                            }
+                          }}
+                        />
                       </div>
                       <div className="fb-proof-caption">
                         <strong>{proof.title}</strong>
