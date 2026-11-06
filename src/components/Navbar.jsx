@@ -29,31 +29,27 @@ export default function Navbar({ onNavigate }) {
         <ul className="nav-menu">
           <li>
             <a href="/" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}>
+              All Products
+            </a>
+          </li>
+          <li>
+            <a href="/fb-masterclass" onClick={(e) => { e.preventDefault(); handleNavClick('fb-masterclass'); }}>
               FB Masterclass (₹299)
             </a>
           </li>
           <li>
-            <a href="#starter-pack" onClick={(e) => { 
-              e.preventDefault(); 
-              handleNavClick('home'); 
-              setTimeout(() => {
-                const el = document.getElementById('starter-pack');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
-            }}>
-              Free Starter Pack
+            <a href="/adre" onClick={(e) => { e.preventDefault(); handleNavClick('adre'); }}>
+              ADRE Combo (₹99)
             </a>
           </li>
           <li>
-            <a href="#proofs" onClick={(e) => { 
-              e.preventDefault(); 
-              handleNavClick('home'); 
-              setTimeout(() => {
-                const el = document.getElementById('proofs');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
-            }}>
-              Payment Proofs
+            <a href="/cinemood-presets" onClick={(e) => { e.preventDefault(); handleNavClick('cinemood-presets'); }}>
+              Presets (₹99)
+            </a>
+          </li>
+          <li>
+            <a href="/spoken-english" onClick={(e) => { e.preventDefault(); handleNavClick('spoken-english'); }}>
+              English (₹149)
             </a>
           </li>
           <li>
@@ -108,33 +104,31 @@ export default function Navbar({ onNavigate }) {
           <ul className="nav-mobile-list">
             <li>
               <a href="/" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}>
+                <span>🏠 All Products Catalog</span>
+                <span className="mobile-chevron">→</span>
+              </a>
+            </li>
+            <li>
+              <a href="/fb-masterclass" onClick={(e) => { e.preventDefault(); handleNavClick('fb-masterclass'); }}>
                 <span>🔥 USA FB Masterclass (₹299)</span>
                 <span className="mobile-chevron">→</span>
               </a>
             </li>
             <li>
-              <a href="#starter-pack" onClick={(e) => { 
-                e.preventDefault(); 
-                handleNavClick('home'); 
-                setTimeout(() => {
-                  const el = document.getElementById('starter-pack');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-              }}>
-                <span>🎁 Free 2-Hour Starter Pack</span>
+              <a href="/adre" onClick={(e) => { e.preventDefault(); handleNavClick('adre'); }}>
+                <span>📚 ADRE 4-in-1 Combo (₹99)</span>
                 <span className="mobile-chevron">→</span>
               </a>
             </li>
             <li>
-              <a href="#proofs" onClick={(e) => { 
-                e.preventDefault(); 
-                handleNavClick('home'); 
-                setTimeout(() => {
-                  const el = document.getElementById('proofs');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-              }}>
-                <span>📈 Verified Payout Proofs</span>
+              <a href="/cinemood-presets" onClick={(e) => { e.preventDefault(); handleNavClick('cinemood-presets'); }}>
+                <span>📸 CineMood Presets (₹99)</span>
+                <span className="mobile-chevron">→</span>
+              </a>
+            </li>
+            <li>
+              <a href="/spoken-english" onClick={(e) => { e.preventDefault(); handleNavClick('spoken-english'); }}>
+                <span>💬 Spoken English (₹149)</span>
                 <span className="mobile-chevron">→</span>
               </a>
             </li>
