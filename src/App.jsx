@@ -15,22 +15,13 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import MyDownloads from './pages/MyDownloads';
 import AdminDashboard from './pages/AdminDashboard';
 import { PRODUCTS, getProductById } from './data/products';
+import { funnelManager } from './data/funnelManager';
 
-// Helper to determine route from clean pathname (e.g. /fb-masterclass) or fallback hash
+// Dynamic Router: Resolves custom funnels, products created in Admin Panel, and standard utility routes
 const resolveCurrentRoute = () => {
   const path = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '').toLowerCase();
   const hash = window.location.hash.replace('#', '').replace(/^\/+/, '').toLowerCase();
   const target = path || hash;
-
-  // Primary Single Product Funnel Route
-  if (target === 'fb-masterclass' || target === 'facebook' || target === 'fb' || target === 'masterclass' || target === 'fb-earning' || target === 'usa-fb') {
-    return 'fb-masterclass';
-  }
-
-  // Archived products (gracefully mapped to primary masterclass funnel or preserved for direct inspection)
-  if (target === 'adre-combo' || target === 'ebook' || target === 'adre' || target === 'assam') return 'fb-masterclass';
-  if (target === 'cinemood-presets' || target === 'cinemood' || target === 'presets' || target === 'preset' || target === 'lightroom' || target === 'lr' || target === 'dng') return 'fb-masterclass';
-  if (target === 'spoken-english' || target === 'english-bundle' || target === 'english' || target === 'spoken') return 'fb-masterclass';
 
   if (target === 'checkout' || target === 'pay' || target === 'order') return 'checkout';
   if (target === 'contact' || target === 'contact-us') return 'contact';
@@ -40,20 +31,37 @@ const resolveCurrentRoute = () => {
   if (target === 'my-downloads' || target === 'downloads' || target === 'download') return 'my-downloads';
   if (target === 'admin' || target === 'dashboard') return 'admin';
   if (target === 'success') return 'success';
-  return 'home'; // Home defaults directly to the single-product FB Masterclass Funnel
+
+  if (!target || target === 'home') {
+    return 'home';
+  }
+
+  // Check if target matches any dynamic product / funnel created in Admin Panel
+  const matchedProd = funnelManager.getProduct(target);
+  if (matchedProd) {
+    return `funnel:${matchedProd.id}`;
+  }
+
+  return 'home';
 };
 
 const resolveInitialCheckoutProduct = () => {
   try {
     const params = new URLSearchParams(window.location.search);
     const prodId = params.get('product') || params.get('id');
-    const resolved = getProductById(prodId);
-    if (resolved) return resolved;
+    if (prodId) {
+      const resolved = funnelManager.getProduct(prodId) || getProductById(prodId);
+      if (resolved) return resolved;
+    }
     const saved = sessionStorage.getItem('pj_checkout_product_id');
-    const savedProd = getProductById(saved);
-    if (savedProd) return savedProd;
+    if (saved) {
+      const savedProd = funnelManager.getProduct(saved) || getProductById(saved);
+      if (savedProd) return savedProd;
+    }
   } catch (e) {}
-  return PRODUCTS['fb-masterclass'];
+
+  const defSlug = funnelManager.getDefaultSlug();
+  return funnelManager.getProduct(defSlug) || PRODUCTS['fb-masterclass'];
 };
 
 export default function App() {
@@ -93,11 +101,19 @@ export default function App() {
     let urlPath = '/';
     let normalized = route;
 
-    if (route === 'fb-masterclass' || route === 'masterclass' || route === 'fb' || route === 'home') {
+    if (route === 'home') {
+      urlPath = '/';
+      normalized = 'home';
+    } else if (route.startsWith('funnel:')) {
+      const slug = route.replace('funnel:', '');
+      urlPath = `/${slug}`;
+      normalized = route;
+    } else if (route === 'fb-masterclass' || route === 'masterclass' || route === 'fb') {
       urlPath = '/';
       normalized = 'home';
     } else if (route === 'checkout' || route === 'pay') {
-      const targetProd = options.product || checkoutProduct || PRODUCTS['fb-masterclass'];
+      const defSlug = funnelManager.getDefaultSlug();
+      const targetProd = options.product || checkoutProduct || funnelManager.getProduct(defSlug) || PRODUCTS['fb-masterclass'];
       const bump = options.withBump !== undefined ? options.withBump : initialOrderBumpSelected;
       setCheckoutProduct(targetProd);
       if (options.withBump !== undefined) setInitialOrderBumpSelected(bump);
@@ -153,7 +169,7 @@ export default function App() {
   };
 
   // Funnel pages, checkout page, success screen, and admin must have ZERO global nav distractions
-  const isFunnelPage = currentRoute === 'home' || currentRoute === 'fb-masterclass' || currentRoute === 'checkout' || currentRoute === 'success' || currentRoute === 'admin';
+  const isFunnelPage = currentRoute === 'home' || currentRoute.startsWith('funnel:') || currentRoute === 'fb-masterclass' || currentRoute === 'checkout' || currentRoute === 'success' || currentRoute === 'admin';
 
   return (
     <div className={`app-root ${isFunnelPage ? 'is-funnel-mode' : ''}`}>
@@ -162,8 +178,12 @@ export default function App() {
 
       {/* Main Content Router */}
       <main className="main-content">
-        {(currentRoute === 'home' || currentRoute === 'fb-masterclass') && (
-          <FbMasterclassFunnel onBuyProduct={handleBuyProduct} onNavigate={navigateTo} />
+        {(currentRoute === 'home' || currentRoute.startsWith('funnel:') || currentRoute === 'fb-masterclass') && (
+          <FbMasterclassFunnel 
+            slug={currentRoute.startsWith('funnel:') ? currentRoute.replace('funnel:', '') : funnelManager.getDefaultSlug()} 
+            onBuyProduct={handleBuyProduct} 
+            onNavigate={navigateTo} 
+          />
         )}
         {currentRoute === 'checkout' && (
           <Checkout

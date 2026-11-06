@@ -4,6 +4,8 @@ import {
   collection, 
   addDoc, 
   getDocs, 
+  getDoc,
+  setDoc,
   query, 
   where, 
   orderBy, 
@@ -164,6 +166,155 @@ export async function deleteOrdersBulkFromFirestore(orderIds = []) {
       console.error('Bulk delete fallback error:', fallbackErr);
       return { success: false, error: fallbackErr };
     }
+  }
+}
+
+/**
+ * ==========================================================
+ * DYNAMIC PRODUCTS & FUNNEL BUILDER FIRESTORE PERSISTENCE
+ * ==========================================================
+ */
+
+/**
+ * Save / Update a Product in Firestore ('products' collection)
+ */
+export async function saveProductToFirestore(product) {
+  if (!product || !product.id) return { success: false, error: 'Product id is required' };
+  try {
+    const docRef = doc(db, 'products', String(product.id).trim().toLowerCase());
+    const payload = {
+      ...product,
+      updatedAtISO: new Date().toISOString(),
+      updatedAt: serverTimestamp()
+    };
+    await setDoc(docRef, payload, { merge: true });
+    return { success: true, id: product.id };
+  } catch (error) {
+    console.warn('Firestore saveProduct error (falling back to local cache):', error);
+    return { success: false, error };
+  }
+}
+
+/**
+ * Fetch all custom products from Firestore
+ */
+export async function fetchProductsFromFirestore() {
+  try {
+    const productsRef = collection(db, 'products');
+    const snapshot = await getDocs(productsRef);
+    const list = [];
+    snapshot.forEach((doc) => {
+      list.push({ id: doc.id, ...doc.data() });
+    });
+    return list;
+  } catch (error) {
+    console.warn('Firestore fetchProducts error:', error);
+    return [];
+  }
+}
+
+/**
+ * Delete a product from Firestore
+ */
+export async function deleteProductFromFirestore(productId) {
+  if (!productId) return { success: false };
+  try {
+    const docRef = doc(db, 'products', String(productId).trim().toLowerCase());
+    await deleteDoc(docRef);
+    return { success: true };
+  } catch (error) {
+    console.warn('Firestore deleteProduct error:', error);
+    return { success: false, error };
+  }
+}
+
+/**
+ * Save / Update a Funnel Page Configuration in Firestore ('funnel_configs' collection)
+ */
+export async function saveFunnelConfigToFirestore(slug, config) {
+  if (!slug || !config) return { success: false };
+  try {
+    const cleanSlug = String(slug).trim().toLowerCase();
+    const docRef = doc(db, 'funnel_configs', cleanSlug);
+    const payload = {
+      slug: cleanSlug,
+      ...config,
+      updatedAtISO: new Date().toISOString(),
+      updatedAt: serverTimestamp()
+    };
+    await setDoc(docRef, payload, { merge: true });
+    return { success: true };
+  } catch (error) {
+    console.warn('Firestore saveFunnelConfig error:', error);
+    return { success: false, error };
+  }
+}
+
+/**
+ * Fetch a single Funnel Page Configuration from Firestore
+ */
+export async function fetchFunnelConfigFromFirestore(slug) {
+  if (!slug) return null;
+  try {
+    const cleanSlug = String(slug).trim().toLowerCase();
+    const docRef = doc(db, 'funnel_configs', cleanSlug);
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      return { slug: snap.id, ...snap.data() };
+    }
+    return null;
+  } catch (error) {
+    console.warn('Firestore fetchFunnelConfig error:', error);
+    return null;
+  }
+}
+
+/**
+ * Fetch all Funnel Page Configurations from Firestore
+ */
+export async function fetchAllFunnelsFromFirestore() {
+  try {
+    const funnelsRef = collection(db, 'funnel_configs');
+    const snapshot = await getDocs(funnelsRef);
+    const list = [];
+    snapshot.forEach((doc) => {
+      list.push({ slug: doc.id, ...doc.data() });
+    });
+    return list;
+  } catch (error) {
+    console.warn('Firestore fetchAllFunnels error:', error);
+    return [];
+  }
+}
+
+/**
+ * Save Default Funnel Slug (e.g. which funnel page is root '/')
+ */
+export async function saveDefaultFunnelSlugToFirestore(slug) {
+  try {
+    const docRef = doc(db, 'app_settings', 'general');
+    await setDoc(docRef, { defaultFunnelSlug: slug, updatedAtISO: new Date().toISOString() }, { merge: true });
+    return { success: true };
+  } catch (error) {
+    console.warn('Firestore saveDefaultFunnelSlug error:', error);
+    return { success: false, error };
+  }
+}
+
+/**
+ * Fetch Default Funnel Slug from Firestore
+ */
+export async function fetchDefaultFunnelSlugFromFirestore() {
+  try {
+    const docRef = doc(db, 'app_settings', 'general');
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      return snap.data().defaultFunnelSlug || null;
+    }
+    return null;
+  } catch (error) {
+    console.warn('Firestore fetchDefaultFunnelSlug error:', error);
+    return null;
   }
 }
 

@@ -323,6 +323,19 @@ PRODUCTS['english'] = PRODUCTS['spoken-english'];
 export const getProductById = (rawId) => {
   if (!rawId) return null;
   const key = String(rawId).trim().toLowerCase();
+
+  // 1. Check custom product from local storage cache
+  try {
+    const cached = localStorage.getItem('pj_custom_products_v2');
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (parsed[key]) return parsed[key];
+      for (const prod of Object.values(parsed)) {
+        if (prod.id === key || prod.slug === key) return prod;
+      }
+    }
+  } catch (e) {}
+
   return PRODUCTS[key] || null;
 };
 

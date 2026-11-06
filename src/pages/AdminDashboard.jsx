@@ -10,8 +10,20 @@ import {
   WEDDING_ORDER_BUMP, 
   getProductById 
 } from '../data/products';
+import AdminProductManager from '../components/AdminProductManager';
+import AdminFunnelBuilder from '../components/AdminFunnelBuilder';
+import { funnelManager } from '../data/funnelManager';
 
 export default function AdminDashboard({ onNavigate }) {
+  // Navigation Tabs: 'orders', 'builder', 'products'
+  const [activeAdminTab, setActiveAdminTab] = useState('orders');
+  const [builderSelectedProduct, setBuilderSelectedProduct] = useState(null);
+
+  const handleSelectProductForBuilder = (product) => {
+    setBuilderSelectedProduct(product);
+    setActiveAdminTab('builder');
+  };
+
   // Session-persisted Authentication
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     try {
@@ -777,9 +789,61 @@ export default function AdminDashboard({ onNavigate }) {
         </div>
       </header>
 
+      {/* Admin Module Navigation Tabs Bar */}
+      <nav className="admin-nav-tabs-bar">
+        <div className="container admin-nav-tabs-container">
+          <button
+            type="button"
+            className={`admin-nav-tab ${activeAdminTab === 'orders' ? 'active' : ''}`}
+            onClick={() => setActiveAdminTab('orders')}
+          >
+            <span>📊 Orders &amp; Analytics</span>
+            <span className="admin-tab-count">{orders.length}</span>
+          </button>
+
+          <button
+            type="button"
+            className={`admin-nav-tab ${activeAdminTab === 'builder' ? 'active' : ''}`}
+            onClick={() => setActiveAdminTab('builder')}
+          >
+            <span>🎨 Funnel Page Builder</span>
+            <span className="admin-tab-pill">Drag &amp; Drop</span>
+          </button>
+
+          <button
+            type="button"
+            className={`admin-nav-tab ${activeAdminTab === 'products' ? 'active' : ''}`}
+            onClick={() => setActiveAdminTab('products')}
+          >
+            <span>📦 Products &amp; Pricing</span>
+          </button>
+        </div>
+      </nav>
+
       {/* Main Container */}
       <main className="admin-main-wrap">
+        
+        {/* TAB 1: FUNNEL BUILDER */}
+        {activeAdminTab === 'builder' && (
+          <AdminFunnelBuilder 
+            initialProduct={builderSelectedProduct} 
+            onNavigate={onNavigate} 
+            showToast={showToast} 
+          />
+        )}
 
+        {/* TAB 2: PRODUCT & PRICING MANAGER */}
+        {activeAdminTab === 'products' && (
+          <AdminProductManager 
+            onSelectProductForBuilder={handleSelectProductForBuilder} 
+            onNavigate={onNavigate} 
+            showToast={showToast} 
+          />
+        )}
+
+        {/* TAB 3: ORDERS & REVENUE ANALYTICS */}
+        {activeAdminTab === 'orders' && (
+          <>
         {/* ========================================================
             PERIOD FILTER SELECTOR & TOP EXECUTIVE STATS
            ======================================================== */}
@@ -1367,6 +1431,8 @@ export default function AdminDashboard({ onNavigate }) {
             )}
           </div>
         </section>
+        </>
+        )}
 
       </main>
 
