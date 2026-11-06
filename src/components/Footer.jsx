@@ -42,12 +42,6 @@ export default function Footer({ onNavigate }) {
           </a>
         </div>
 
-        <div className="pricing-disclaimer-box">
-          <p>
-            <strong>Pricing & Currency Notice:</strong> All digital products and services listed on ProjuktiSoft are billed and processed in <strong>Indian Rupees (INR - ₹)</strong>. Delivery is 100% digital and instant.
-          </p>
-        </div>
-
         <p style={{ fontSize: '0.74rem', color: '#64748b', margin: '14px 0' }}>
           Disclaimer: All study materials are educational practice tools. Selection in competitive exams depends on individual merit, preparation, and dedication.
         </p>
